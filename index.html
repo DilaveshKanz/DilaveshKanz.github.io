@@ -68,26 +68,11 @@ h1 .ch > i { display: inline-block; font-style: normal; animation: letter .9s va
 .netbtns { display: flex; gap: 6px; }
 .nb { font: 400 11px/1 var(--mono); letter-spacing: .04em; color: var(--t2); background: none; border: 1px solid var(--hair); border-radius: 999px; padding: 6px 10px; cursor: pointer; transition: color var(--fast), border-color var(--fast); }
 .nb:hover { color: var(--t1); border-color: var(--t3); }
-@media (max-width: 1180px) { .city { position: static; width: 100%; max-width: 420px; margin: 0 0 32px; } .city canvas { aspect-ratio: 16 / 9; } }
-.gen { border: 1px solid var(--hair); border-radius: 14px; padding: 14px; display: grid; gap: 12px; background: #0c0c0c; top: -40px; width: 360px; }
-.gen-head { display: flex; justify-content: space-between; align-items: center; }
-.gen canvas.face { width: 40px; height: 20px; display: block; aspect-ratio: auto; border: 0; border-radius: 0; cursor: default; }
-.gen .seg { justify-self: start; }
-.gen-out { height: 200px; border: 1px solid var(--hair); border-radius: 10px; overflow: hidden; }
-.gen-out pre { margin: 0; padding: 12px 14px; height: 100%; overflow: auto; font: 400 12px/1.6 var(--mono); color: var(--t1); white-space: pre-wrap; }
-.gen-out canvas { display: block; width: 100%; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; cursor: default; }
-.gen-in { display: flex; gap: 6px; }
-.gen-in input { flex: 1; min-width: 0; background: none; border: 1px solid var(--hair); border-radius: 999px; padding: 8px 12px; color: var(--t1); font: 400 12px var(--mono); outline: none; transition: border-color var(--fast); }
-.gen-in input:focus { border-color: var(--t3); }
-.nb.solid { background: var(--t1); color: var(--bg); border-color: var(--t1); }
-.nb.solid:hover { background: transparent; color: var(--t1); }
-.gen-meta { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: end; min-height: 44px; }
-.gen-meta pre { margin: 0; white-space: pre; font-size: 10px; line-height: 1.5; text-transform: none; overflow: hidden; }
-.gen-meta > div { display: grid; gap: 6px; justify-items: end; }
-.temp { display: flex; align-items: center; gap: 6px; }
-.temp input { width: 80px; accent-color: #ededeb; }
-.gen .note { margin: 0; text-transform: none; letter-spacing: .02em; line-height: 1.5; }
-@media (max-width: 1180px) { .gen { width: 100%; max-width: 460px; } }
+@media (max-width: 1180px) { #intro { display: flex; flex-direction: column; align-items: flex-start; } .city { position: static; order: 9; width: 100%; max-width: 460px; margin: 48px 0 0; } }
+.ticks { display: flex; gap: 6px; }
+.ticks button { flex: 1; height: 14px; padding: 0; border: 0; cursor: pointer; background: linear-gradient(var(--t1), var(--t1)) 0 50% / calc(var(--p, 0) * 100%) 2px no-repeat, linear-gradient(var(--hair), var(--hair)) 0 50% / 100% 2px no-repeat; }
+.ticks button:hover { background: linear-gradient(var(--t1), var(--t1)) 0 50% / calc(var(--p, 0) * 100%) 2px no-repeat, linear-gradient(var(--t3), var(--t3)) 0 50% / 100% 2px no-repeat; }
+#story { cursor: pointer; }
 .open { margin: 24px 0 0; color: var(--t2); max-width: 36em; }
 .open b { font-weight: 500; color: var(--t1); }
 
@@ -152,13 +137,12 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
 <div class="page">
   <main class="col">
     <section id="intro">
-      <figure class="city gen in" style="--d:2" aria-label="dkn-1, a tiny toy model you can prompt">
-        <div class="gen-head"><span class="label">dkn-1 · a very small model</span><canvas id="genface" class="face" aria-hidden="true"></canvas></div>
-        <div class="seg" id="genmode" role="group" aria-label="Output mode"><i></i><button type="button" aria-pressed="true" data-v="text">Text</button><button type="button" aria-pressed="false" data-v="pixels">Pixels</button><button type="button" aria-pressed="false" data-v="code">Code</button><button type="button" aria-pressed="false" data-v="robot">Robot</button></div>
-        <div class="gen-out"><pre id="genpre"></pre><canvas id="gencv" hidden></canvas></div>
-        <div class="gen-in"><input id="genin" type="text" aria-label="Prompt" spellcheck="false"><button class="nb" id="gennext" type="button" title="Next prompt">↻</button><button class="nb solid" id="gengo" type="button">Generate</button></div>
-        <div class="gen-meta"><pre id="genprobs" class="label"></pre><div><span class="label tnum" id="genstat"></span><label class="label temp" id="gentemprow">temp <input id="gentemp" type="range" min="0.2" max="2.5" step="0.1" value="0.4"> <span id="gentempv">0.4</span></label></div></div>
-        <p class="label note">Text is a real character 4-gram trained in your browser. Pixels, code and robot are scripted for fun.</p>
+      <figure class="city in" style="--d:2" aria-label="An animation: a Turing quote is typed, becomes code, the code becomes a pixel in a cat image, the cat becomes a robot's screen, the robot becomes part of an equation, and the equation becomes a node in a neural network.">
+        <canvas id="story" title="Click to skip ahead"></canvas>
+        <figcaption>
+          <div class="ticks" id="storyticks"><button type="button" aria-label="Text"></button><button type="button" aria-label="Code"></button><button type="button" aria-label="Pixels"></button><button type="button" aria-label="Robot"></button><button type="button" aria-label="Math"></button><button type="button" aria-label="Network"></button></div>
+          <span class="label">Text → code → pixels → robot → math → network. Click to skip.</span>
+        </figcaption>
       </figure>
       <p class="status label in" style="--d:0"><i></i>Open to internships · 2026</p>
       <h1 id="name" aria-label="Dilavesh Kanz Nidooli">Dilavesh Kanz Nidooli</h1>
@@ -207,38 +191,38 @@ const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const W8 = a => `rgba(255,255,255,${a})`;
 
 const WORK = [
-  { n: "AltiMap", c: "Building heights from one aerial image. Team RMSE 5.23 → 4.99 m.", t: "SIH 2026 · Ongoing", sel: 1, v: "alti",
-    r: "Team project for an ISRO problem. I fine-tune the RS3DAda height model and built its training and evaluation. The gain came from a change in how the model's outputs are combined, measured on 2,861 held-out test tiles.",
+  { n: "AltiMap", c: "Works out how tall every building is from a single photo taken from above.", t: "SIH 2026 · Ongoing", sel: 1, v: "alti",
+    r: "A team project for an ISRO challenge at Smart India Hackathon. I teach the model to read building heights and test how well it does. One change we made cut its typical error from 5.23 m to 4.99 m.",
     k: "PyTorch · DINOv2", l: ["Code", "https://github.com/ManasBytes/altimap"] },
-  { n: "FieldPilot AI", c: "A phone camera that flags missing safety gear on construction sites.", t: "Kaya AI · Finalist", sel: 1, v: "field",
-    r: "Team project in the Physical AI track. I trained and fine-tuned the safety-gear detector, and added a gate that promotes a new model only when it beats the baseline.",
+  { n: "FieldPilot AI", c: "A phone camera that watches a construction site and warns workers out loud.", t: "Kaya AI · Finalist", sel: 1, v: "field",
+    r: "Built with my team at the Kaya AI Hackathon, where we reached the final. It spots missing helmets, people too close to machines, and falls, then speaks a warning. I trained the part that recognises safety gear.",
     k: "YOLO · FastAPI · Local LLM", l: ["Hackathon", "https://kaya-ai-iit-hackathon-2026.devpost.com/"] },
-  { n: "Live Dress Try-On", c: "A webcam mirror that shows you wearing a dress while you move.", t: "Prototype · Ongoing", sel: 1, v: "tryon",
-    r: "Personal prototype. MediaPipe pose and segmentation run on every frame. FASHN VTON generates the garment on keyframes, and per-part transforms carry it to the live pose. Only garment pixels are generated, so the face and body stay real.",
+  { n: "Live Dress Try-On", c: "A live mirror that shows you wearing a dress as you move.", t: "Prototype · Ongoing", sel: 1, v: "tryon",
+    r: "My own project, still in progress. The camera follows your body and the dress moves with you in real time. Your face and body stay real; only the dress is added.",
     k: "MediaPipe · FASHN VTON · WebRTC · FastAPI · Next.js", l: null },
-  { n: "Course Planner", c: "Took over a half-built planner. Now live for four degree programmes.", t: "CODE · Live", sel: 1, v: "plan",
-    r: "Completed and launched it for Data Science, then extended it to Electronic Systems, Aeronautics and Space Technology, and Management and Data Science. I maintain it.",
+  { n: "Course Planner", c: "Helps IIT Madras students plan their courses. Live in four degree programmes.", t: "CODE · Live", sel: 1, v: "plan",
+    r: "I took over an unfinished app, finished it and launched it for Data Science students. Then I extended it to three more programmes, and I still look after it.",
     k: "Flask · PostgreSQL · BigQuery", l: null },
-  { n: "Paradox Fest Platform", c: "Events, registrations and attendance for the IIT Madras BS fest.", t: "Paradox · Active", sel: 1, v: "fest",
-    r: "Built event management, registration exports, student profiles and demographics. Finance and sponsorship modules are next.",
+  { n: "Paradox Fest Platform", c: "Runs events and sign-ups for the IIT Madras BS student fest.", t: "Paradox · Active", sel: 1, v: "fest",
+    r: "Teams create events and get them approved, then students sign up. Organisers track who came and download the lists. I am now building the finance and sponsorship parts.",
     k: "Next.js · NestJS · PostgreSQL", l: null },
-  { n: "DealFlow360", c: "Fixed duplicate shipment notifications under concurrent requests.", t: "Odoo · Finalist", v: "deal",
-    r: "Final-round project, a sales and fulfilment platform. Front end and back end, margin checks, and regression tests for the concurrency fix.",
+  { n: "DealFlow360", c: "Tracks a sale from the first quote to the final delivery.", t: "Odoo · Finalist", v: "deal",
+    r: "Built in the final round of the Odoo Hackathon. One fix I made: when two people pressed ship at the same moment, the customer got two emails. Now they get one.",
     k: "Next.js · Django REST · PostgreSQL", l: null },
-  { n: "AssetFlow", c: "Shared asset booking, guarded against double bookings in the database.", t: "Odoo · Qualifier", v: "asset",
-    r: "Qualifier project. Front end and back end: dashboard, organisation and asset screens.",
+  { n: "AssetFlow", c: "Lets a team share equipment without two people booking it at once.", t: "Odoo · Qualifier", v: "asset",
+    r: "Our first-round project at the Odoo Hackathon. I built the screens and the server side for bookings, repairs and checks.",
     k: "Next.js · Django REST · PostgreSQL", l: ["Code", "https://github.com/mbiplab-dev/Sparkz-AssetFlow"] },
-  { n: "Discourse Q&A", c: "Answers from a course forum, with links to their sources.", t: "WebOps task", v: "rag",
-    r: "My entry task for Paradox WebOps. Section-based chunking, semantic retrieval and source-linked answers.",
+  { n: "Discourse Q&A", c: "Answers student questions from the course forum, and shows where each answer came from.", t: "WebOps task", v: "rag",
+    r: "My entry task for the Paradox WebOps team. It finds the most useful forum posts and documents, then writes an answer with links to them.",
     k: "FastAPI · ChromaDB · Sentence Transformers", l: ["Code", "https://github.com/DilaveshKanz/Webops-RAG-Project"] },
-  { n: "SurfaceGuard AI", c: "Segmenting four kinds of industrial surface defects, pixel by pixel.", t: "Coursework · In progress", v: "surface",
-    r: "Deep-learning course project. Milestone 1 is done: label checks, RLE mask decoding, class balance, mask coverage and the Dice metric. Model training is next.",
+  { n: "SurfaceGuard AI", c: "Teaching a computer to spot scratches and defects on metal.", t: "Coursework · In progress", v: "surface",
+    r: "A course project, in progress. I have studied the data and how to measure success. Training the model comes next.",
     k: "Python · NumPy · pandas · Kaggle", l: null },
-  { n: "Placement Portal", c: "Campus placements with eligibility checks, interview stages and reminders.", t: "Coursework", v: "place",
-    r: "Individual coursework. Admins approve companies and drives, students apply only if they meet CGPA and branch rules, and Celery sends interview emails, deadline reminders and CSV exports.",
+  { n: "Placement Portal", c: "Connects students and companies for campus placements.", t: "Coursework", v: "place",
+    r: "A course project I built alone. Companies post jobs, eligible students apply, and everyone gets interview updates and reminders by email.",
     k: "Flask · Vue.js · Celery · Redis", l: null },
-  { n: "TrailHead", c: "Trek bookings, with a Redis cache that clears itself on every booking.", t: "Coursework", v: "trek",
-    r: "Individual coursework. JWT roles for trekkers, staff and admins, slot-safe booking and cancellation, cache invalidation, and daily email and Google Chat reminders.",
+  { n: "TrailHead", c: "Book a trekking trip and get a reminder before you go.", t: "Coursework", v: "trek",
+    r: "A course project I built alone. Trekkers book or cancel trips, staff manage them, and reminders go out by email and chat.",
     k: "Flask · Vue.js · JWT · Celery · Redis", l: null }
 ];
 
@@ -280,7 +264,7 @@ const shape = (c, pts, fill, stroke) => { c.beginPath(); pts.forEach((p, k) => c
 
 const SK = {
   // RGB image -> overlapping windows predict a height map -> blocks extruded into a 3D city
-  alti: { l: "image → height map → 3D city", still: 4.6, d(c, W, H, t) {
+  alti: { l: "photo → heights → 3D city", still: 4.6, d(c, W, H, t) {
     const s = (t / 1000) % 5.4, f = ez(ph(s, 2.6, 4.4));
     c.globalAlpha = 1 - ph(s, 5, 5.4);
     const B = [[0, 0, 2, 1.5, .9], [2.6, 0, 4.2, 1.2, .5], [4.8, 0, 6.4, 1.6, .75], [7, 0, 9.6, 1.3, .4], [0, 2.2, 1.6, 4, .6], [2.4, 2, 4.8, 3.6, 1], [5.4, 2.2, 6.8, 4.2, .55], [7.4, 2, 9.6, 4.4, .8], [0, 4.8, 2.2, 6, .35], [3, 4.4, 5.2, 6, .65], [6, 5, 9.6, 6, .3]];
@@ -300,7 +284,7 @@ const SK = {
   } },
 
   // Phone streams frames to a laptop; detectors flag PPE, proximity and falls; each hazard comes back as a spoken alert
-  field: { l: "phone camera → hazards → spoken alert", still: 1.9, d(c, W, H, t) {
+  field: { l: "camera → spot danger → warn out loud", still: 1.9, d(c, W, H, t) {
     const s = (t / 1000) % 6.6, gy = 128;
     box(c, 14, 54, 28, 52, W8(.7)); c.fillStyle = W8(.7); c.beginPath(); c.arc(28, 62, 2, 0, 7); c.fill(); txt(c, "phone", 12, 48, .45);
     box(c, 96, 22, 190, 120, W8(.45)); c.strokeStyle = W8(.45); c.beginPath(); c.moveTo(86, 150); c.lineTo(296, 150); c.stroke(); txt(c, "laptop · pose + ppe models", 96, 166, .45);
@@ -323,7 +307,7 @@ const SK = {
   } },
 
   // Completed courses unlock others through prerequisites; they go into three terms until a checkpoint is met
-  plan: { l: "prerequisites → 3-term plan", still: 4.7, d(c, W, H, t) {
+  plan: { l: "finished courses → next three terms", still: 4.7, d(c, W, H, t) {
     const s = (t / 1000) % 5.4, bw = 34, bh = 15;
     const done = [[18, 46], [18, 112]], from = [[86, 26], [86, 60], [86, 96], [86, 130]], par = [0, 0, 1, 1];
     const to = [[168, 44], [168, 66], [210, 44], [252, 44]], cols = [168, 210, 252];
@@ -344,7 +328,7 @@ const SK = {
   } },
 
   // Events move from draft through Core review to live; students register into live events; attendance follows
-  fest: { l: "draft → core review → live → registrations", still: 3.6, d(c, W, H, t) {
+  fest: { l: "draft → approved → sign-ups", still: 3.6, d(c, W, H, t) {
     const s = (t / 1000) % 6.6; c.globalAlpha = 1 - ph(s, 6.1, 6.6);
     const X = [16, 112, 208], cw = 76, ch = 32;
     ["draft", "core review", "live"].forEach((n, i) => { txt(c, n, X[i], 18, .5); box(c, X[i] - 2, 26, cw + 4, 150, W8(.07)); });
@@ -368,7 +352,7 @@ const SK = {
     if (s >= 4.2 && s < 6) txt(c, "attendance", X[2], 128, .6 * ph(s, 4.2, 4.6));
   } },
   // Two completions race for one locked shipment: stock moves once, one email goes out
-  deal: { l: "row lock · one shipment, one email", still: 2.8, d(c, W, H, t) {
+  deal: { l: "two clicks, one shipment, one email", still: 2.8, d(c, W, H, t) {
     const s = (t / 1000) % 5.2; c.globalAlpha = 1 - ph(s, 4.6, 5.2);
     const bx = 128, by = 56, shipped = s >= 2.3, locked = s >= 1 && s < 3.1;
     box(c, bx, by, 72, 50, W8(.8), shipped ? W8(.08) : null); txt(c, shipped ? "shipped" : "pending", bx, by + 64, .8);
@@ -388,7 +372,7 @@ const SK = {
   } },
 
   // Bookings on a half-open time range; Postgres refuses an overlap, ignores cancelled slots
-  asset: { l: "tstzrange && · no double booking", still: 2.7, d(c, W, H, t) {
+  asset: { l: "no double bookings", still: 2.7, d(c, W, H, t) {
     const s = (t / 1000) % 5.4, X = h => 40 + (h - 9) * 50, ty = 96, bh = 26;
     c.strokeStyle = W8(.2); c.beginPath(); c.moveTo(30, ty + bh + 1); c.lineTo(282, ty + bh + 1); c.stroke();
     for (let h = 9; h <= 13; h++) { c.fillStyle = W8(.2); c.fillRect(X(h), ty + bh + 1, 1, 5); txt(c, String(h).padStart(2, "0"), X(h) - 5, ty + bh + 18, .4); }
@@ -406,7 +390,7 @@ const SK = {
   } },
 
   // Chunks in a vector store; filter by term, take the nearest, keep the ones above the threshold, answer with sources
-  rag: { l: "embed · filter by term · retrieve · cite", still: 4.2, d(c, W, H, t) {
+  rag: { l: "find → filter → answer with sources", still: 4.2, d(c, W, H, t) {
     const s = (t / 1000) % 5.2; c.globalAlpha = 1 - ph(s, 4.7, 5.2);
     let sd = 3; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
     const pts = [...Array(42)].map((_, i) => ({ x: 22 + r() * 168, y: 26 + r() * 150, doc: i % 4 === 0, cur: r() < .62 }));
@@ -430,7 +414,7 @@ const SK = {
   } },
 
   // Pose every frame; a generated garment keyframe; the garment follows the live pose; a big pose change asks for a new keyframe
-  tryon: { l: "pose → keyframe → live garment", still: 3, d(c, W, H, t) {
+  tryon: { l: "follow the body → add the dress", still: 3, d(c, W, H, t) {
     const s = (t / 1000) % 5.4, x = 150, gy = 178;
     box(c, 92, 14, 116, 172, W8(.1)); txt(c, "mirror", 92, 10, .4);
     const up = ph(s, 3.6, 4.2) * (1 - ph(s, 4.9, 5.3)), sw = s > 1.8 ? Math.sin((s - 1.8) * 2.4) * 9 * (1 - up) : 0, hx = x + sw * .4;
@@ -450,7 +434,7 @@ const SK = {
   } },
 
   // Column-order RLE decodes into a defect mask; types are kept apart; Dice scores the overlap
-  surface: { l: "rle → mask → dice", still: 4.4, d(c, W, H, t) {
+  surface: { l: "find defects, pixel by pixel", still: 4.4, d(c, W, H, t) {
     const s = (t / 1000) % 5.6, X0 = 20, Y0 = 24, cs = 5, C = 52, R = 13;
     c.strokeStyle = W8(.05); for (let y = Y0; y <= Y0 + R * cs; y += 6) { c.beginPath(); c.moveTo(X0, y); c.lineTo(X0 + C * cs, y); c.stroke(); }
     box(c, X0, Y0, C * cs, R * cs, W8(.25)); txt(c, "steel surface", X0, Y0 - 8, .45);
@@ -468,7 +452,7 @@ const SK = {
       txt(c, "true", ax - 52, ty + 3, .5); txt(c, "pred", bx + 34, ty + 3, .5); txt(c, "dice = 2|a∩b| / (|a|+|b|)", 150, 192, .7); c.globalAlpha = 1; }
   } },
   // Approved company -> approved drive; eligibility gate; application stages; scheduled reminders
-  place: { l: "approve · eligibility · stages · reminders", still: 3.3, d(c, W, H, t) {
+  place: { l: "approve → check → interview → offer", still: 3.3, d(c, W, H, t) {
     const s = (t / 1000) % 5.2; c.globalAlpha = 1 - ph(s, 4.7, 5.2);
     const gate = (x, y, lit, lab) => { c.strokeStyle = W8(lit ? .9 : .3); c.beginPath(); c.moveTo(x, y - 14); c.lineTo(x, y + 14); c.stroke(); txt(c, lab, x - 14, y - 20, .45); };
     const m = ez(ph(s, 0, 1)); gate(64, 50, m > .5 && m < .9, "approve");
@@ -487,7 +471,7 @@ const SK = {
   } },
 
   // Reads hit Redis; a booking takes a slot and clears treks:*; the next read misses, goes to the DB and refills
-  trek: { l: "redis hit · book · invalidate · refill", still: 3.4, d(c, W, H, t) {
+  trek: { l: "fast page → booking → refresh", still: 3.4, d(c, W, H, t) {
     const s = (t / 1000) % 5.4; c.globalAlpha = 1 - ph(s, 4.9, 5.4);
     const R = [128, 26, 64, 40], D = [128, 128, 64, 40], cx = 30, cy = 98;
     box(c, ...R, W8(.7)); box(c, ...D, W8(.7)); txt(c, "redis", 128, 20, .5); txt(c, "db", 128, 182, .5);
@@ -532,170 +516,139 @@ const SK = {
   });
 })();
 
-// Hero: dkn-1, a very small "multimodal model". Text mode is a real character 4-gram trained in the browser; the other modes are scripted.
+// Hero: a looping infinite zoom. Each scene finishes, shrinks into a slot of the next one, and stays nested inside it.
 (() => {
-  const $ = id => document.getElementById(id);
-  const pre = $("genpre"), cv = $("gencv"), c = cv.getContext("2d"), inp = $("genin"), stat = $("genstat"), probs = $("genprobs"), temp = $("gentemp"), tempv = $("gentempv"), tempRow = $("gentemprow");
-  const PROMPTS = {
-    text: ["why hire dilavesh?", "what does he build?", "what is he into?"],
-    pixels: ["a robot that wants an internship", "a cat doing gradient descent", "a city from one aerial image"],
-    code: ["def should_hire()", "a training loop at 3am"],
-    robot: ["deliver the CV to the recruiter"]
-  };
-  let mode = "text", job = 0;
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
-  const show = w => { pre.hidden = w !== "pre"; cv.hidden = w !== "cv"; if (w === "cv") fit(); };
-  const fit = () => { const r = cv.getBoundingClientRect(), dp = Math.min(devicePixelRatio || 1, 2); cv.width = r.width * dp; cv.height = r.height * dp; c.setTransform(dp, 0, 0, dp, 0, 0); return r; };
-  const bar = p => "█".repeat(Math.round(p * 10)).padEnd(10, "·");
-
-  // ---------- text: character 4-gram with backoff, sampled with temperature
-  const CORPUS = (". dilavesh trains computer vision models and builds the web apps that use them. he fine-tunes height models for altimap, an isro problem. " +
-    "he trained the safety gear detector for fieldpilot ai. he took over a half built course planner and shipped it to four degree programmes. " +
-    "he builds the fest platform for paradox. he studies data science and applications at iit madras. he likes models that see the world. " +
-    "he wants to work on embodied ai and robots. he is open to ai engineering, ml, software, robotics and agent roles. " +
-    "hire him before the loss goes to zero. he builds things that ship. he reads loss curves for fun. ").repeat(2);
-  const N = 4, T = new Map();
-  for (let n = 1; n <= N; n++) for (let i = n; i < CORPUS.length; i++) {
-    const k = n + CORPUS.slice(i - n, i); let m = T.get(k); if (!m) T.set(k, m = new Map()); m.set(CORPUS[i], (m.get(CORPUS[i]) || 0) + 1);
-  }
-  const next = (ctx, t) => {
-    let m; for (let n = N; n >= 1 && !m; n--) m = T.get(n + ctx.slice(-n)); if (!m) m = T.get("2. ");
-    const e = [...m].map(([ch, k]) => [ch, Math.pow(k, 1 / t)]), z = e.reduce((a, [, w]) => a + w, 0);
-    let r = Math.random() * z, pick = e[0][0]; for (const [ch, w] of e) { if ((r -= w) <= 0) { pick = ch; break; } }
-    return { pick, top: e.sort((a, b) => b[1] - a[1]).slice(0, 3).map(([ch, w]) => [ch, w / z]) };
-  };
-  async function genText(id, prompt) {
-    show("pre");
-    const seed = /build|make|ship/i.test(prompt) ? "he builds " : /into|like|want/i.test(prompt) ? "he likes " : /hire|why/i.test(prompt) ? "hire him " : "dilavesh ";
-    let out = seed;
-    for (let i = 0; i < 190; i++) {
-      if (id !== job) return;
-      const { pick, top } = next(". " + out, +temp.value);
-      out += pick;
-      pre.textContent = "> " + prompt + "\n\n" + out + "▌";
-      probs.textContent = top.map(([ch, p]) => `'${ch === " " ? "␣" : ch}' ${p.toFixed(2)} ${bar(p)}`).join("\n");
-      stat.textContent = `char ${i + 1} · 4-gram · temp ${(+temp.value).toFixed(1)}`;
-      if (pick === "." && out.length > 80) break;
-      await sleep(26);
-    }
-    pre.textContent = "> " + prompt + "\n\n" + out;
-  }
-
-  // ---------- pixels: a toy denoiser that walks from noise to a 20x20 sprite
-  const sprite = name => {
-    const g = [...Array(20)].map(() => Array(20).fill(0)), R = (x0, y0, x1, y1, v) => { for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) if (g[y] && x >= 0 && x < 20) g[y][x] = v; };
-    const O = (x0, y0, x1, y1, v) => { R(x0, y0, x1, y0, v); R(x0, y1, x1, y1, v); R(x0, y0, x0, y1, v); R(x1, y0, x1, y1, v); };
-    if (name === "robot") {
-      R(9, 0, 10, 1, .5); O(5, 2, 13, 8, 1); R(7, 4, 8, 5, 1); R(11, 4, 12, 5, 1); R(8, 7, 11, 7, .5); R(8, 9, 10, 9, .5);
-      R(5, 10, 13, 15, .45); O(5, 10, 13, 15, 1); R(3, 11, 4, 14, .8); R(14, 9, 15, 10, .8); R(16, 3, 16, 9, .8);
-      O(15, 1, 19, 6, 1); R(16, 4, 16, 4, 1); R(17, 5, 17, 5, 1); R(18, 3, 18, 3, 1); R(7, 16, 8, 19, .8); R(10, 16, 11, 19, .8);
-    } else if (name === "cat") {
-      for (let x = 0; x < 20; x++) { const y = Math.round(16 - (x - 10) ** 2 * .11); R(x, y, x, y, .55); }
-      [[2, 9], [4, 12], [6, 14]].forEach(([x, y]) => R(x, y, x, y, 1));
-      R(8, 12, 12, 16, .9); R(8, 10, 8, 11, .9); R(12, 10, 12, 11, .9); R(9, 13, 9, 13, 0); R(11, 13, 11, 13, 0); R(10, 15, 10, 15, .3); R(13, 15, 15, 15, .7); R(15, 13, 15, 14, .7);
-    } else {
-      const hs = [5, 9, 7, 13, 6, 10, 15, 8, 11, 6]; hs.forEach((h, i) => { const x0 = i * 2; R(x0, 19 - h, x0 + 1, 19, .85); for (let y = 21 - h; y < 19; y += 2) R(x0 + (y % 4 ? 0 : 1), y, x0 + (y % 4 ? 0 : 1), y, .25); });
-      R(16, 2, 17, 2, 1); R(17, 1, 17, 3, 1); R(14, 1, 15, 1, .5); R(18, 3, 19, 3, .5);
-    }
+  const cv = document.getElementById("story"), c = cv.getContext("2d"), ticks = [...document.querySelectorAll("#storyticks button")];
+  const FS = (s, it) => `${it ? "italic " : ""}300 ${s}px Newsreader, Georgia, serif`, MONO = s => `400 ${s}px 'Geist Mono', monospace`;
+  const lab = (c, s) => { c.font = MONO(9); c.fillStyle = W8(.4); c.fillText(s.toUpperCase(), 16, 22); };
+  const hash = (x, y, k) => { const v = Math.sin(x * 12.9898 + y * 78.233 + k * 37.719) * 43758.5453; return v - Math.floor(v); };
+  const QUOTE = "We can only see a short distance ahead, but we can see plenty there that needs to be done.";
+  const CODE = ["from dkn import vision", "", 'model = vision.load("tiny-cat")', "frame = camera.read()", "label = model(frame)", "print(label)    # cat"];
+  const CAT = (() => {
+    const g = [...Array(18)].map(() => Array(24).fill(0)), set = (x, y, v) => { if (g[y] && x >= 0 && x < 24) g[y][x] = v; };
+    for (let y = 0; y < 18; y++) for (let x = 0; x < 24; x++) if (((x - 11.5) / 7.6) ** 2 + ((y - 10.6) / 5.8) ** 2 < 1) set(x, y, .82);
+    for (let y = 2; y <= 6; y++) for (let x = 0; x < 24; x++) { const k = y - 2; if (x >= 5 - k * .2 && x <= 6 + k * .8) { set(x, y, .82); set(23 - x, y, .82); } }
+    [[8, 9], [9, 9], [8, 10], [9, 10], [14, 9], [15, 9], [14, 10], [15, 10]].forEach(([x, y]) => set(x, y, .04));
+    [[9, 9], [15, 9]].forEach(([x, y]) => set(x, y, .5));
+    [[11, 12], [12, 12]].forEach(([x, y]) => set(x, y, .3)); [[10, 13], [13, 13], [11, 14], [12, 14]].forEach(([x, y]) => set(x, y, .35));
+    for (let x = 0; x < 4; x++) { set(1 + x, 12, .5); set(1 + x, 14, .45); set(19 + x, 12, .5); set(19 + x, 14, .45); }
     return g;
-  };
-  async function genPixels(id, prompt) {
-    show("cv"); const r = fit(), name = /robot|intern/i.test(prompt) ? "robot" : /cat|gradient|descent/i.test(prompt) ? "cat" : /city|aerial|height|map/i.test(prompt) ? "city" : ["robot", "cat", "city"][prompt.length % 3];
-    const g = sprite(name), steps = 48, cs = Math.floor(Math.min(r.width - 24, r.height - 24) / 20), ox = (r.width - cs * 20) / 2, oy = (r.height - cs * 20) / 2;
-    probs.textContent = `sampler   toy denoiser\nsprite    20 × 20\nadherence high (he wrote the prompts)`;
-    for (let s = 0; s <= steps; s++) {
-      if (id !== job) return;
-      const sig = Math.cos(s / steps * Math.PI / 2);
-      c.clearRect(0, 0, r.width, r.height);
-      for (let y = 0; y < 20; y++) for (let x = 0; x < 20; x++) {
-        const v = Math.min(1, Math.max(0, g[y][x] * (1 - sig) + Math.random() * sig));
-        c.fillStyle = W8((.03 + v * .9).toFixed(3)); c.fillRect(ox + x * cs, oy + y * cs, cs - 1, cs - 1);
+  })();
+
+  const S = [
+    { n: "text", dur: 4600, draw(c, p, t) {
+      lab(c, "generating text");
+      c.font = FS(22, true);
+      const lines = []; let line = ""; for (const w of QUOTE.split(" ")) { const s = line ? line + " " + w : w; if (c.measureText(s).width > 288 && line) { lines.push(line); line = w; } else line = s; } lines.push(line);
+      let n = Math.floor(ph(p, 0, .75) * QUOTE.length), cx = 36, cy = 86;
+      c.fillStyle = W8(.92);
+      lines.forEach((l, i) => { const s = l.slice(0, Math.max(0, n)); n -= l.length + 1; if (!s) return; c.fillText(s, 36, 86 + i * 32); cx = 36 + c.measureText(s).width + 3; cy = 86 + i * 32; });
+      if (p < .75 || t % 1000 < 500) c.fillRect(cx, cy - 18, 1.5, 22);
+      if (p > .78) { c.font = MONO(10); c.fillStyle = W8(.55 * ph(p, .78, .88)); c.fillText("— ALAN TURING, 1950", 36, 86 + lines.length * 32 + 12); }
+    } },
+    { n: "code", dur: 4600, slot: [262, 42, 72, 54], keep: 1, draw(c, p, t) {
+      lab(c, "writing code");
+      box(c, 20, 32, 320, 212, W8(.2), "#0c0c0c");
+      [32, 42, 52].forEach(x => { c.fillStyle = W8(.25); c.beginPath(); c.arc(x, 45, 2.5, 0, 7); c.fill(); });
+      box(c, 261, 41, 74, 56, W8(.3)); c.font = MONO(8); c.fillStyle = W8(.4); c.fillText("QUOTE.TXT", 262, 108);
+      const total = CODE.join("").length; let n = Math.floor(ph(p, .05, .82) * total), lx = 0, ly = 0;
+      c.font = MONO(12);
+      CODE.forEach((l, i) => {
+        const y = 82 + i * 22; c.fillStyle = W8(.22); c.fillText(String(i + 1), 34, y);
+        const s = l.slice(0, Math.max(0, n)); n -= l.length;
+        if (s) { const k = s.indexOf("#"); c.fillStyle = W8(.85); c.fillText(k < 0 ? s : s.slice(0, k), 56, y); if (k >= 0) { c.fillStyle = W8(p > .85 ? .95 : .45); c.fillText(s.slice(k), 56 + c.measureText(s.slice(0, k)).width, y); } }
+        if (s || i === 0) { lx = 56 + c.measureText(s).width + 2; ly = y; }
+      });
+      if (p < .82 || t % 1000 < 500) { c.fillStyle = W8(.9); c.fillRect(lx, ly - 11, 7, 14); }
+    } },
+    { n: "pixels", dur: 3800, slot: [172.5, 129.375, 15, 11.25], draw(c, p, t) {
+      const sig = 1 - ez(ph(p, 0, .82)), step = Math.floor(t / 70);
+      for (let y = 0; y < 18; y++) for (let x = 0; x < 24; x++) {
+        const v = CAT[y][x] * (1 - sig) + hash(x, y, step) * sig * .9;
+        c.fillStyle = W8((.03 + v * .88).toFixed(3)); c.fillRect(x * 15 + .5, y * 15 + .5, 14, 14);
       }
-      stat.textContent = `denoising step ${s}/${steps} · σ ${sig.toFixed(2)}`;
-      await sleep(s < steps ? 55 : 0);
-    }
-  }
-
-  // ---------- code: types a snippet token by token
-  const CODE = {
-    hire: 'def should_hire(candidate):\n    skills = {"pytorch", "fine-tuning", "full-stack"}\n    shipped = candidate.live_projects  # course planner: live\n    return skills <= candidate.skills and shipped\n\n>>> should_hire(dilavesh)\nTrue',
-    loop: 'for epoch in range(10**9):\n    loss = model(data) + regret\n    loss.backward()        # it is fine\n    if loss.isnan():\n        coffee += 1        # try again\n        optimizer.zero_grad()\n\n# epoch 1: loss nan. coffee 1.'
-  };
-  async function genCode(id, prompt) {
-    show("pre"); const src = /loop|train|3am/i.test(prompt) ? CODE.loop : CODE.hire, toks = src.match(/\s+|\w+|[^\s\w]/g);
-    probs.textContent = "decoding  greedy\nmodel     knows python\nvibes     immaculate";
-    let out = "";
-    for (let i = 0; i < toks.length; i++) {
-      if (id !== job) return;
-      out += toks[i]; pre.textContent = out + "▌";
-      stat.textContent = `token ${i + 1}/${toks.length} · p ${(0.82 + Math.random() * .17).toFixed(2)}`;
-      await sleep(/\s/.test(toks[i]) ? 8 : 34);
-    }
-    pre.textContent = out;
-  }
-
-  // ---------- robot: language -> action tokens -> a pixel robot carries the CV to "you"
-  async function genRobot(id, prompt) {
-    show("cv"); const r = fit(), W = r.width, H = r.height, gy = H - 30;
-    const plan = [["<look>", 500], ["<walk: cv>", 1300], ["<grip>", 400], ["<lift>", 450], ["<walk: you>", 1500], ["<place>", 450], ["<wave>", 1100]];
-    probs.textContent = "policy    vla-nano\nactions   7 tokens\nsuccess   cv delivered";
-    const cvx = W * .45, you = W - 34;
-    let rx = 30, carry = false, armUp = 0, wave = 0, placed = false, say = "";
-    const draw = (k, tk) => {
-      c.clearRect(0, 0, W, H);
-      c.font = "400 10px 'Geist Mono', monospace";
-      plan.forEach(([n], i) => { c.fillStyle = W8(i < k ? .45 : i === k ? .95 : .18); c.fillText(n, 10 + (i % 4) * 72, 18 + Math.floor(i / 4) * 14); });
-      c.strokeStyle = W8(.3); c.beginPath(); c.moveTo(0, gy + .5); c.lineTo(W, gy + .5); c.stroke();
-      const bx = carry ? rx + 14 : placed ? you - 24 : cvx, by = carry ? gy - 40 - armUp * 8 : gy - 12;
-      c.fillStyle = W8(.85); c.fillRect(bx - 7, by, 14, 12); c.fillStyle = "#0c0c0c"; c.fillRect(bx - 4, by + 3, 8, 1.5); c.fillRect(bx - 4, by + 7, 6, 1.5);
-      c.strokeStyle = W8(.8); c.beginPath(); c.arc(you, gy - 34, 5, 0, 7); c.moveTo(you, gy - 29); c.lineTo(you, gy - 12); c.moveTo(you, gy - 12); c.lineTo(you - 5, gy); c.moveTo(you, gy - 12); c.lineTo(you + 5, gy); c.moveTo(you - 7, gy - 24); c.lineTo(you + 7, gy - 24); c.stroke();
-      c.fillStyle = W8(.45); c.fillText("you", you - 9, gy + 14);
-      const p = 4, X = rx - 12, Y = gy - 40, px = (x, y, w, h, a) => { c.fillStyle = W8(a); c.fillRect(X + x * p, Y + y * p, w * p, h * p); };
-      px(1, 0, 4, 3, .9); px(2, 1, 1, 1, 0); px(4, 1, 1, 1, 0); c.fillStyle = "#0c0c0c"; c.fillRect(X + 2 * p, Y + p, p, p); c.fillRect(X + 3.6 * p, Y + p, p, p);
-      px(0, 4, 6, 4, .6); const step = Math.floor(tk / 120) % 2; px(1, 8, 1, 2 - step, .8); px(4, 8, 1, 1 + step, .8);
-      c.strokeStyle = W8(.9); c.lineWidth = 2; c.beginPath(); c.moveTo(X + 6 * p, Y + 5 * p); c.lineTo(X + 6 * p + 8, Y + 5 * p - armUp * 10 + Math.sin(wave) * 4 - (carry ? 4 : 0)); c.stroke(); c.lineWidth = 1;
-      if (say) { c.fillStyle = W8(.85); c.fillText(say, you - 120, gy - 50); }
-    };
-    for (let k = 0; k < plan.length; k++) {
-      const [n, ms] = plan[k], t0 = performance.now(), x0 = rx;
-      while (performance.now() - t0 < ms) {
-        if (id !== job) return;
-        const e = (performance.now() - t0) / ms;
-        if (n === "<walk: cv>") rx = x0 + (cvx - 22 - x0) * e;
-        if (n === "<grip>") armUp = e * .3;
-        if (n === "<lift>") { carry = true; armUp = .3 + e * .7; }
-        if (n === "<walk: you>") rx = x0 + (you - 44 - x0) * e;
-        if (n === "<place>") { armUp = 1 - e; if (e > .6) { carry = false; placed = true; } }
-        if (n === "<wave>") { wave = e * 14; armUp = .8; say = "recruiter: when can you start?"; }
-        stat.textContent = `action ${k + 1}/${plan.length} · ${n}`;
-        draw(k, performance.now()); await sleep(16);
+      c.fillStyle = "rgba(10,10,10,.75)"; c.fillRect(10, 10, 150, 18); lab(c, `denoising · step ${Math.round((1 - sig) * 50)}/50`);
+    } },
+    { n: "robot", dur: 3800, slot: [144, 46, 72, 54], keep: 1, draw(c, p, t) {
+      lab(c, "vision → action");
+      c.strokeStyle = W8(.08); c.beginPath(); c.moveTo(40, 218.5); c.lineTo(320, 218.5); c.stroke();
+      c.strokeStyle = W8(.85); c.lineWidth = 1.5;
+      c.beginPath(); c.moveTo(180, 40); c.lineTo(180, 28); c.stroke(); c.fillStyle = W8(t % 900 < 450 ? .95 : .3); c.beginPath(); c.arc(180, 25, 3, 0, 7); c.fill();
+      c.strokeRect(138.5, 40.5, 84, 66); c.fillStyle = W8(.85); c.fillRect(172, 107, 16, 7);
+      c.fillStyle = "#101010"; c.fillRect(146, 114, 68, 62); c.strokeRect(146.5, 114.5, 68, 62);
+      [0, 1, 2].forEach(k => { c.fillStyle = W8(Math.floor(t / 300 + k) % 3 === 0 ? .9 : .25); c.fillRect(158 + k * 16, 128, 8, 5); });
+      c.fillStyle = W8(.35); c.fillRect(158, 146, 44, 2); c.fillRect(158, 154, 30, 2);
+      const w = 1.25 + Math.sin(t * .008) * .45, elx = 236, ely = 106, hx = elx + Math.cos(w) * 20, hy = ely - Math.sin(w) * 20;
+      c.beginPath(); c.moveTo(146, 122); c.lineTo(128, 160); c.lineTo(132, 178); c.moveTo(214, 122); c.lineTo(elx, ely); c.lineTo(hx, hy); c.stroke();
+      c.beginPath(); c.arc(hx, hy, 3, 0, 7); c.stroke();
+      c.beginPath(); c.moveTo(164, 176); c.lineTo(164, 214); c.moveTo(196, 176); c.lineTo(196, 214); c.stroke();
+      c.fillRect(156, 213, 16, 5); c.fillRect(188, 213, 16, 5); c.lineWidth = 1;
+      if (p > .3) { const k = ph(p, .3, .45); c.globalAlpha *= k; c.strokeStyle = W8(.9); c.beginPath(); [[132, 34, 1, 1], [228, 34, -1, 1], [228, 112, -1, -1], [132, 112, 1, -1]].forEach(([x, y, sx, sy]) => { c.moveTo(x + sx * 10, y); c.lineTo(x, y); c.lineTo(x, y + sy * 10); }); c.stroke();
+        c.font = MONO(9); c.fillStyle = W8(.9); c.fillText("CAT 0.97", 132, 128 - 100); c.globalAlpha /= k || 1; }
+      if (p > .55) { c.font = FS(20, true); c.fillStyle = W8(.7 * ph(p, .55, .7)); c.fillText("a = π(o)", 250, 160); }
+    } },
+    { n: "math", dur: 4200, slot: [178, 114, 60, 45], keep: 1, draw(c, p, t) {
+      lab(c, "the math underneath");
+      c.fillStyle = W8(.92); c.font = FS(28, true); c.fillText("a = π", 84, 146); c.font = FS(15, true); c.fillText("θ", 146, 153); c.font = FS(30, false); c.fillText("(", 164, 147); c.fillText(")", 242, 147);
+      box(c, 177, 113, 62, 47, W8(.35));
+      [["softmax(QKᵀ / √d) · V", 92, 66, .12], ["θ ← θ − η ∇θ L(θ)", 96, 206, .32], ["L = − Σ y log ŷ", 124, 240, .52]].forEach(([s, x, y, at]) => {
+        const k = ez(ph(p, at, at + .2)); if (k <= 0) return; c.font = FS(18, true); c.fillStyle = W8((.6 * k).toFixed(3)); c.fillText(s, x, y + (1 - k) * 8);
+      });
+    } },
+    { n: "network", dur: 4600, slot: [174, 130.5, 12, 9], keep: 1, draw(c, p, t) {
+      lab(c, "and it all becomes one node");
+      const X = [60, 120, 180, 240, 300], NN = [3, 4, 5, 4, 2], Y = (n, j) => 128 + (j - (n - 1) / 2) * 38;
+      for (let l = 0; l < 4; l++) for (let a = 0; a < NN[l]; a++) for (let b = 0; b < NN[l + 1]; b++) {
+        const x0 = X[l], y0 = Y(NN[l], a), x1 = X[l + 1], y1 = Y(NN[l + 1], b);
+        c.strokeStyle = W8(.09); c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
+        if (p > .15) { const f = (t * .0007 + hash(l, a * 7 + b, 1)) % 1; c.fillStyle = W8((.7 * ph(p, .15, .3)).toFixed(3)); c.fillRect(x0 + (x1 - x0) * f - 1, y0 + (y1 - y0) * f - 1, 2, 2); }
       }
+      X.forEach((x, l) => { for (let j = 0; j < NN[l]; j++) { const y = Y(NN[l], j), mid = l === 2 && j === 2; c.beginPath(); c.arc(x, y, mid ? 11 : 6, 0, 7); c.fillStyle = "#0a0a0a"; c.fill(); c.strokeStyle = W8(mid ? .9 : .6); c.stroke(); } });
+      if (p > .55) { c.font = FS(16, true); c.fillStyle = W8((.9 * ph(p, .55, .7)).toFixed(3)); const s = "…and he would like to build the next one with you."; c.fillText(s, 180 - c.measureText(s).width / 2, 252); }
+    } }
+  ];
+
+  const ZOOM = 1300, FADE = 900;
+  let sc = 1, i = 0, phase = "play", el = 0, last = 0, mx = 0, my = 0, px = 0, py = 0, vis = true, raf;
+  let prev = document.createElement("canvas"), next = document.createElement("canvas");
+  const size = () => { const r = cv.getBoundingClientRect(), dp = Math.min(devicePixelRatio || 1, 2); [cv, prev, next].forEach(k => { k.width = r.width * dp; k.height = r.height * dp; }); sc = r.width * dp / 360; };
+  const scene = (ctx, k, p, t, snap, slotAlpha) => {
+    S[k].draw(ctx, p, t);
+    const s = S[k].slot; if (s && snap && slotAlpha > 0) { ctx.globalAlpha = slotAlpha; ctx.drawImage(snap, s[0], s[1], s[2], s[3]); ctx.globalAlpha = 1; }
+  };
+  const base = ctx => { ctx.setTransform(sc, 0, 0, sc, 0, 0); ctx.globalAlpha = 1; ctx.fillStyle = "#0a0a0a"; ctx.fillRect(0, 0, 360, 270); };
+  const snapshot = (k, t, from) => { const x = next.getContext("2d"); base(x); scene(x, k, 1, t, from, 1); [prev, next] = [next, prev]; };
+  function frame(t) {
+    const dt = Math.min(64, t - (last || t)); last = t; el += dt;
+    px += (mx - px) * .08; py += (my - py) * .08;
+    base(c); c.translate(px * 5, py * 4);
+    if (phase === "play") {
+      const p = Math.min(1, el / S[i].dur);
+      scene(c, i, p, t, prev, S[i].keep ? 1 : 0);
+      if (p >= 1) { snapshot(i, t, prev); i = (i + 1) % S.length; phase = i === 0 ? "fade" : "zoom"; el = 0; }
+    } else if (phase === "zoom") {
+      const e = ez(Math.min(1, el / ZOOM)), s = S[i].slot, K = 360 / s[2], k = Math.pow(K, 1 - e);
+      const cx = s[0] + s[2] / 2 + (180 - s[0] - s[2] / 2) * e, cy = s[1] + s[3] / 2 + (135 - s[1] - s[3] / 2) * e;
+      c.translate(180, 135); c.scale(k, k); c.translate(-cx, -cy);
+      scene(c, i, 0, t, prev, S[i].keep ? 1 : 1 - ph(e, .7, 1));
+      if (el >= ZOOM) { phase = "play"; el = 0; }
+    } else {
+      const e = Math.min(1, el / FADE);
+      scene(c, 0, 0, t, null, 0); c.setTransform(sc, 0, 0, sc, 0, 0); c.globalAlpha = 1 - e; c.drawImage(prev, 0, 0, 360, 270); c.globalAlpha = 1;
+      if (el >= FADE) { phase = "play"; el = 0; prev.getContext("2d").clearRect(0, 0, prev.width, prev.height); }
     }
-    draw(plan.length, 0);
+    const cur = phase === "play" ? Math.min(1, el / S[i].dur) : 0;
+    ticks.forEach((b, k) => { b.style.setProperty("--p", k < i ? 1 : k === i ? cur : 0); b.setAttribute("aria-current", k === i); });
+    if (vis && !reduce) raf = requestAnimationFrame(frame);
   }
-
-  const RUN = { text: genText, pixels: genPixels, code: genCode, robot: genRobot };
-  const run = () => { const id = ++job; RUN[mode](id, inp.value.trim() || PROMPTS[mode][0]); };
-  seg($("genmode"), v => { mode = v; inp.value = PROMPTS[v][0]; tempRow.hidden = v !== "text"; probs.textContent = ""; run(); });
-  $("gengo").addEventListener("click", run);
-  inp.addEventListener("keydown", e => { if (e.key === "Enter") run(); });
-  $("gennext").addEventListener("click", () => { const L = PROMPTS[mode]; inp.value = L[(L.indexOf(inp.value) + 1) % L.length]; run(); });
-  temp.addEventListener("input", () => { tempv.textContent = (+temp.value).toFixed(1); });
-  inp.value = PROMPTS.text[0];
-  setTimeout(run, 700);
-
-  // Mascot: a pixel face whose eyes follow the cursor and look up while it "thinks"
-  const m = $("genface"), mc = m.getContext("2d"), dp = Math.min(devicePixelRatio || 1, 2);
-  m.width = 40 * dp; m.height = 20 * dp; mc.setTransform(dp, 0, 0, dp, 0, 0);
-  let ex = 0, ey = 0, tx = 0, ty = 0, blink = 0;
-  addEventListener("pointermove", e => { const r = m.getBoundingClientRect(), dx = e.clientX - (r.left + 20), dy = e.clientY - (r.top + 10), d = Math.hypot(dx, dy) || 1; tx = dx / d * Math.min(1, d / 200) * 3; ty = dy / d * Math.min(1, d / 200) * 2.5; });
-  (function face(t) {
-    ex += (tx - ex) * .2; ey += (ty - ey) * .2;
-    blink = (t % 4200) < 120 ? 1 : 0;
-    mc.clearRect(0, 0, 40, 20); mc.strokeStyle = W8(.6); mc.strokeRect(.5, .5, 39, 19);
-    [12, 28].forEach(x => { if (blink) { mc.fillStyle = W8(.9); mc.fillRect(x - 4, 10, 8, 1.5); } else { mc.fillStyle = W8(.9); mc.fillRect(x - 4 + ex, 6 + ey, 8, 8); mc.fillStyle = "#0c0c0c"; mc.fillRect(x - 1 + ex * 1.4, 9 + ey * 1.4, 3, 3); } });
-    requestAnimationFrame(face);
-  })(0);
+  const still = () => { base(c); scene(c, i, 1, 0, null, 0); ticks.forEach((b, k) => b.style.setProperty("--p", k <= i ? 1 : 0)); };
+  const go = () => { cancelAnimationFrame(raf); last = 0; if (reduce) still(); else raf = requestAnimationFrame(frame); };
+  cv.addEventListener("click", () => { if (phase === "play") el = S[i].dur; else el = 1e9; if (reduce) { i = (i + 1) % S.length; still(); } });
+  ticks.forEach((b, k) => b.addEventListener("click", () => { i = k; phase = "play"; el = 0; prev.getContext("2d").clearRect(0, 0, prev.width, prev.height); if (reduce) still(); }));
+  addEventListener("pointermove", e => { const r = cv.getBoundingClientRect(); mx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / innerWidth * 2)); my = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / innerHeight * 2)); });
+  new ResizeObserver(() => { size(); go(); }).observe(cv);
+  new IntersectionObserver(([en]) => { vis = en.isIntersecting; if (vis) go(); }).observe(cv);
+  document.fonts?.ready.then(go);
 })();
 
 // Name: letters lift gently under the cursor
