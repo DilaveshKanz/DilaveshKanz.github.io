@@ -53,7 +53,7 @@ section + section { margin-top: 112px; }
 #intro { position: relative; }
 .status { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 28px; }
 .status i { width: 6px; height: 6px; border-radius: 50%; background: var(--t1); animation: ping 2.4s infinite; }
-h1 { font: 300 clamp(40px, 6.2vw, 64px)/1.02 var(--serif); color: var(--t1); margin: 0; letter-spacing: -.025em; cursor: default; }
+h1 { font: 300 clamp(26px, calc((100vw - 44px) / 9), 64px)/1.02 var(--serif); color: var(--t1); margin: 0; letter-spacing: -.025em; cursor: default; white-space: nowrap; }
 h1 .ch { display: inline-block; transition: transform var(--mid) var(--out), color var(--mid); will-change: transform; }
 h1 .ch > i { display: inline-block; font-style: normal; animation: letter .9s var(--out) both; animation-delay: calc(var(--k) * 32ms + 120ms); }
 @keyframes letter { from { opacity: 0; filter: blur(8px); transform: translateY(.45em) rotate(4deg); } }
