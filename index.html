@@ -51,8 +51,15 @@ section + section { margin-top: 112px; }
 
 /* Opening */
 #intro { position: relative; }
-.status { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 28px; }
-.status i { width: 6px; height: 6px; border-radius: 50%; background: var(--t1); animation: ping 2.4s infinite; }
+.deploy { position: fixed; z-index: 30; right: max(20px, env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 10px; max-width: calc(100vw - 40px);
+  font: 400 11px/1 var(--mono); letter-spacing: .04em; color: var(--t1); background: rgba(12, 12, 12, .86); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid var(--hair); border-radius: 999px; padding: 10px 14px; cursor: pointer; animation: chip .8s var(--out) 1s both; transition: border-color var(--fast); }
+.deploy:hover { border-color: var(--t3); }
+.deploy i { width: 6px; height: 6px; border-radius: 50%; background: var(--t1); flex: none; animation: ping 2.4s infinite; }
+.deploy.busy i { animation: spin .8s linear infinite; border-radius: 1px; }
+.deploy span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@keyframes chip { from { opacity: 0; transform: translateY(16px); } }
+@keyframes spin { to { transform: rotate(360deg); } }
 h1 { font: 300 clamp(26px, calc((100vw - 44px) / 9), 64px)/1.02 var(--serif); color: var(--t1); margin: 0; letter-spacing: -.025em; cursor: default; white-space: nowrap; }
 h1 .ch { display: inline-block; transition: transform var(--mid) var(--out), color var(--mid); will-change: transform; }
 h1 .ch > i { display: inline-block; font-style: normal; animation: letter .9s var(--out) both; animation-delay: calc(var(--k) * 32ms + 120ms); }
@@ -153,7 +160,6 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
       <figure class="city in" style="--d:2" aria-label="An animation: a Turing quote is typed, becomes code, the code becomes a pixel in a cat image, the cat becomes a robot's screen, the robot becomes part of an equation, and the equation becomes a node in a neural network.">
         <canvas id="story" title="Click to skip ahead"></canvas>
       </figure>
-      <p class="status label in" style="--d:0"><i></i>Open to FDE internships · 2026</p>
       <h1 id="name" aria-label="Dilavesh Kanz Nidooli">Dilavesh Kanz Nidooli</h1>
       <p class="tagline in" style="--d:1">Making AI happen. <em>For real.</em></p>
       <p class="role label in" style="--d:1">Forward deployed engineering · AI · IIT Madras</p>
@@ -206,6 +212,8 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
       <span class="tnum" id="clock">IST</span>
     </footer>
   </main>
+
+  <button class="deploy busy" id="deploy" type="button" title="Click to copy dilaveshkanz@gmail.com" aria-label="Ready for a Forward Deployed Engineer internship in 2026. Click to copy email."><i></i><span id="deploytxt">&nbsp;</span></button>
 
   <aside class="stage" aria-hidden="true">
     <div class="peek" id="peek"><canvas id="peekc"></canvas><span class="label" id="peekl"></span></div>
@@ -688,6 +696,22 @@ const SK = {
     s.style.transform = `translateY(${(-k * 7).toFixed(2)}px)`; s.style.color = `rgba(255,255,255,${(.92 - k * .35).toFixed(3)})`;
   }));
   h.addEventListener("pointerleave", () => chs.forEach(s => { s.style.transform = ""; s.style.color = ""; }));
+})();
+
+// Deploy-status chip: types a short "deploy log", then rests on availability. Click copies the email.
+(() => {
+  const b = document.getElementById("deploy"), s = document.getElementById("deploytxt"), FINAL = "ready for an FDE internship · 2026";
+  const steps = ["deploying dilavesh…", "running checks… passed ✓", FINAL];
+  const type = (txt, ms) => new Promise(r => { let i = 0; const k = setInterval(() => { s.textContent = txt.slice(0, ++i); if (i >= txt.length) { clearInterval(k); setTimeout(r, ms); } }, 28); });
+  (async () => {
+    if (reduce) { s.textContent = FINAL; b.classList.remove("busy"); return; }
+    await new Promise(r => setTimeout(r, 1300));
+    for (const [k, st] of steps.entries()) { if (k === steps.length - 1) b.classList.remove("busy"); await type(st, k < steps.length - 1 ? 700 : 0); }
+  })();
+  b.addEventListener("click", () => {
+    const back = () => setTimeout(() => { s.textContent = FINAL; }, 1600);
+    navigator.clipboard.writeText("dilaveshkanz@gmail.com").then(() => { s.textContent = "email copied ✓"; back(); }, () => { s.textContent = "dilaveshkanz@gmail.com"; back(); });
+  });
 })();
 
 // Email: copy on click, with the address in the tooltip as a fallback
