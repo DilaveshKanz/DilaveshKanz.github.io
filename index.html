@@ -120,6 +120,17 @@ button.lk { font: inherit; border: 0; cursor: pointer; }
 .peek .label { position: absolute; left: 12px; bottom: 10px; }
 @media (max-width: 1180px) { .page { grid-template-columns: minmax(0, 600px); } .stage { display: none; } }
 
+/* Experience */
+.xp { border-top: 1px solid var(--hair); }
+.org { padding: 18px 0 6px; border-bottom: 1px solid var(--hair); }
+.on { font: 400 18px/1.35 var(--serif); color: var(--t1); margin-bottom: 8px; }
+.job { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 20px; padding: 8px 0 12px; transition: transform var(--mid) var(--out); }
+.job:hover { transform: translateX(4px); }
+.jr { color: var(--t1); }
+.jd { align-self: center; white-space: nowrap; }
+.job p { grid-column: 1 / -1; margin: 0; max-width: 36em; }
+@media (max-width: 560px) { .job { grid-template-columns: 1fr; } .jd { grid-row: 2; margin-bottom: 4px; } }
+
 /* Now */
 .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .list li { display: grid; grid-template-columns: 18px minmax(0, 1fr); }
@@ -164,7 +175,23 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
       <ul class="rows" id="rows"></ul>
     </section>
 
-    <section id="now" class="in" style="--d:5">
+    <section id="experience" class="in" style="--d:5">
+      <div class="sh"><span class="label">Experience</span></div>
+      <div class="xp">
+        <div class="org">
+          <div class="on">CODE, IIT Madras</div>
+          <div class="job"><span class="jr">Software Developer Intern</span><span class="jd label tnum">Jul 2026 – now</span><p>Finished and launched the Course Planner, now live in four degree programmes. I also write automation scripts and keep the app running.</p></div>
+          <div class="job"><span class="jr">Operations Intern</span><span class="jd label tnum">Mar – Jun 2026</span><p>Worked with professors to arrange more than 60 workshops.</p></div>
+        </div>
+        <div class="org">
+          <div class="on">Paradox, IIT Madras</div>
+          <div class="job"><span class="jr">WebOps Core</span><span class="jd label tnum">Dec 2025 – now</span><p>Build the platform the fest runs on: events, sign-ups and attendance.</p></div>
+          <div class="job"><span class="jr">Graphic Design, Paradox Multimedia</span><span class="jd label tnum">Dec 2024 – Nov 2025</span><p>Coordinator, then Super Coordinator. Led the fest's visuals with the design team.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="now" class="in" style="--d:6">
       <div class="sh"><span class="label">Now</span></div>
       <ul class="list">
         <li class="live"><span>Fine-tuning AltiMap for <b>Smart India Hackathon 2026</b></span></li>
