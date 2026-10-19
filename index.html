@@ -6,7 +6,7 @@
 <style>body{margin:0}[hidden]{display:none!important}</style>
 <title>Dilavesh Kanz Nidooli</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Dilavesh Kanz Nidooli trains vision models and builds the software that puts them to work.">
+<meta name="description" content="Dilavesh Kanz Nidooli builds AI and software and gets it working for the people who use it. Looking for a Forward Deployed Engineer internship.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Geist:wght@400;500&family=Geist+Mono:wght@400&display=swap">
@@ -139,16 +139,12 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
     <section id="intro">
       <figure class="city in" style="--d:2" aria-label="An animation: a Turing quote is typed, becomes code, the code becomes a pixel in a cat image, the cat becomes a robot's screen, the robot becomes part of an equation, and the equation becomes a node in a neural network.">
         <canvas id="story" title="Click to skip ahead"></canvas>
-        <figcaption>
-          <div class="ticks" id="storyticks"><button type="button" aria-label="Text"></button><button type="button" aria-label="Code"></button><button type="button" aria-label="Pixels"></button><button type="button" aria-label="Robot"></button><button type="button" aria-label="Math"></button><button type="button" aria-label="Network"></button></div>
-          <span class="label">Text → code → pixels → robot → math → network. Click to skip.</span>
-        </figcaption>
       </figure>
-      <p class="status label in" style="--d:0"><i></i>Open to internships · 2026</p>
+      <p class="status label in" style="--d:0"><i></i>Open to FDE internships · 2026</p>
       <h1 id="name" aria-label="Dilavesh Kanz Nidooli">Dilavesh Kanz Nidooli</h1>
-      <p class="role label in" style="--d:1">AI engineering · Computer vision · IIT Madras</p>
-      <p class="bio in" style="--d:2">I train computer-vision models <em>and build the web apps that use them.</em> I study Data Science and Applications at IIT Madras and work as a Software Developer Intern at CODE.</p>
-      <p class="open in" style="--d:3">I am open to <b>AI engineering, ML, software, intelligent systems, robotics, and autonomous-agent</b> opportunities.</p>
+      <p class="role label in" style="--d:1">Forward deployed engineering · AI · IIT Madras</p>
+      <p class="bio in" style="--d:2">I build AI and software <em>and get it working for the people who use it.</em> At CODE, IIT Madras, I started out coordinating 60+ workshops with professors, then finished and launched a course planner now live in four degree programmes.</p>
+      <p class="open in" style="--d:3">I am looking for a <b>Forward Deployed Engineer internship</b>. I am also open to AI engineering, ML, software, intelligent systems, robotics, and autonomous-agent roles.</p>
       <div class="ctrl in" style="--d:4">
         <div class="links">
           <button class="lk" id="copy" type="button" title="Copy dilaveshkanz@gmail.com">Email</button>
@@ -191,21 +187,21 @@ const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const W8 = a => `rgba(255,255,255,${a})`;
 
 const WORK = [
-  { n: "AltiMap", c: "Works out how tall every building is from a single photo taken from above.", t: "SIH 2026 · Ongoing", sel: 1, v: "alti",
-    r: "A team project for an ISRO challenge at Smart India Hackathon. I teach the model to read building heights and test how well it does. One change we made cut its typical error from 5.23 m to 4.99 m.",
-    k: "PyTorch · DINOv2", l: ["Code", "https://github.com/ManasBytes/altimap"] },
-  { n: "FieldPilot AI", c: "A phone camera that watches a construction site and warns workers out loud.", t: "Kaya AI · Finalist", sel: 1, v: "field",
-    r: "Built with my team at the Kaya AI Hackathon, where we reached the final. It spots missing helmets, people too close to machines, and falls, then speaks a warning. I trained the part that recognises safety gear.",
-    k: "YOLO · FastAPI · Local LLM", l: ["Hackathon", "https://kaya-ai-iit-hackathon-2026.devpost.com/"] },
-  { n: "Live Dress Try-On", c: "A live mirror that shows you wearing a dress as you move.", t: "Prototype · Ongoing", sel: 1, v: "tryon",
-    r: "My own project, still in progress. The camera follows your body and the dress moves with you in real time. Your face and body stay real; only the dress is added.",
-    k: "MediaPipe · FASHN VTON · WebRTC · FastAPI · Next.js", l: null },
   { n: "Course Planner", c: "Helps IIT Madras students plan their courses. Live in four degree programmes.", t: "CODE · Live", sel: 1, v: "plan",
     r: "I took over an unfinished app, finished it and launched it for Data Science students. Then I extended it to three more programmes, and I still look after it.",
     k: "Flask · PostgreSQL · BigQuery", l: null },
   { n: "Paradox Fest Platform", c: "Runs events and sign-ups for the IIT Madras BS student fest.", t: "Paradox · Active", sel: 1, v: "fest",
     r: "Teams create events and get them approved, then students sign up. Organisers track who came and download the lists. I am now building the finance and sponsorship parts.",
     k: "Next.js · NestJS · PostgreSQL", l: null },
+  { n: "FieldPilot AI", c: "A phone camera that watches a construction site and warns workers out loud.", t: "Kaya AI · Finalist", sel: 1, v: "field",
+    r: "Built with my team at the Kaya AI Hackathon, where we reached the final. It spots missing helmets, people too close to machines, and falls, then speaks a warning. I trained the part that recognises safety gear.",
+    k: "YOLO · FastAPI · Local LLM", l: ["Hackathon", "https://kaya-ai-iit-hackathon-2026.devpost.com/"] },
+  { n: "AltiMap", c: "Works out how tall every building is from a single photo taken from above.", t: "SIH 2026 · Ongoing", sel: 1, v: "alti",
+    r: "A team project for an ISRO challenge at Smart India Hackathon. I teach the model to read building heights and test how well it does. One change we made cut its typical error from 5.23 m to 4.99 m.",
+    k: "PyTorch · DINOv2", l: ["Code", "https://github.com/ManasBytes/altimap"] },
+  { n: "Live Dress Try-On", c: "A live mirror that shows you wearing a dress as you move.", t: "Prototype · Ongoing", sel: 1, v: "tryon",
+    r: "My own project, still in progress. The camera follows your body and the dress moves with you in real time. Your face and body stay real; only the dress is added.",
+    k: "MediaPipe · FASHN VTON · WebRTC · FastAPI · Next.js", l: null },
   { n: "DealFlow360", c: "Tracks a sale from the first quote to the final delivery.", t: "Odoo · Finalist", v: "deal",
     r: "Built in the final round of the Odoo Hackathon. One fix I made: when two people pressed ship at the same moment, the customer got two emails. Now they get one.",
     k: "Next.js · Django REST · PostgreSQL", l: null },
