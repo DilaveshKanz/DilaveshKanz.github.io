@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+<title>Dilavesh Kanz Nidooli</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Dilavesh Kanz Nidooli trains vision models and builds the software that puts them to work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Geist:wght@400;500&family=Geist+Mono:wght@400&display=swap">
+<style>
+/* Layout: one narrow left column of prose and rows; the empty right margin is a stage where a project's sketch appears on hover. Dark only, by choice. */
+:root {
+  --bg: #0a0a0a;
+  --t1: rgba(255, 255, 255, .92);
+  --t2: rgba(255, 255, 255, .62);
+  --t3: rgba(255, 255, 255, .40);
+  --hair: rgba(255, 255, 255, .08);
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --sans: "Geist", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+  --fast: 160ms; --mid: 240ms; --slow: 480ms;
+  --out: cubic-bezier(.2, .8, .2, 1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { overflow-x: clip; background: var(--bg); color: var(--t2); font: 400 15px/1.7 var(--sans); -webkit-font-smoothing: antialiased; }
+::selection { background: var(--t1); color: var(--bg); }
+a { color: var(--t1); text-decoration: none; }
+:focus-visible { outline: 1px solid var(--t2); outline-offset: 3px; border-radius: 3px; }
+.label { font: 400 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--t3); }
+.serif { font-family: var(--serif); }
+
+.page {
+  max-width: 1200px; margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
+  padding-block: 112px 56px;
+  display: grid; grid-template-columns: minmax(0, 600px) minmax(0, 1fr); column-gap: 80px;
+}
+@media (min-width: 1000px) { .page { padding-left: max(9vw, env(safe-area-inset-left, 0px)); } }
+.col { grid-column: 1; min-width: 0; }
+.stage { grid-column: 2; position: relative; }
+section + section { margin-top: 112px; }
+.sh { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+
+/* Entry: each block sharpens into place, one after another */
+.in { animation: sharpen var(--slow) var(--out) both; animation-delay: calc(var(--d, 0) * 70ms + 80ms); }
+@keyframes sharpen { from { opacity: 0; filter: blur(6px); transform: translateY(6px); } }
+
+/* Opening */
+#intro { position: relative; }
+.status { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 28px; }
+.status i { width: 6px; height: 6px; border-radius: 50%; background: var(--t1); animation: ping 2.4s infinite; }
+h1 { font: 300 clamp(40px, 6.2vw, 64px)/1.02 var(--serif); color: var(--t1); margin: 0; letter-spacing: -.025em; cursor: default; }
+h1 .ch { display: inline-block; transition: transform var(--mid) var(--out), color var(--mid); will-change: transform; }
+.role { margin: 18px 0 40px; }
+.bio { font: 400 21px/1.5 var(--serif); color: var(--t1); margin: 0; text-wrap: pretty; max-width: 30em; }
+.bio em { font-style: italic; color: var(--t2); }
+.city { position: absolute; top: -24px; left: calc(100% + 56px); width: 340px; margin: 0; }
+.city canvas { display: block; width: 100%; aspect-ratio: 4 / 3; cursor: crosshair; }
+.city figcaption { margin-top: 8px; }
+@media (max-width: 1180px) { .city { position: static; width: 100%; max-width: 420px; margin: 0 0 32px; } .city canvas { aspect-ratio: 16 / 9; } }
+.open { margin: 24px 0 0; color: var(--t2); max-width: 36em; }
+.open b { font-weight: 500; color: var(--t1); }
+
+.seg { display: inline-flex; padding: 2px; border: 1px solid var(--hair); border-radius: 999px; position: relative; }
+.seg button { position: relative; z-index: 1; font: 400 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--t3); background: none; border: 0; padding: 7px 12px; border-radius: 999px; cursor: pointer; transition: color var(--mid) var(--out); }
+.seg button[aria-pressed="true"] { color: var(--t1); }
+.seg i { position: absolute; z-index: 0; top: 2px; bottom: 2px; border-radius: 999px; background: rgba(255, 255, 255, .08); transition: left var(--mid) var(--out), width var(--mid) var(--out); }
+.ctrl { display: flex; align-items: center; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
+
+.links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.lk { color: var(--t1); background: linear-gradient(var(--t3), var(--t3)) 0 100% / 100% 1px no-repeat; padding-bottom: 2px; transition: background-size var(--mid) var(--out), color var(--fast); }
+.lk:hover { background-image: linear-gradient(var(--t1), var(--t1)); }
+.ext::after { content: "↗"; font-size: .8em; margin-left: 3px; color: var(--t3); display: inline-block; transition: transform var(--fast) var(--out), color var(--fast); }
+.ext:hover::after { transform: translate(2px, -2px); color: var(--t1); }
+button.lk { font: inherit; border: 0; cursor: pointer; }
+
+/* Work */
+.rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hair); }
+.row { border-bottom: 1px solid var(--hair); transition: opacity var(--mid) var(--out); }
+.row[hidden] { display: none; }
+.rows.hov .row:not(.on) { opacity: .38; }
+.row > button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 20px; width: 100%; padding: 16px 0; cursor: pointer; }
+.row > button:focus-visible { outline: 1px solid var(--t2); outline-offset: 2px; }
+.rn { font: 400 18px/1.35 var(--serif); color: var(--t1); }
+.rc { grid-column: 1; color: var(--t2); }
+.rt { grid-column: 2; grid-row: 1; align-self: center; text-align: right; white-space: nowrap; }
+.rd { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--slow) var(--out); }
+.rd > div { overflow: hidden; }
+.rd .inner { padding: 0 0 18px; display: grid; gap: 10px; }
+.rd p { margin: 0; max-width: 36em; }
+.rd .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; }
+.row.x .rd { grid-template-rows: 1fr; }
+.row .chev { display: inline-block; margin-left: 8px; color: var(--t3); transition: transform var(--mid) var(--out); }
+.row.x .chev { transform: rotate(90deg); }
+@media (max-width: 560px) { .row > button { grid-template-columns: 1fr; } .rt { grid-column: 1; grid-row: auto; text-align: left; margin-top: 4px; } }
+
+/* Hover sketch in the right margin */
+.peek { position: absolute; left: 0; top: 0; width: 300px; height: 200px; border: 1px solid var(--hair); border-radius: 12px; overflow: hidden; background: #0d0d0d;
+  opacity: 0; transform: translateY(var(--y, 0)) scale(.97); filter: blur(4px);
+  transition: opacity var(--mid) var(--out), filter var(--mid) var(--out), transform var(--slow) var(--out); pointer-events: none; }
+.peek.on { opacity: 1; filter: none; transform: translateY(var(--y, 0)) scale(1); }
+.peek canvas { display: block; width: 100%; height: 100%; }
+.peek .label { position: absolute; left: 12px; bottom: 10px; }
+@media (max-width: 1180px) { .page { grid-template-columns: minmax(0, 600px); } .stage { display: none; } }
+
+/* Now */
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.list li { display: grid; grid-template-columns: 18px minmax(0, 1fr); }
+.list li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--t3); margin-top: 10px; }
+.list li.live::before { background: var(--t1); box-shadow: 0 0 0 0 rgba(255,255,255,.4); animation: ping 2.4s infinite; }
+@keyframes ping { 70% { box-shadow: 0 0 0 6px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
+.list b { font-weight: 500; color: var(--t1); }
+
+footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<div class="page">
+  <main class="col">
+    <section id="intro">
+      <figure class="city in" style="--d:2" aria-hidden="true">
+        <canvas id="city"></canvas>
+        <figcaption class="label">Height field · move the cursor</figcaption>
+      </figure>
+      <p class="status label in" style="--d:0"><i></i>Open to internships · 2026</p>
+      <h1 id="name" class="in" style="--d:0" aria-label="Dilavesh Kanz Nidooli">Dilavesh Kanz Nidooli</h1>
+      <p class="role label in" style="--d:1">AI engineering · Computer vision · IIT Madras</p>
+      <p class="bio in" style="--d:2">I train computer-vision models <em>and build the web apps that use them.</em> I study Data Science and Applications at IIT Madras and work as a Software Developer Intern at CODE.</p>
+      <p class="open in" style="--d:3">I am open to <b>AI engineering, ML, software, intelligent systems, robotics, and autonomous-agent</b> opportunities.</p>
+      <div class="ctrl in" style="--d:4">
+        <div class="links">
+          <button class="lk" id="copy" type="button" title="Copy dilaveshkanz@gmail.com">Email</button>
+          <a class="lk ext" href="https://github.com/DilaveshKanz" target="_blank" rel="noopener">GitHub</a>
+          <a class="lk ext" href="https://www.linkedin.com/in/dilavesh-kanz-nidooli/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="in" style="--d:4">
+      <div class="sh"><span class="label">Work</span>
+        <div class="seg" id="workSeg" role="group" aria-label="Show projects"><i></i><button type="button" aria-pressed="true" data-v="sel">Selected</button><button type="button" aria-pressed="false" data-v="all">All</button></div>
+      </div>
+      <ul class="rows" id="rows"></ul>
+    </section>
+
+    <section id="now" class="in" style="--d:5">
+      <div class="sh"><span class="label">Now</span></div>
+      <ul class="list">
+        <li class="live"><span>Fine-tuning AltiMap for <b>Smart India Hackathon 2026</b></span></li>
+        <li class="live"><span>Building fest modules on the <b>Paradox WebOps</b> core team</span></li>
+        <li class="live"><span>Competing in <b>e-Yantra</b>, the IIT Bombay robotics competition</span></li>
+        <li><span>Finalist at <b>Kaya AI</b> (Physical AI track) and <b>Odoo</b> hackathons, 2026</span></li>
+      </ul>
+    </section>
+
+    <footer class="label">
+      <span>Updated Oct 2026</span>
+      <span class="tnum" id="clock">IST</span>
+    </footer>
+  </main>
+
+  <aside class="stage" aria-hidden="true">
+    <div class="peek" id="peek"><canvas id="peekc"></canvas><span class="label" id="peekl"></span></div>
+  </aside>
+</div>
+
+<script>
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const W8 = a => `rgba(255,255,255,${a})`;
+
+const WORK = [
+  { n: "AltiMap", c: "Building heights from one aerial image. Team RMSE 5.23 → 4.99 m.", t: "SIH 2026 · Ongoing", sel: 1, v: "alti",
+    r: "Team project for an ISRO problem. I fine-tune the RS3DAda height model and built its training and evaluation. The gain came from a change in how the model's outputs are combined, measured on 2,861 held-out test tiles.",
+    k: "PyTorch · DINOv2", l: ["Code", "https://github.com/ManasBytes/altimap"] },
+  { n: "FieldPilot AI", c: "A phone camera that flags missing safety gear on construction sites.", t: "Kaya AI · Finalist", sel: 1, v: "field",
+    r: "Team project in the Physical AI track. I trained and fine-tuned the safety-gear detector, and added a gate that promotes a new model only when it beats the baseline.",
+    k: "YOLO · FastAPI · Local LLM", l: ["Hackathon", "https://kaya-ai-iit-hackathon-2026.devpost.com/"] },
+  { n: "Course Planner", c: "Took over a half-built planner. Now live for four degree programmes.", t: "CODE · Live", sel: 1, v: "plan",
+    r: "Completed and launched it for Data Science, then extended it to Electronic Systems, Aeronautics and Space Technology, and Management and Data Science. I maintain it.",
+    k: "Flask · PostgreSQL · BigQuery", l: null },
+  { n: "Paradox Fest Platform", c: "Events, registrations and attendance for the IIT Madras BS fest.", t: "Paradox · Active", sel: 1, v: "fest",
+    r: "Built event management, registration exports, student profiles and demographics. Finance and sponsorship modules are next.",
+    k: "Next.js · NestJS · PostgreSQL", l: null },
+  { n: "DealFlow360", c: "Fixed duplicate shipment notifications under concurrent requests.", t: "Odoo · Finalist", v: "deal",
+    r: "Final-round project, a sales and fulfilment platform. Front end and back end, margin checks, and regression tests for the concurrency fix.",
+    k: "Next.js · Django REST · PostgreSQL", l: null },
+  { n: "AssetFlow", c: "Shared asset booking, guarded against double bookings in the database.", t: "Odoo · Qualifier", v: "asset",
+    r: "Qualifier project. Front end and back end: dashboard, organisation and asset screens.",
+    k: "Next.js · Django REST · PostgreSQL", l: ["Code", "https://github.com/mbiplab-dev/Sparkz-AssetFlow"] },
+  { n: "Discourse Q&A", c: "Answers from a course forum, with links to their sources.", t: "WebOps task", v: "rag",
+    r: "My entry task for Paradox WebOps. Section-based chunking, semantic retrieval and source-linked answers.",
+    k: "FastAPI · ChromaDB · Sentence Transformers", l: ["Code", "https://github.com/DilaveshKanz/Webops-RAG-Project"] },
+  { n: "Live Dress Try-On", c: "A webcam mirror that shows you wearing a dress while you move.", t: "Prototype", v: "tryon",
+    r: "Personal prototype. MediaPipe pose and segmentation run on every frame. FASHN VTON generates the garment on keyframes, and per-part transforms carry it to the live pose. Only garment pixels are generated, so the face and body stay real.",
+    k: "MediaPipe · FASHN VTON · WebRTC · FastAPI · Next.js", l: null },
+  { n: "SurfaceGuard AI", c: "Segmenting four kinds of industrial surface defects, pixel by pixel.", t: "Coursework · In progress", v: "surface",
+    r: "Deep-learning course project. Milestone 1 is done: label checks, RLE mask decoding, class balance, mask coverage and the Dice metric. Model training is next.",
+    k: "Python · NumPy · pandas · Kaggle", l: null },
+  { n: "Placement Portal", c: "Campus placements with eligibility checks, interview stages and reminders.", t: "Coursework", v: "place",
+    r: "Individual coursework. Admins approve companies and drives, students apply only if they meet CGPA and branch rules, and Celery sends interview emails, deadline reminders and CSV exports.",
+    k: "Flask · Vue.js · Celery · Redis", l: null },
+  { n: "TrailHead", c: "Trek bookings, with a Redis cache that clears itself on every booking.", t: "Coursework", v: "trek",
+    r: "Individual coursework. JWT roles for trekkers, staff and admins, slot-safe booking and cancellation, cache invalidation, and daily email and Google Chat reminders.",
+    k: "Flask · Vue.js · JWT · Celery · Redis", l: null }
+];
+
+// Segmented controls with a sliding thumb
+function seg(el, onChange) {
+  const thumb = el.querySelector("i"), btns = [...el.querySelectorAll("button")];
+  const place = b => { thumb.style.left = b.offsetLeft + "px"; thumb.style.width = b.offsetWidth + "px"; };
+  btns.forEach(b => b.addEventListener("click", () => { btns.forEach(x => x.setAttribute("aria-pressed", x === b)); place(b); onChange(b.dataset.v); }));
+  const sync = () => place(btns.find(b => b.getAttribute("aria-pressed") === "true"));
+  sync(); document.fonts?.ready.then(sync); addEventListener("resize", sync);
+}
+
+// Work rows
+const rows = document.getElementById("rows");
+rows.innerHTML = WORK.map((w, i) => `
+  <li class="row" data-i="${i}"${w.sel ? "" : " hidden"}>
+    <button type="button" aria-expanded="false" aria-controls="rd${i}">
+      <span class="rn">${w.n}<span class="chev" aria-hidden="true">›</span></span>
+      <span class="rt label">${w.t}</span>
+      <span class="rc">${w.c}</span>
+    </button>
+    <div class="rd" id="rd${i}"><div><div class="inner">
+      <p>${w.r}</p>
+      <div class="meta"><span class="label">${w.k}</span>${w.l ? `<a class="lk ext" href="${w.l[1]}" target="_blank" rel="noopener">${w.l[0]}</a>` : `<span class="label">Private repository</span>`}</div>
+    </div></div></div>
+  </li>`).join("");
+rows.querySelectorAll(".row > button").forEach(b => b.addEventListener("click", () => {
+  const li = b.parentElement, x = li.classList.toggle("x"); b.setAttribute("aria-expanded", x);
+}));
+seg(document.getElementById("workSeg"), v => rows.querySelectorAll(".row").forEach((li, i) => { li.hidden = v === "sel" && !WORK[i].sel; }));
+
+// Sketch helpers: s = seconds into the loop
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ph = (s, a, b) => cl((s - a) / (b - a));
+const ez = x => 1 - (1 - x) ** 3;
+const txt = (c, s, x, y, a = .55) => { c.font = "400 9px 'Geist Mono', monospace"; c.fillStyle = W8(a); c.fillText(s.toUpperCase(), x, y); };
+const box = (c, x, y, w, h, stroke, fill, dashed) => { c.setLineDash(dashed ? [3, 3] : []); if (fill) { c.fillStyle = fill; c.fillRect(x, y, w, h); } c.strokeStyle = stroke; c.strokeRect(x + .5, y + .5, w, h); c.setLineDash([]); };
+const shape = (c, pts, fill, stroke) => { c.beginPath(); pts.forEach((p, k) => c[k ? "lineTo" : "moveTo"](p[0], p[1])); c.closePath(); if (fill) { c.fillStyle = fill; c.fill(); } if (stroke) { c.strokeStyle = stroke; c.stroke(); } };
+
+const SK = {
+  // RGB image -> overlapping windows predict a height map -> blocks extruded into a 3D city
+  alti: { l: "image → height map → 3D city", still: 4.6, d(c, W, H, t) {
+    const s = (t / 1000) % 5.4, f = ez(ph(s, 2.6, 4.4));
+    c.globalAlpha = 1 - ph(s, 5, 5.4);
+    const B = [[0, 0, 2, 1.5, .9], [2.6, 0, 4.2, 1.2, .5], [4.8, 0, 6.4, 1.6, .75], [7, 0, 9.6, 1.3, .4], [0, 2.2, 1.6, 4, .6], [2.4, 2, 4.8, 3.6, 1], [5.4, 2.2, 6.8, 4.2, .55], [7.4, 2, 9.6, 4.4, .8], [0, 4.8, 2.2, 6, .35], [3, 4.4, 5.2, 6, .65], [6, 5, 9.6, 6, .3]];
+    const TR = [[2.25, 1.75], [4.55, 1.55], [7.15, 1.7], [1.95, 4.35], [5.7, 4.65], [6.95, 4.75]];
+    const P = (u, v, z = 0) => { const tx = 30 + u * 24, ty = 30 + v * 21, ix = 132 + (u - v) * 12.5, iy = 62 + (u + v) * 6.3 - z * 58; return [tx + (ix - tx) * f, ty + (iy - ty) * f]; };
+    const q = ph(s, 1, 2.2) * 8, win = s >= 1 && s < 2.2;
+    B.forEach(([u0, v0, u1, v1, h]) => {
+      const cu = (u0 + u1) / 2, cv = (v0 + v1) / 2, idx = (cv < 3 ? 0 : 4) + Math.min(3, Math.floor(cu / 2.5)), lit = idx < q;
+      const a0 = P(u0, v0), b0 = P(u1, v0), c0 = P(u1, v1), d0 = P(u0, v1), a1 = P(u0, v0, h), b1 = P(u1, v0, h), c1 = P(u1, v1, h), d1 = P(u0, v1, h);
+      if (f > .02) { shape(c, [b0, c0, c1, b1], "#141414", W8(.22)); shape(c, [d0, c0, c1, d1], "#1b1b1b", W8(.22)); }
+      shape(c, [a1, b1, c1, d1], lit ? W8((.12 + .75 * h).toFixed(3)) : "#0d0d0d", W8(.5));
+    });
+    TR.forEach(([u, v]) => { const g = P(u, v), tp = P(u, v, .32); c.strokeStyle = W8(.4); c.beginPath(); c.moveTo(...g); c.lineTo(...tp); c.stroke(); c.fillStyle = W8(q > 7 || s > 2.2 ? .7 : .25); c.beginPath(); c.arc(tp[0], tp[1], 3.4, 0, 7); c.fill(); });
+    if (win) { const k = Math.min(7, Math.floor(q)), [x, y] = P((k % 4) * 2.4 - .2, Math.floor(k / 4) * 3 - .2); c.strokeStyle = W8(.95); c.strokeRect(x, y, 3.3 * 24, 3.3 * 21); }
+    txt(c, s < 1 ? "rgb image" : s < 2.6 ? "height map, windowed" : "3d city", 12, 18);
+    c.globalAlpha = 1;
+  } },
+
+  // Pose + tracking; the gap to a machine closes past a threshold and the phone speaks
+  field: { l: "pose · track · proximity alert", still: 3.1, d(c, W, H, t) {
+    const s = (t / 1000) % 5, walk = s < 2.5 || s > 4;
+    const x = s < 2.5 ? 46 + ez(s / 2.5) * 126 : s < 4 ? 172 : 172 - ez(ph(s, 4, 5)) * 126, gy = 156, sw = walk ? Math.sin(t * .012) * .5 : 0;
+    c.strokeStyle = W8(.08); c.beginPath(); c.moveTo(10, gy + 1); c.lineTo(W - 10, gy + 1); c.stroke();
+    const K = { head: [x, gy - 78], neck: [x, gy - 66], hip: [x, gy - 38], ls: [x - 8, gy - 64], rs: [x + 8, gy - 64], le: [x - 10 - sw * 6, gy - 52], re: [x + 10 + sw * 6, gy - 52], lw: [x - 9 - sw * 10, gy - 41], rw: [x + 9 + sw * 10, gy - 41], lh: [x - 6, gy - 38], rh: [x + 6, gy - 38], lk: [x - 5 + sw * 9, gy - 20], rk: [x + 5 - sw * 9, gy - 20], la: [x - 5 + sw * 15, gy - 1], ra: [x + 5 - sw * 15, gy - 1] };
+    c.strokeStyle = W8(.75); c.beginPath();
+    [["neck", "ls"], ["neck", "rs"], ["ls", "le"], ["le", "lw"], ["rs", "re"], ["re", "rw"], ["neck", "hip"], ["hip", "lh"], ["hip", "rh"], ["lh", "lk"], ["lk", "la"], ["rh", "rk"], ["rk", "ra"]].forEach(([a, b]) => { c.moveTo(...K[a]); c.lineTo(...K[b]); });
+    c.stroke(); c.beginPath(); c.arc(K.head[0], K.head[1], 6, 0, 7); c.stroke();
+    c.fillStyle = W8(.95); Object.values(K).forEach(([px, py]) => c.fillRect(px - 1.2, py - 1.2, 2.4, 2.4));
+    const mx = 214, gap = mx - (x + 20), thr = 28, alert = gap < thr + 1 && s > 2.3 && s < 4.1;
+    c.strokeStyle = W8(.6); c.strokeRect(226.5, 118.5, 52, 24); c.strokeRect(234.5, 98.5, 22, 20); c.beginPath(); c.moveTo(270, 118); c.lineTo(284, 86); c.lineTo(292, 112); c.stroke();
+    box(c, x - 20, gy - 88, 40, 90, W8(alert ? .95 : .45), alert ? W8(.06) : null, !alert);
+    box(c, mx, 78, 82, 70, W8(alert ? .95 : .45), alert ? W8(.06) : null, !alert);
+    txt(c, "id 3", x - 20, gy - 93, .7); txt(c, "machine", mx, 73, .5);
+    c.strokeStyle = W8(.5); c.beginPath(); c.moveTo(x + 20, gy + 10); c.lineTo(mx, gy + 10); c.stroke();
+    c.strokeStyle = W8(.25); c.beginPath(); c.moveTo(mx - thr, gy + 5); c.lineTo(mx - thr, gy + 15); c.stroke();
+    c.strokeStyle = W8(.6); c.strokeRect(20.5, 22.5, 14, 24);
+    if (alert) {
+      for (let k = 0; k < 3; k++) { const r = 6 + ((s - 2.3) * 28 + k * 9) % 27; c.strokeStyle = W8((.9 * (1 - r / 33)).toFixed(3)); c.beginPath(); c.arc(34, 34, r, -.8, .8); c.stroke(); }
+      txt(c, "“stop work”", 16, 62, .9);
+    }
+  } },
+
+  // Completed courses unlock others through prerequisites; they go into three terms until a checkpoint is met
+  plan: { l: "prerequisites → 3-term plan", still: 4.7, d(c, W, H, t) {
+    const s = (t / 1000) % 5.4, bw = 34, bh = 15;
+    const done = [[18, 46], [18, 112]], from = [[86, 26], [86, 60], [86, 96], [86, 130]], par = [0, 0, 1, 1];
+    const to = [[168, 44], [168, 66], [210, 44], [252, 44]], cols = [168, 210, 252];
+    cols.forEach((x, i) => { box(c, x - 3, 34, bw + 6, 108, W8(.07)); txt(c, "t" + (i + 1), x, 26, .45); });
+    done.forEach(([x, y]) => box(c, x, y, bw, bh, W8(.7), W8(.75)));
+    const lit = ph(s, .9, 2), lines = [];
+    from.forEach((p, i) => {
+      const on = lit > i / 4, m = ez(ph(s, 2 + i * .35, 2.65 + i * .35));
+      const x = p[0] + (to[i][0] - p[0]) * m, y = p[1] + (to[i][1] - p[1]) * m;
+      if (m < 1) { const [dx, dy] = done[par[i]]; c.strokeStyle = W8(on ? .65 : .15); c.beginPath(); c.moveTo(dx + bw, dy + bh / 2); c.lineTo(x, y + bh / 2); c.stroke(); }
+      box(c, x, y, bw, bh, W8(on ? .85 : .3), m > .98 ? W8(.22) : null, !on);
+    });
+    const cp = ph(s, 3.9, 4.5);
+    c.strokeStyle = W8(.35); c.beginPath(); c.moveTo(165, 158); c.lineTo(282, 158); c.stroke();
+    c.beginPath(); c.arc(286, 158, 5, 0, 7); c.strokeStyle = W8(.85); c.stroke();
+    if (cp > 0) { c.fillStyle = W8((.9 * cp).toFixed(3)); c.beginPath(); c.arc(286, 158, 5, 0, 7); c.fill(); }
+    txt(c, "checkpoint", 165, 174, cp > 0 ? .85 : .4); txt(c, "done", 18, 38, .45);
+  } },
+
+  // Draft -> approval gate -> live; registrations arrive (duplicates bounce), get attendance ticks, export as CSV
+  fest: { l: "draft → approved → registrations → csv", still: 4, d(c, W, H, t) {
+    const s = (t / 1000) % 5.4, mv = ez(ph(s, .9, 1.4)), cx = 24 + mv * 96, cy = 70, live = s >= 1.7;
+    if (s < 1.5) [[8, -8], [4, -4]].forEach(([ox, oy]) => box(c, cx + ox, cy + oy, 64, 44, W8(.18 * (1 - ph(s, 1.1, 1.5)))));
+    if (s > .7 && s < 2.1) { c.strokeStyle = W8(.6 * (1 - ph(s, 1.8, 2.1))); c.beginPath(); [[112, 1], [194, -1]].forEach(([gx, d]) => { c.moveTo(gx + d * 6, 60); c.lineTo(gx, 60); c.lineTo(gx, 124); c.lineTo(gx + d * 6, 124); }); c.stroke(); }
+    box(c, cx, cy, 64, 44, W8(.85), live ? W8(.9) : null);
+    if (live) { c.strokeStyle = "#0a0a0a"; c.lineWidth = 1.6; c.beginPath(); c.moveTo(cx + 24, cy + 23); c.lineTo(cx + 30, cy + 29); c.lineTo(cx + 41, cy + 16); c.stroke(); c.lineWidth = 1; }
+    txt(c, s < 1 ? "draft" : live ? "live" : "pending", cx, cy - 8, .7);
+    const comp = ez(ph(s, 4.4, 4.9));
+    for (let i = 0; i < 6; i++) {
+      const t0 = 2 + i * .22, k = ph(s, t0, t0 + .3);
+      if (k > 0 && k < 1) { c.fillStyle = W8(.9); c.fillRect(296 - k * (296 - cx - 64) - 2, 14 + i * 9 + k * (cy + 20 - 14 - i * 9) - 2, 4, 4); }
+      if (s >= t0 + .3) {
+        const ry = 26 + i * 15, y = ry + (150 - ry) * comp, a = 1 - comp;
+        if (a > .02) { box(c, 214, y, 64, 10, W8(.4 * a)); c.fillStyle = W8(.35 * a); c.fillRect(219, y + 4, 26, 2); }
+        const tk = ph(s, 3.5 + i * .14, 3.7 + i * .14);
+        if (i < 5 && tk > 0 && a > .02) { c.strokeStyle = W8(.9 * tk * a); c.beginPath(); c.moveTo(264, y + 5); c.lineTo(267, y + 8); c.lineTo(273, y + 2); c.stroke(); }
+      }
+    }
+    const dk = ph(s, 2.75, 3.25);
+    if (dk > 0 && dk < 1) { const x = dk < .5 ? 296 - dk * 2 * 100 : 196 + (dk - .5) * 2 * 100; c.fillStyle = W8((.9 * (1 - dk)).toFixed(3)); c.fillRect(x - 2, 24, 4, 4); txt(c, "duplicate", 220, 18, .5 * (1 - dk)); }
+    if (comp > 0) { c.globalAlpha = comp; shape(c, [[232, 132], [252, 132], [262, 142], [262, 172], [232, 172]], null, W8(.85)); c.beginPath(); c.moveTo(252, 132); c.lineTo(252, 142); c.lineTo(262, 142); c.stroke(); txt(c, "csv", 236, 160, .9); c.globalAlpha = 1; }
+  } },
+  // Two completions race for one locked shipment: stock moves once, one email goes out
+  deal: { l: "row lock · one shipment, one email", still: 2.8, d(c, W, H, t) {
+    const s = (t / 1000) % 5.2; c.globalAlpha = 1 - ph(s, 4.6, 5.2);
+    const bx = 128, by = 56, shipped = s >= 2.3, locked = s >= 1 && s < 3.1;
+    box(c, bx, by, 72, 50, W8(.8), shipped ? W8(.08) : null); txt(c, shipped ? "shipped" : "pending", bx, by + 64, .8);
+    c.strokeStyle = W8(.85); c.beginPath(); c.arc(bx + 36, by - 14 - (locked ? 0 : 4), 6, Math.PI, 0); c.stroke();
+    box(c, bx + 28, by - 14, 16, 11, W8(.85), W8(locked ? .85 : .2));
+    const aIn = ez(ph(s, 0, 1)), aGo = ez(ph(s, 1, 1.8));
+    const ax = 20 + aIn * 80 + aGo * 52, ay = 72 + aGo * 9;
+    if (s < 2.3) { c.fillStyle = W8(.95); c.beginPath(); c.arc(ax, ay, 5, 0, 7); c.fill(); txt(c, "a", ax - 3, ay - 9, .7); }
+    const bIn = ez(ph(s, 0, 1)), bGo = ez(ph(s, 3.1, 3.6)), bBack = ez(ph(s, 3.7, 4.4));
+    const bxp = 20 + bIn * 74 + bGo * 58 - bBack * 90, byp = 100 - bGo * 10 + bBack * 40;
+    c.setLineDash(locked ? [2, 2] : []); c.strokeStyle = W8(.85 * (1 - bBack)); c.beginPath(); c.arc(bxp, byp, 5, 0, 7); c.stroke(); c.setLineDash([]); txt(c, "b", bxp - 3, byp + 17, .6 * (1 - bBack));
+    for (let i = 0; i < 10; i++) { const gone = i >= 6 && s >= 2.3; box(c, 128 + i * 15, 150, 11, 10, W8(gone ? .12 : .5), gone ? null : W8(.5)); }
+    txt(c, "stock", 128, 176, .45);
+    const e = ph(s, 2.4, 3.2);
+    if (e > 0 && e < 1) { const x = 206 + ez(e) * 70, y = 72 - e * 20; c.globalAlpha *= 1 - e * .6; box(c, x, y, 18, 12, W8(.9)); c.beginPath(); c.moveTo(x, y); c.lineTo(x + 9, y + 7); c.lineTo(x + 18, y); c.stroke(); c.globalAlpha = 1 - ph(s, 4.6, 5.2); }
+    if (s >= 3.7 && s < 4.6) txt(c, "already shipped · no email", 20, 30, .6);
+  } },
+
+  // Bookings on a half-open time range; Postgres refuses an overlap, ignores cancelled slots
+  asset: { l: "tstzrange && · no double booking", still: 2.7, d(c, W, H, t) {
+    const s = (t / 1000) % 5.4, X = h => 40 + (h - 9) * 50, ty = 96, bh = 26;
+    c.strokeStyle = W8(.2); c.beginPath(); c.moveTo(30, ty + bh + 1); c.lineTo(282, ty + bh + 1); c.stroke();
+    for (let h = 9; h <= 13; h++) { c.fillStyle = W8(.2); c.fillRect(X(h), ty + bh + 1, 1, 5); txt(c, String(h).padStart(2, "0"), X(h) - 5, ty + bh + 18, .4); }
+    txt(c, "asset · projector", 30, 30, .45);
+    box(c, X(9), ty, 50, bh, W8(.8), W8(.55));
+    const d1 = ez(ph(s, 1, 1.8)); box(c, X(10), 30 + (ty - 30) * d1, 50, bh, W8(.85), W8(.3 + .25 * d1));
+    const g = ph(s, 2, 2.6), back = ph(s, 2.6, 3.5);
+    if (s >= 2 && s < 3.5) {
+      const y = 30 + (ty - 34 - 30) * ez(g) - back * 30, a = 1 - back;
+      box(c, X(9.5), y, 50, bh, W8(.95 * a), null);
+      if (s > 2.55 && s < 3) { c.fillStyle = W8(.9 * (1 - ph(s, 2.55, 3))); c.fillRect(X(9.5), ty - 4, 50, 4); txt(c, "&& overlap", X(9.5), y - 6, .8); }
+    }
+    box(c, X(12), ty, 50, bh, W8(.35), null, true); txt(c, "cancelled", X(12) + 3, ty - 6, s < 3.6 ? .4 : .4 * (1 - ph(s, 3.6, 4)));
+    const d3 = ez(ph(s, 3.8, 4.6)); if (s >= 3.8) box(c, X(12), 30 + (ty - 30) * d3, 50, bh, W8(.85), W8(.3 + .25 * d3));
+  } },
+
+  // Chunks in a vector store; filter by term, take the nearest, keep the ones above the threshold, answer with sources
+  rag: { l: "embed · filter by term · retrieve · cite", still: 4.2, d(c, W, H, t) {
+    const s = (t / 1000) % 5.2; c.globalAlpha = 1 - ph(s, 4.7, 5.2);
+    let sd = 3; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+    const pts = [...Array(42)].map((_, i) => ({ x: 22 + r() * 168, y: 26 + r() * 150, doc: i % 4 === 0, cur: r() < .62 }));
+    const q = { x: 106, y: 100 }, sweep = 16 + ph(s, 1, 2) * 184;
+    const near = pts.filter(p => p.cur).sort((a, b) => Math.hypot(a.x - q.x, a.y - q.y) - Math.hypot(b.x - q.x, b.y - q.y)).slice(0, 5);
+    const pick = ph(s, 2, 2.6), keep = near.slice(0, 3), to = ez(ph(s, 3, 4.2));
+    pts.forEach(p => {
+      if (keep.includes(p) && to > 0) return;
+      const off = !p.cur && p.x < sweep, a = off ? .07 : near.includes(p) && pick > 0 ? (keep.includes(p) ? .95 : .3) : .32;
+      c.fillStyle = W8(a); if (p.doc) c.fillRect(p.x - 2.5, p.y - 2.5, 5, 5); else { c.beginPath(); c.arc(p.x, p.y, 2.4, 0, 7); c.fill(); }
+    });
+    if (s >= 1 && s < 2) { c.fillStyle = W8(.5); c.fillRect(sweep, 20, 1, 160); txt(c, "term: current", 18, 18, .5); }
+    if (pick > 0 && to < 1) near.forEach((p, i) => { c.strokeStyle = W8((i < 3 ? .6 : .18) * pick * (1 - to)); c.beginPath(); c.moveTo(q.x, q.y); c.lineTo(p.x, p.y); c.stroke(); });
+    if (s > .3) { c.fillStyle = W8(.95); c.beginPath(); c.arc(q.x, q.y, 4.5, 0, 7); c.fill(); txt(c, "query", q.x + 8, q.y + 3, .7); }
+    if (to > 0) {
+      box(c, 214, 56, 74, 88, W8(.6 * to)); txt(c, "answer", 214, 50, .6 * to);
+      keep.forEach((p, i) => { const tx = 222, ty = 70 + i * 24, x = p.x + (tx - p.x) * to, y = p.y + (ty - p.y) * to;
+        c.fillStyle = W8(.9); c.fillRect(x - 2.5, y - 2.5, 5, 5);
+        if (to > .9) { c.fillStyle = W8(.4); c.fillRect(230, ty - 1, 34, 2); c.strokeStyle = W8(.8); c.beginPath(); c.moveTo(270, ty + 2); c.lineTo(276, ty - 4); c.moveTo(272, ty - 4); c.lineTo(276, ty - 4); c.lineTo(276, ty); c.stroke(); } });
+    }
+  } },
+
+  // Pose every frame; a generated garment keyframe; the garment follows the live pose; a big pose change asks for a new keyframe
+  tryon: { l: "pose → keyframe → live garment", still: 3, d(c, W, H, t) {
+    const s = (t / 1000) % 5.4, x = 150, gy = 178;
+    box(c, 92, 14, 116, 172, W8(.1)); txt(c, "mirror", 92, 10, .4);
+    const up = ph(s, 3.6, 4.2) * (1 - ph(s, 4.9, 5.3)), sw = s > 1.8 ? Math.sin((s - 1.8) * 2.4) * 9 * (1 - up) : 0, hx = x + sw * .4;
+    const nk = [x + sw, gy - 120], hd = [x + sw * 1.1, gy - 136], ls = [nk[0] - 16, nk[1] + 4], rs = [nk[0] + 16, nk[1] + 4];
+    const lh = [hx - 12, gy - 62], rh = [hx + 12, gy - 62], le = [ls[0] - 8, ls[1] + 26], lw = [ls[0] - 6, ls[1] + 50];
+    const re = [rs[0] + 10 + up * 10, rs[1] + 26 - up * 50], rw = [rs[0] + 8 + up * 16, rs[1] + 50 - up * 98];
+    const lk = [lh[0] - 2, gy - 30], la = [lh[0] - 4, gy], rk = [rh[0] + 2, gy - 30], ra = [rh[0] + 4, gy];
+    const gen = ph(s, 1, 1.8), dress = [ls, rs, [rh[0] + 4, rh[1]], [rh[0] + 24, gy - 24], [lh[0] - 24, gy - 24], [lh[0] - 4, lh[1]]];
+    if (s >= 1) { c.save(); c.beginPath(); c.rect(0, 0, W, gy - 116 + gen * 96); c.clip(); shape(c, dress, W8(.78), W8(.95));
+      c.strokeStyle = "rgba(10,10,10,.35)"; for (let k = 1; k < 4; k++) { c.beginPath(); c.moveTo(lh[0] - 4 - k * 2, lh[1] + 4); c.lineTo(lh[0] - 24 + k * 12, gy - 26); c.stroke(); } c.restore(); }
+    const flash = ph(s, 4.2, 4.6); if (flash > 0 && flash < 1) shape(c, dress, W8((.6 * (1 - flash)).toFixed(3)));
+    c.strokeStyle = W8(.65); c.beginPath(); [[nk, ls], [nk, rs], [ls, le], [le, lw], [rs, re], [re, rw], [nk, [hx, gy - 62]], [lh, rh], [lh, lk], [lk, la], [rh, rk], [rk, ra]].forEach(([a, b]) => { c.moveTo(...a); c.lineTo(...b); }); c.stroke();
+    c.beginPath(); c.arc(hd[0], hd[1], 9, 0, 7); c.stroke();
+    c.fillStyle = W8(.95); [nk, ls, rs, le, re, lw, rw, lh, rh, lk, rk, la, ra].forEach(([px, py]) => c.fillRect(px - 1.3, py - 1.3, 2.6, 2.6));
+    txt(c, s < 1 ? "pose · segmentation" : s < 1.8 ? "keyframe: garment only" : up > .5 ? "far from pose: new keyframe" : "propagate to live pose", 12, 196 - 4, .7);
+    txt(c, "face: live", 214, 40, .4);
+  } },
+
+  // Column-order RLE decodes into a defect mask; types are kept apart; Dice scores the overlap
+  surface: { l: "rle → mask → dice", still: 4.4, d(c, W, H, t) {
+    const s = (t / 1000) % 5.6, X0 = 20, Y0 = 24, cs = 5, C = 52, R = 13;
+    c.strokeStyle = W8(.05); for (let y = Y0; y <= Y0 + R * cs; y += 6) { c.beginPath(); c.moveTo(X0, y); c.lineTo(X0 + C * cs, y); c.stroke(); }
+    box(c, X0, Y0, C * cs, R * cs, W8(.25)); txt(c, "steel surface", X0, Y0 - 8, .45);
+    const A = (i, j) => i >= 6 && i <= 30 && Math.abs(j - (i * .32 - 1)) < .8, B = (i, j) => ((i - 41) / 6) ** 2 + ((j - 7) / 3.4) ** 2 < 1;
+    const k = ph(s, .5, 2.6) * C * R, typed = s >= 2.7;
+    for (let i = 0; i < C; i++) for (let j = 0; j < R; j++) { if (i * R + j >= k) continue; const a = A(i, j), b = B(i, j); if (!a && !b) continue;
+      c.fillStyle = W8(typed ? (a ? .92 : .42) : .8); c.fillRect(X0 + i * cs + .5, Y0 + j * cs + .5, cs - 1, cs - 1); }
+    if (k > 0 && k < C * R) { const ci = Math.floor(k / R), cj = Math.floor(k % R); c.fillStyle = W8(.9); c.fillRect(X0 + ci * cs, Y0, 1, R * cs); c.strokeStyle = W8(.9); c.strokeRect(X0 + ci * cs - .5, Y0 + cj * cs - .5, cs + 1, cs + 1); txt(c, "start · length pairs, down columns", X0, 104, .6); }
+    if (typed) { txt(c, "type a", X0 + 6 * cs, 104, .8); txt(c, "type c", X0 + 36 * cs, 104, .55); }
+    const dk = ez(ph(s, 3.2, 4.2));
+    if (dk > 0) { c.globalAlpha = dk; const ty = 150, ax = 120, bx = 178 - dk * 30;
+      c.strokeStyle = W8(.85); c.beginPath(); c.ellipse(ax, ty, 30, 20, 0, 0, 7); c.stroke();
+      c.setLineDash([3, 3]); c.beginPath(); c.ellipse(bx, ty, 30, 20, 0, 0, 7); c.stroke(); c.setLineDash([]);
+      c.save(); c.beginPath(); c.ellipse(ax, ty, 30, 20, 0, 0, 7); c.clip(); c.fillStyle = W8(.7); c.beginPath(); c.ellipse(bx, ty, 30, 20, 0, 0, 7); c.fill(); c.restore();
+      txt(c, "true", ax - 52, ty + 3, .5); txt(c, "pred", bx + 34, ty + 3, .5); txt(c, "dice = 2|a∩b| / (|a|+|b|)", 150, 192, .7); c.globalAlpha = 1; }
+  } },
+  // Approved company -> approved drive; eligibility gate; application stages; scheduled reminders
+  place: { l: "approve · eligibility · stages · reminders", still: 3.3, d(c, W, H, t) {
+    const s = (t / 1000) % 5.2; c.globalAlpha = 1 - ph(s, 4.7, 5.2);
+    const gate = (x, y, lit, lab) => { c.strokeStyle = W8(lit ? .9 : .3); c.beginPath(); c.moveTo(x, y - 14); c.lineTo(x, y + 14); c.stroke(); txt(c, lab, x - 14, y - 20, .45); };
+    const m = ez(ph(s, 0, 1)); gate(64, 50, m > .5 && m < .9, "approve");
+    box(c, 14 + m * 80, 42, 26, 16, W8(.85), m > .5 ? W8(.5) : null); txt(c, m > .5 ? "drive" : "co.", 16 + m * 80, 38, .6);
+    gate(118, 130, s > 1.4 && s < 2.1, "cgpa · branch");
+    const st = ez(ph(s, 1, 1.6)), stop = ph(s, 1.6, 2.1);
+    c.fillStyle = W8(.9 * (1 - ph(s, 2, 2.2))); c.beginPath(); c.arc(30 + st * 80, 124, 4, 0, 7); c.fill();
+    c.strokeStyle = W8(.7 * (1 - stop)); c.beginPath(); c.arc(30 + st * 80 - stop * 40, 140, 4, 0, 7); c.stroke();
+    const stages = [["applied", 146], ["interview", 204], ["selected", 262]], mv = ph(s, 2, 3.4), px = 146 + ez(mv) * 116;
+    stages.forEach(([n, x]) => { c.fillStyle = W8(px >= x - 1 && s >= 2 ? .9 : .25); c.beginPath(); c.arc(x, 130, 3, 0, 7); c.fill(); txt(c, n, x - n.length * 2.8, 152, .45); });
+    c.strokeStyle = W8(.2); c.beginPath(); c.moveTo(146, 130); c.lineTo(262, 130); c.stroke();
+    if (s >= 2) box(c, px - 10, 114, 20, 10, W8(.9), W8(.6));
+    const e = ph(s, 3.1, 3.7); if (e > 0 && e < 1) { const y = 108 - e * 60; box(c, 240, y, 16, 10, W8(.9 * (1 - e))); }
+    if (s >= 3.6) { const p = ph(s, 3.6, 4.6); c.strokeStyle = W8(.8); c.beginPath(); c.arc(270, 40, 9, 0, 7); c.moveTo(270, 40); c.lineTo(270, 34); c.moveTo(270, 40); c.lineTo(270 + Math.cos(p * 6.28) * 6, 40 + Math.sin(p * 6.28) * 6); c.stroke(); txt(c, "daily", 254, 62, .45);
+      [70, 100].forEach((y, i) => { const k = ph(s, 3.8 + i * .2, 4.5 + i * .2); if (k > 0 && k < 1) box(c, 256 - k * 70, 40 + k * (y - 40), 14, 9, W8(.85 * (1 - k * .5))); }); }
+  } },
+
+  // Reads hit Redis; a booking takes a slot and clears treks:*; the next read misses, goes to the DB and refills
+  trek: { l: "redis hit · book · invalidate · refill", still: 3.4, d(c, W, H, t) {
+    const s = (t / 1000) % 5.4; c.globalAlpha = 1 - ph(s, 4.9, 5.4);
+    const R = [128, 26, 64, 40], D = [128, 128, 64, 40], cx = 30, cy = 98;
+    box(c, ...R, W8(.7)); box(c, ...D, W8(.7)); txt(c, "redis", 128, 20, .5); txt(c, "db", 128, 182, .5);
+    c.fillStyle = W8(.8); c.beginPath(); c.arc(cx, cy, 6, 0, 7); c.fill(); txt(c, "trekker", 12, 120, .45);
+    const filled = s < 2 || s > 3.7, slots = s >= 1.6 ? 5 : 6;
+    const wipe = ph(s, 2, 2.4); if (filled || wipe < 1) for (let i = 0; i < 3; i++) { c.fillStyle = W8(.5 * (s >= 2 && s < 3.7 ? 1 - wipe : 1)); c.fillRect(136, 34 + i * 9, 40 - i * 8, 3); }
+    if (s >= 2 && s < 3) txt(c, "treks:* cleared", 200, 46, .7 * (1 - ph(s, 2.6, 3)));
+    for (let i = 0; i < 6; i++) box(c, 214 + i * 12, 144, 9, 9, W8(i < slots ? .7 : .15), i < slots ? W8(.5) : null);
+    txt(c, "slots", 214, 136, .45);
+    const dot = (a, b, k, open) => { const x = a[0] + (b[0] - a[0]) * k, y = a[1] + (b[1] - a[1]) * k; c.fillStyle = W8(.95); if (open) { c.strokeStyle = W8(.95); c.beginPath(); c.arc(x, y, 3, 0, 7); c.stroke(); } else c.fillRect(x - 2.5, y - 2.5, 5, 5); };
+    const C = [cx + 8, cy], Rp = [128, 46], Dp = [128, 148];
+    const k1 = ph(s, 0, 1); if (k1 > 0 && k1 < 1) dot(k1 < .5 ? C : Rp, k1 < .5 ? Rp : C, (k1 % .5) * 2);
+    if (s < 1) txt(c, "hit", 200, 46, .7);
+    const k2 = ph(s, 1, 1.6); if (k2 > 0 && k2 < 1) dot(C, Dp, ez(k2), true);
+    if (s >= 1 && s < 2) txt(c, "book", 52, 140, .7);
+    const k3 = ph(s, 2.5, 3.7);
+    if (k3 > 0 && k3 < 1) { const seg = [C, Rp, Dp, Rp, C], i = Math.min(3, Math.floor(k3 * 4)); dot(seg[i], seg[i + 1], k3 * 4 - i); txt(c, i < 1 ? "miss" : "refill", 200, 46, .7); }
+    if (s >= 4) { const p = ph(s, 4, 4.8); c.strokeStyle = W8(.8 * (1 - p * .5)); c.beginPath(); c.arc(270, 70, 7 + p * 3, 0, 7); c.stroke();
+      box(c, 250 + p * 30, 92, 13, 9, W8(.8 * (1 - p))); shape(c, [[250 + p * 30, 108], [264 + p * 30, 108], [264 + p * 30, 117], [255 + p * 30, 117], [251 + p * 30, 121]], null, W8(.8 * (1 - p))); }
+  } }
+};
+
+(() => {
+  const stage = document.querySelector(".stage"), peek = document.getElementById("peek"), cv = document.getElementById("peekc"), lab = document.getElementById("peekl");
+  if (getComputedStyle(stage).display === "none" || !matchMedia("(hover: hover)").matches) return;
+  const ctx = cv.getContext("2d"), dpr = Math.min(devicePixelRatio || 1, 2), W = 300, H = 200;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  let cur = null, raf, off, t0 = 0;
+  const loop = t => { ctx.clearRect(0, 0, W, H); ctx.globalAlpha = 1; if (cur) SK[cur].d(ctx, W, H, reduce ? SK[cur].still * 1000 : Math.max(0, t - t0)); if (!reduce) raf = requestAnimationFrame(loop); };
+  rows.addEventListener("pointerover", e => {
+    const li = e.target.closest(".row"); if (!li) return;
+    clearTimeout(off);
+    rows.classList.add("hov"); rows.querySelectorAll(".row").forEach(r => r.classList.toggle("on", r === li));
+    const v = WORK[li.dataset.i].v; if (v !== cur) t0 = performance.now(); cur = v; lab.textContent = SK[cur].l;
+    const y = li.getBoundingClientRect().top - stage.getBoundingClientRect().top - 40;
+    peek.style.setProperty("--y", Math.max(0, y) + "px"); peek.classList.add("on");
+    cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
+  });
+  rows.addEventListener("pointerleave", () => {
+    rows.classList.remove("hov"); peek.classList.remove("on");
+    off = setTimeout(() => { cur = null; cancelAnimationFrame(raf); }, 300);
+  });
+})();
+
+// Hero: an isometric height field, a nod to AltiMap. Buildings rise toward the pointer; the nearest roof lights up.
+(() => {
+  const cv = document.getElementById("city"), c = cv.getContext("2d");
+  const N = 12; let seed = 7; const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+  const HT = [];
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+    const road = i % 4 === 0 || j % 4 === 0, ctr = 1 - Math.hypot(i - N / 2, j - N / 2) / (N * .75);
+    HT.push(road ? 0 : Math.max(.06, ctr * (.25 + rnd() * .9)));
+  }
+  let W = 0, H = 0, ptr = null, cur = { i: N / 2, j: N / 2 }, vis = true, raf;
+  const geo = () => { const tw = Math.min(W * .94 / N, H * 1.25 / N), th = tw / 2; return { tw, th, x0: W / 2, y0: H - N * th - 6 }; };
+  const size = () => { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0); };
+  function draw(t) {
+    const { tw, th, x0, y0 } = geo(), maxH = Math.min(y0 - 8, H * .55), P = (i, j) => [x0 + (i - j) * tw / 2, y0 + (i + j) * th / 2];
+    const tg = ptr || { i: N / 2 + Math.cos(t * .00035) * 3.2, j: N / 2 + Math.sin(t * .00035) * 3.2 };
+    cur.i += (tg.i - cur.i) * (reduce ? 1 : .07); cur.j += (tg.j - cur.j) * (reduce ? 1 : .07);
+    c.clearRect(0, 0, W, H); c.lineWidth = .75;
+    c.strokeStyle = W8(.1); c.beginPath(); [[0, 0], [N, 0], [N, N], [0, N]].forEach(([i, j], k) => c[k ? "lineTo" : "moveTo"](...P(i, j))); c.closePath(); c.stroke();
+    let best = -1, bd = 1e9;
+    for (let k = 0; k < N * N; k++) if (HT[k]) { const d = (Math.floor(k / N) + .5 - cur.i) ** 2 + (k % N + .5 - cur.j) ** 2; if (d < bd) { bd = d; best = k; } }
+    const poly = (pts, fill, stroke) => { c.beginPath(); pts.forEach((p, k) => c[k ? "lineTo" : "moveTo"](p[0], p[1])); c.closePath(); c.fillStyle = fill; c.fill(); c.strokeStyle = stroke; c.stroke(); };
+    for (let s = 0; s <= 2 * (N - 1); s++) for (let i = Math.max(0, s - N + 1); i <= Math.min(s, N - 1); i++) {
+      const j = s - i, h0 = HT[i * N + j]; if (!h0) continue;
+      const d2 = (i + .5 - cur.i) ** 2 + (j + .5 - cur.j) ** 2;
+      const wave = reduce ? 1 : .88 + .12 * Math.sin(t * .0012 + i * .55 + j * .35);
+      const z = maxH * (h0 * wave * .72 + .4 * Math.exp(-d2 / 6)), a = .16, b = 1 - a;
+      const g = [P(i + a, j + a), P(i + b, j + a), P(i + b, j + b), P(i + a, j + b)], up = g.map(([x, y]) => [x, y - z]);
+      const lit = i * N + j === best;
+      poly([g[3], g[2], up[2], up[3]], "#121212", W8(.22));
+      poly([g[1], g[2], up[2], up[1]], "#181818", W8(.22));
+      poly(up, lit ? W8(.92) : "#0a0a0a", W8(lit ? .92 : .4));
+    }
+    if (!reduce && vis) raf = requestAnimationFrame(draw);
+  }
+  const go = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); };
+  addEventListener("pointermove", e => {
+    const r = cv.getBoundingClientRect(); if (!r.width) return;
+    const { tw, th, x0, y0 } = geo(), u = (e.clientX - r.left - x0) / (tw / 2), v = (e.clientY - r.top - y0 + th * 2) / (th / 2);
+    const i = (u + v) / 2, j = (v - u) / 2;
+    ptr = i > -4 && j > -4 && i < N + 4 && j < N + 4 ? { i, j } : null;
+    if (reduce) go();
+  });
+  new ResizeObserver(() => { size(); go(); }).observe(cv);
+  new IntersectionObserver(([e]) => { vis = e.isIntersecting; if (vis) go(); }).observe(cv);
+})();
+
+// Name: letters lift gently under the cursor
+(() => {
+  const h = document.getElementById("name");
+  h.innerHTML = [...h.textContent].map(ch => ch === " " ? " " : `<span class="ch" aria-hidden="true">${ch}</span>`).join("");
+  const chs = [...h.querySelectorAll(".ch")];
+  if (reduce || !matchMedia("(hover: hover)").matches) return;
+  h.addEventListener("pointermove", e => chs.forEach(s => {
+    const r = s.getBoundingClientRect(), k = Math.exp(-((e.clientX - (r.left + r.width / 2)) ** 2) / 1800);
+    s.style.transform = `translateY(${(-k * 7).toFixed(2)}px)`; s.style.color = `rgba(255,255,255,${(.92 - k * .35).toFixed(3)})`;
+  }));
+  h.addEventListener("pointerleave", () => chs.forEach(s => { s.style.transform = ""; s.style.color = ""; }));
+})();
+
+// Email: copy on click, with the address in the tooltip as a fallback
+document.getElementById("copy").addEventListener("click", e => {
+  const b = e.currentTarget, done = t => { b.textContent = t; setTimeout(() => b.textContent = "Email", 1600); };
+  navigator.clipboard.writeText("dilaveshkanz@gmail.com").then(() => done("Copied"), () => done("dilaveshkanz@gmail.com"));
+});
+
+// Live India time in the footer
+(() => {
+  const el = document.getElementById("clock");
+  const tick = () => { el.textContent = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" }) + " IST"; };
+  tick(); setInterval(tick, 15000);
+})();
+</script>
+
+</html>
