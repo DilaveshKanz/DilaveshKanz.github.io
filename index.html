@@ -60,7 +60,12 @@ h1 .ch { display: inline-block; transition: transform var(--mid) var(--out), col
 .bio em { font-style: italic; color: var(--t2); }
 .city { position: absolute; top: -24px; left: calc(100% + 56px); width: 340px; margin: 0; }
 .city canvas { display: block; width: 100%; aspect-ratio: 4 / 3; cursor: crosshair; }
-.city figcaption { margin-top: 8px; }
+.city canvas { border: 1px solid var(--hair); border-radius: 12px; }
+.city figcaption { margin-top: 10px; display: grid; gap: 8px; }
+.netbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.netbtns { display: flex; gap: 6px; }
+.nb { font: 400 11px/1 var(--mono); letter-spacing: .04em; color: var(--t2); background: none; border: 1px solid var(--hair); border-radius: 999px; padding: 6px 10px; cursor: pointer; transition: color var(--fast), border-color var(--fast); }
+.nb:hover { color: var(--t1); border-color: var(--t3); }
 @media (max-width: 1180px) { .city { position: static; width: 100%; max-width: 420px; margin: 0 0 32px; } .city canvas { aspect-ratio: 16 / 9; } }
 .open { margin: 24px 0 0; color: var(--t2); max-width: 36em; }
 .open b { font-weight: 500; color: var(--t1); }
@@ -126,9 +131,12 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
 <div class="page">
   <main class="col">
     <section id="intro">
-      <figure class="city in" style="--d:2" aria-hidden="true">
-        <canvas id="city"></canvas>
-        <figcaption class="label">Height field · move the cursor</figcaption>
+      <figure class="city in" style="--d:2">
+        <canvas id="net" aria-label="A small neural network learning to separate two classes of points. Click to add points."></canvas>
+        <figcaption>
+          <span class="label">A tiny neural network, training live. Click to add points.</span>
+          <span class="netbar"><span class="label tnum" id="netinfo"></span><span class="netbtns"><button class="nb" id="netcls" type="button">Placing ●</button><button class="nb" id="netclear" type="button">Clear</button><button class="nb" id="netreset" type="button">Reset</button></span></span>
+        </figcaption>
       </figure>
       <p class="status label in" style="--d:0"><i></i>Open to internships · 2026</p>
       <h1 id="name" class="in" style="--d:0" aria-label="Dilavesh Kanz Nidooli">Dilavesh Kanz Nidooli</h1>
@@ -183,6 +191,9 @@ const WORK = [
   { n: "FieldPilot AI", c: "A phone camera that flags missing safety gear on construction sites.", t: "Kaya AI · Finalist", sel: 1, v: "field",
     r: "Team project in the Physical AI track. I trained and fine-tuned the safety-gear detector, and added a gate that promotes a new model only when it beats the baseline.",
     k: "YOLO · FastAPI · Local LLM", l: ["Hackathon", "https://kaya-ai-iit-hackathon-2026.devpost.com/"] },
+  { n: "Live Dress Try-On", c: "A webcam mirror that shows you wearing a dress while you move.", t: "Prototype · Ongoing", sel: 1, v: "tryon",
+    r: "Personal prototype. MediaPipe pose and segmentation run on every frame. FASHN VTON generates the garment on keyframes, and per-part transforms carry it to the live pose. Only garment pixels are generated, so the face and body stay real.",
+    k: "MediaPipe · FASHN VTON · WebRTC · FastAPI · Next.js", l: null },
   { n: "Course Planner", c: "Took over a half-built planner. Now live for four degree programmes.", t: "CODE · Live", sel: 1, v: "plan",
     r: "Completed and launched it for Data Science, then extended it to Electronic Systems, Aeronautics and Space Technology, and Management and Data Science. I maintain it.",
     k: "Flask · PostgreSQL · BigQuery", l: null },
@@ -198,9 +209,6 @@ const WORK = [
   { n: "Discourse Q&A", c: "Answers from a course forum, with links to their sources.", t: "WebOps task", v: "rag",
     r: "My entry task for Paradox WebOps. Section-based chunking, semantic retrieval and source-linked answers.",
     k: "FastAPI · ChromaDB · Sentence Transformers", l: ["Code", "https://github.com/DilaveshKanz/Webops-RAG-Project"] },
-  { n: "Live Dress Try-On", c: "A webcam mirror that shows you wearing a dress while you move.", t: "Prototype", v: "tryon",
-    r: "Personal prototype. MediaPipe pose and segmentation run on every frame. FASHN VTON generates the garment on keyframes, and per-part transforms carry it to the live pose. Only garment pixels are generated, so the face and body stay real.",
-    k: "MediaPipe · FASHN VTON · WebRTC · FastAPI · Next.js", l: null },
   { n: "SurfaceGuard AI", c: "Segmenting four kinds of industrial surface defects, pixel by pixel.", t: "Coursework · In progress", v: "surface",
     r: "Deep-learning course project. Milestone 1 is done: label checks, RLE mask decoding, class balance, mask coverage and the Dice metric. Model training is next.",
     k: "Python · NumPy · pandas · Kaggle", l: null },
@@ -269,28 +277,27 @@ const SK = {
     c.globalAlpha = 1;
   } },
 
-  // Pose + tracking; the gap to a machine closes past a threshold and the phone speaks
-  field: { l: "pose · track · proximity alert", still: 3.1, d(c, W, H, t) {
-    const s = (t / 1000) % 5, walk = s < 2.5 || s > 4;
-    const x = s < 2.5 ? 46 + ez(s / 2.5) * 126 : s < 4 ? 172 : 172 - ez(ph(s, 4, 5)) * 126, gy = 156, sw = walk ? Math.sin(t * .012) * .5 : 0;
-    c.strokeStyle = W8(.08); c.beginPath(); c.moveTo(10, gy + 1); c.lineTo(W - 10, gy + 1); c.stroke();
-    const K = { head: [x, gy - 78], neck: [x, gy - 66], hip: [x, gy - 38], ls: [x - 8, gy - 64], rs: [x + 8, gy - 64], le: [x - 10 - sw * 6, gy - 52], re: [x + 10 + sw * 6, gy - 52], lw: [x - 9 - sw * 10, gy - 41], rw: [x + 9 + sw * 10, gy - 41], lh: [x - 6, gy - 38], rh: [x + 6, gy - 38], lk: [x - 5 + sw * 9, gy - 20], rk: [x + 5 - sw * 9, gy - 20], la: [x - 5 + sw * 15, gy - 1], ra: [x + 5 - sw * 15, gy - 1] };
-    c.strokeStyle = W8(.75); c.beginPath();
-    [["neck", "ls"], ["neck", "rs"], ["ls", "le"], ["le", "lw"], ["rs", "re"], ["re", "rw"], ["neck", "hip"], ["hip", "lh"], ["hip", "rh"], ["lh", "lk"], ["lk", "la"], ["rh", "rk"], ["rk", "ra"]].forEach(([a, b]) => { c.moveTo(...K[a]); c.lineTo(...K[b]); });
-    c.stroke(); c.beginPath(); c.arc(K.head[0], K.head[1], 6, 0, 7); c.stroke();
-    c.fillStyle = W8(.95); Object.values(K).forEach(([px, py]) => c.fillRect(px - 1.2, py - 1.2, 2.4, 2.4));
-    const mx = 214, gap = mx - (x + 20), thr = 28, alert = gap < thr + 1 && s > 2.3 && s < 4.1;
-    c.strokeStyle = W8(.6); c.strokeRect(226.5, 118.5, 52, 24); c.strokeRect(234.5, 98.5, 22, 20); c.beginPath(); c.moveTo(270, 118); c.lineTo(284, 86); c.lineTo(292, 112); c.stroke();
-    box(c, x - 20, gy - 88, 40, 90, W8(alert ? .95 : .45), alert ? W8(.06) : null, !alert);
-    box(c, mx, 78, 82, 70, W8(alert ? .95 : .45), alert ? W8(.06) : null, !alert);
-    txt(c, "id 3", x - 20, gy - 93, .7); txt(c, "machine", mx, 73, .5);
-    c.strokeStyle = W8(.5); c.beginPath(); c.moveTo(x + 20, gy + 10); c.lineTo(mx, gy + 10); c.stroke();
-    c.strokeStyle = W8(.25); c.beginPath(); c.moveTo(mx - thr, gy + 5); c.lineTo(mx - thr, gy + 15); c.stroke();
-    c.strokeStyle = W8(.6); c.strokeRect(20.5, 22.5, 14, 24);
-    if (alert) {
-      for (let k = 0; k < 3; k++) { const r = 6 + ((s - 2.3) * 28 + k * 9) % 27; c.strokeStyle = W8((.9 * (1 - r / 33)).toFixed(3)); c.beginPath(); c.arc(34, 34, r, -.8, .8); c.stroke(); }
-      txt(c, "“stop work”", 16, 62, .9);
-    }
+  // Phone streams frames to a laptop; detectors flag PPE, proximity and falls; each hazard comes back as a spoken alert
+  field: { l: "phone camera → hazards → spoken alert", still: 1.9, d(c, W, H, t) {
+    const s = (t / 1000) % 6.6, gy = 128;
+    box(c, 14, 54, 28, 52, W8(.7)); c.fillStyle = W8(.7); c.beginPath(); c.arc(28, 62, 2, 0, 7); c.fill(); txt(c, "phone", 12, 48, .45);
+    box(c, 96, 22, 190, 120, W8(.45)); c.strokeStyle = W8(.45); c.beginPath(); c.moveTo(86, 150); c.lineTo(296, 150); c.stroke(); txt(c, "laptop · pose + ppe models", 96, 166, .45);
+    for (let k = 0; k < 4; k++) { const fx = (s * 1.3 + k / 4) % 1; c.fillStyle = W8(.6 * (1 - fx * .5)); c.fillRect(46 + fx * 46, 66, 4, 4); }
+    c.strokeStyle = W8(.08); c.beginPath(); c.moveTo(104, gy + .5); c.lineTo(278, gy + .5); c.stroke();
+    const fig = (x, ang, hat) => { c.save(); c.translate(x, gy); c.rotate(ang); c.strokeStyle = W8(.8); c.beginPath(); c.arc(0, -40, 5, 0, 7); c.moveTo(0, -35); c.lineTo(0, -15); c.moveTo(-8, -28); c.lineTo(8, -28); c.moveTo(0, -15); c.lineTo(-6, 0); c.moveTo(0, -15); c.lineTo(6, 0); c.stroke(); if (hat) { c.beginPath(); c.arc(0, -42, 6.5, Math.PI, 0); c.fillStyle = W8(.85); c.fill(); } c.restore(); };
+    const H1 = s >= .8 && s < 2.2, H2 = s >= 2.8 && s < 4.2, H3 = s >= 4.8 && s < 6.2;
+    const ax = 140, fall = ez(ph(s, 4.6, 5.1)) * (1 - ph(s, 6.1, 6.5)), bxp = 186 + ez(ph(s, 2.4, 3)) * 30 - ez(ph(s, 4.3, 4.8)) * 30;
+    fig(ax, fall * 1.25, false); fig(bxp, 0, true);
+    c.strokeStyle = W8(.6); c.strokeRect(244.5, 104.5, 30, 22); c.strokeRect(250.5, 92.5, 12, 12); c.beginPath(); c.moveTo(272, 104); c.lineTo(282, 80); c.lineTo(286, 100); c.stroke();
+    if (H3) box(c, ax - 6, gy - 16, 52, 18, W8(.95)); else box(c, ax - 12, gy - 50, 24, 52, W8(.25), null, true); box(c, bxp - 12, gy - 52, 24, 54, W8(H2 ? .95 : .25), null, !H2); box(c, 240, 76, 50, 52, W8(H2 ? .95 : .25), null, !H2);
+    if (H1) { box(c, ax - 8, gy - 49, 16, 16, W8(.95)); txt(c, "ppe: no hard hat", 104, 36, .85); }
+    if (H2) { c.strokeStyle = W8(.7); c.setLineDash([2, 2]); c.beginPath(); c.moveTo(bxp + 12, gy - 20); c.lineTo(240, gy - 20); c.stroke(); c.setLineDash([]); txt(c, "proximity", 104, 36, .85); }
+    if (H3) txt(c, "fall", 104, 36, .85);
+    [.8, 2.8, 4.8].forEach(h0 => {
+      const e = ph(s, h0 + .3, h0 + .8); if (e > 0 && e < 1) { c.fillStyle = W8(.95); c.fillRect(96 - e * 52, 84, 5, 5); }
+      const sp = s - h0 - .8; if (sp > 0 && sp < .9) for (let k = 0; k < 3; k++) { const r = 6 + (sp * 30 + k * 8) % 24; c.strokeStyle = W8((.9 * (1 - r / 30)).toFixed(3)); c.beginPath(); c.arc(42, 80, r, -.9, .9); c.stroke(); }
+    });
+    txt(c, "spoken alert", 10, 124, .45);
   } },
 
   // Completed courses unlock others through prerequisites; they go into three terms until a checkpoint is met
@@ -314,28 +321,29 @@ const SK = {
     txt(c, "checkpoint", 165, 174, cp > 0 ? .85 : .4); txt(c, "done", 18, 38, .45);
   } },
 
-  // Draft -> approval gate -> live; registrations arrive (duplicates bounce), get attendance ticks, export as CSV
-  fest: { l: "draft → approved → registrations → csv", still: 4, d(c, W, H, t) {
-    const s = (t / 1000) % 5.4, mv = ez(ph(s, .9, 1.4)), cx = 24 + mv * 96, cy = 70, live = s >= 1.7;
-    if (s < 1.5) [[8, -8], [4, -4]].forEach(([ox, oy]) => box(c, cx + ox, cy + oy, 64, 44, W8(.18 * (1 - ph(s, 1.1, 1.5)))));
-    if (s > .7 && s < 2.1) { c.strokeStyle = W8(.6 * (1 - ph(s, 1.8, 2.1))); c.beginPath(); [[112, 1], [194, -1]].forEach(([gx, d]) => { c.moveTo(gx + d * 6, 60); c.lineTo(gx, 60); c.lineTo(gx, 124); c.lineTo(gx + d * 6, 124); }); c.stroke(); }
-    box(c, cx, cy, 64, 44, W8(.85), live ? W8(.9) : null);
-    if (live) { c.strokeStyle = "#0a0a0a"; c.lineWidth = 1.6; c.beginPath(); c.moveTo(cx + 24, cy + 23); c.lineTo(cx + 30, cy + 29); c.lineTo(cx + 41, cy + 16); c.stroke(); c.lineWidth = 1; }
-    txt(c, s < 1 ? "draft" : live ? "live" : "pending", cx, cy - 8, .7);
-    const comp = ez(ph(s, 4.4, 4.9));
-    for (let i = 0; i < 6; i++) {
-      const t0 = 2 + i * .22, k = ph(s, t0, t0 + .3);
-      if (k > 0 && k < 1) { c.fillStyle = W8(.9); c.fillRect(296 - k * (296 - cx - 64) - 2, 14 + i * 9 + k * (cy + 20 - 14 - i * 9) - 2, 4, 4); }
-      if (s >= t0 + .3) {
-        const ry = 26 + i * 15, y = ry + (150 - ry) * comp, a = 1 - comp;
-        if (a > .02) { box(c, 214, y, 64, 10, W8(.4 * a)); c.fillStyle = W8(.35 * a); c.fillRect(219, y + 4, 26, 2); }
-        const tk = ph(s, 3.5 + i * .14, 3.7 + i * .14);
-        if (i < 5 && tk > 0 && a > .02) { c.strokeStyle = W8(.9 * tk * a); c.beginPath(); c.moveTo(264, y + 5); c.lineTo(267, y + 8); c.lineTo(273, y + 2); c.stroke(); }
-      }
+  // Events move from draft through Core review to live; students register into live events; attendance follows
+  fest: { l: "draft → core review → live → registrations", still: 3.6, d(c, W, H, t) {
+    const s = (t / 1000) % 6.6; c.globalAlpha = 1 - ph(s, 6.1, 6.6);
+    const X = [16, 112, 208], cw = 76, ch = 32;
+    ["draft", "core review", "live"].forEach((n, i) => { txt(c, n, X[i], 18, .5); box(c, X[i] - 2, 26, cw + 4, 150, W8(.07)); });
+    const card = (x, y, reg, att, extra) => {
+      box(c, x, y, cw, ch, W8(.75), "#0d0d0d"); c.fillStyle = W8(.55); c.fillRect(x + 7, y + 8, 34, 2); c.fillStyle = W8(.25); c.fillRect(x + 7, y + 13, 22, 2);
+      if (reg >= 0) { c.fillStyle = W8(.15); c.fillRect(x + 7, y + 22, cw - 14, 3); c.fillStyle = W8(.6); c.fillRect(x + 7, y + 22, (cw - 14) * reg, 3); if (att > 0) { c.fillStyle = W8(.95); c.fillRect(x + 7, y + 22, (cw - 14) * reg * att, 3); } }
+      if (extra) extra(x, y);
+    };
+    const att = ez(ph(s, 4.2, 5.4)) * .7;
+    card(X[2], 36, .35 + .5 * ph(s, 0, 4), att);
+    const bm = ez(ph(s, 1.6, 2.2)), bxp = X[1] + (X[2] - X[1]) * bm, byp = 36 + 40 * bm;
+    card(bxp, byp, bm >= 1 ? .6 * ph(s, 2.2, 4.4) : -1, bm >= 1 ? att : 0, (x, y) => { if (s >= 1.1 && s < 2.2) { c.strokeStyle = W8(.95); c.lineWidth = 1.5; c.beginPath(); c.moveTo(x + cw - 20, y + 16); c.lineTo(x + cw - 15, y + 21); c.lineTo(x + cw - 7, y + 11); c.stroke(); c.lineWidth = 1; txt(c, "approved", x, y + ch + 12, .7); } });
+    const cm = ez(ph(s, 2.6, 3.2));
+    card(X[0] + (X[1] - X[0]) * cm, 36, -1, 0, (x, y) => { if (cm === 0) txt(c, s < .6 ? "form v1" : "form v2", x + 7, y + 26, .6); });
+    if (s >= 3.4) { c.globalAlpha *= ph(s, 3.4, 3.9); card(X[0], 36, -1, 0); c.globalAlpha = 1 - ph(s, 6.1, 6.6); }
+    for (let k = 0; k < 14; k++) {
+      const t0 = .3 + k * .28, e = ph(s, t0, t0 + .45); if (e <= 0 || e >= 1) continue;
+      const toB = k % 2 && s > 2.3, ty = toB ? 76 : 36, x = X[2] + 10 + (k * 23 % 56);
+      c.fillStyle = W8(.9); c.fillRect(x - 1.5, 6 + (ty - 6) * ez(e) - 1.5, 3, 3);
     }
-    const dk = ph(s, 2.75, 3.25);
-    if (dk > 0 && dk < 1) { const x = dk < .5 ? 296 - dk * 2 * 100 : 196 + (dk - .5) * 2 * 100; c.fillStyle = W8((.9 * (1 - dk)).toFixed(3)); c.fillRect(x - 2, 24, 4, 4); txt(c, "duplicate", 220, 18, .5 * (1 - dk)); }
-    if (comp > 0) { c.globalAlpha = comp; shape(c, [[232, 132], [252, 132], [262, 142], [262, 172], [232, 172]], null, W8(.85)); c.beginPath(); c.moveTo(252, 132); c.lineTo(252, 142); c.lineTo(262, 142); c.stroke(); txt(c, "csv", 236, 160, .9); c.globalAlpha = 1; }
+    if (s >= 4.2 && s < 6) txt(c, "attendance", X[2], 128, .6 * ph(s, 4.2, 4.6));
   } },
   // Two completions race for one locked shipment: stock moves once, one email goes out
   deal: { l: "row lock · one shipment, one email", still: 2.8, d(c, W, H, t) {
@@ -502,48 +510,80 @@ const SK = {
   });
 })();
 
-// Hero: an isometric height field, a nod to AltiMap. Buildings rise toward the pointer; the nearest roof lights up.
+// Hero: a tiny neural network (2-10-10-1, tanh) that trains live on points you place
 (() => {
-  const cv = document.getElementById("city"), c = cv.getContext("2d");
-  const N = 12; let seed = 7; const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;
-  const HT = [];
-  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
-    const road = i % 4 === 0 || j % 4 === 0, ctr = 1 - Math.hypot(i - N / 2, j - N / 2) / (N * .75);
-    HT.push(road ? 0 : Math.max(.06, ctr * (.25 + rnd() * .9)));
-  }
-  let W = 0, H = 0, ptr = null, cur = { i: N / 2, j: N / 2 }, vis = true, raf;
-  const geo = () => { const tw = Math.min(W * .94 / N, H * 1.25 / N), th = tw / 2; return { tw, th, x0: W / 2, y0: H - N * th - 6 }; };
-  const size = () => { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0); };
-  function draw(t) {
-    const { tw, th, x0, y0 } = geo(), maxH = Math.min(y0 - 8, H * .55), P = (i, j) => [x0 + (i - j) * tw / 2, y0 + (i + j) * th / 2];
-    const tg = ptr || { i: N / 2 + Math.cos(t * .00035) * 3.2, j: N / 2 + Math.sin(t * .00035) * 3.2 };
-    cur.i += (tg.i - cur.i) * (reduce ? 1 : .07); cur.j += (tg.j - cur.j) * (reduce ? 1 : .07);
-    c.clearRect(0, 0, W, H); c.lineWidth = .75;
-    c.strokeStyle = W8(.1); c.beginPath(); [[0, 0], [N, 0], [N, N], [0, N]].forEach(([i, j], k) => c[k ? "lineTo" : "moveTo"](...P(i, j))); c.closePath(); c.stroke();
-    let best = -1, bd = 1e9;
-    for (let k = 0; k < N * N; k++) if (HT[k]) { const d = (Math.floor(k / N) + .5 - cur.i) ** 2 + (k % N + .5 - cur.j) ** 2; if (d < bd) { bd = d; best = k; } }
-    const poly = (pts, fill, stroke) => { c.beginPath(); pts.forEach((p, k) => c[k ? "lineTo" : "moveTo"](p[0], p[1])); c.closePath(); c.fillStyle = fill; c.fill(); c.strokeStyle = stroke; c.stroke(); };
-    for (let s = 0; s <= 2 * (N - 1); s++) for (let i = Math.max(0, s - N + 1); i <= Math.min(s, N - 1); i++) {
-      const j = s - i, h0 = HT[i * N + j]; if (!h0) continue;
-      const d2 = (i + .5 - cur.i) ** 2 + (j + .5 - cur.j) ** 2;
-      const wave = reduce ? 1 : .88 + .12 * Math.sin(t * .0012 + i * .55 + j * .35);
-      const z = maxH * (h0 * wave * .72 + .4 * Math.exp(-d2 / 6)), a = .16, b = 1 - a;
-      const g = [P(i + a, j + a), P(i + b, j + a), P(i + b, j + b), P(i + a, j + b)], up = g.map(([x, y]) => [x, y - z]);
-      const lit = i * N + j === best;
-      poly([g[3], g[2], up[2], up[3]], "#121212", W8(.22));
-      poly([g[1], g[2], up[2], up[1]], "#181818", W8(.22));
-      poly(up, lit ? W8(.92) : "#0a0a0a", W8(lit ? .92 : .4));
+  const cv = document.getElementById("net"), c = cv.getContext("2d"), info = document.getElementById("netinfo"), tog = document.getElementById("netcls");
+  const L = [2, 10, 10, 1], pts = [];
+  let Wt, Bs, VW, VB, step = 0, loss = 0, cls = 1, W = 0, H = 0, vis = true, raf;
+  const seed = () => {
+    pts.length = 0;
+    for (let i = 0; i < 14; i++) { const a = Math.random() * 6.283, r = Math.random() * .26; pts.push([Math.cos(a) * r, Math.sin(a) * r * .8, 1]); }
+    for (let i = 0; i < 24; i++) { const a = Math.random() * 6.283, r = .52 + Math.random() * .18; pts.push([Math.cos(a) * r, Math.sin(a) * r * .8, 0]); }
+  };
+  const init = () => {
+    Wt = []; Bs = []; VW = []; VB = []; step = 0;
+    for (let l = 1; l < L.length; l++) {
+      const n = L[l], m = L[l - 1], sc = 1.6 / Math.sqrt(m);
+      Wt.push([...Array(n)].map(() => [...Array(m)].map(() => (Math.random() * 2 - 1) * sc))); Bs.push(Array(n).fill(0));
+      VW.push([...Array(n)].map(() => Array(m).fill(0))); VB.push(Array(n).fill(0));
     }
-    if (!reduce && vis) raf = requestAnimationFrame(draw);
+  };
+  const fwd = x => {
+    const A = [x];
+    for (let l = 0; l < Wt.length; l++) {
+      const prev = A[l], last = l === Wt.length - 1;
+      A.push(Wt[l].map((w, i) => { let z = Bs[l][i]; for (let j = 0; j < w.length; j++) z += w[j] * prev[j]; return last ? 1 / (1 + Math.exp(-z)) : Math.tanh(z); }));
+    }
+    return A;
+  };
+  const train = () => {
+    if (!pts.length) return;
+    const gW = Wt.map(w => w.map(r => r.map(() => 0))), gB = Bs.map(b => b.map(() => 0));
+    let ls = 0;
+    for (const [x, y, t] of pts) {
+      const A = fwd([x, y]), p = A[A.length - 1][0];
+      ls -= t * Math.log(p + 1e-7) + (1 - t) * Math.log(1 - p + 1e-7);
+      let dz = [p - t];
+      for (let l = Wt.length - 1; l >= 0; l--) {
+        const prev = A[l], nd = Array(prev.length).fill(0);
+        for (let i = 0; i < dz.length; i++) { gB[l][i] += dz[i]; for (let j = 0; j < prev.length; j++) { gW[l][i][j] += dz[i] * prev[j]; nd[j] += dz[i] * Wt[l][i][j]; } }
+        if (l > 0) dz = nd.map((v, j) => v * (1 - prev[j] * prev[j]));
+      }
+    }
+    const n = pts.length, lr = .2, mo = .9;
+    for (let l = 0; l < Wt.length; l++) for (let i = 0; i < Wt[l].length; i++) {
+      VB[l][i] = mo * VB[l][i] - lr * gB[l][i] / n; Bs[l][i] += VB[l][i];
+      for (let j = 0; j < Wt[l][i].length; j++) { VW[l][i][j] = mo * VW[l][i][j] - lr * gW[l][i][j] / n; Wt[l][i][j] += VW[l][i][j]; }
+    }
+    loss = ls / n; step++;
+  };
+  const size = () => { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0); };
+  const toPx = (x, y) => [(x + 1) / 2 * W, (y / (H / W) + 1) / 2 * H];
+  function render() {
+    c.clearRect(0, 0, W, H);
+    const cols = 40, cw = W / cols, rows = Math.round(H / cw);
+    for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
+      const x = ((i + .5) / cols) * 2 - 1, y = (((j + .5) / rows) * 2 - 1) * (H / W), A = fwd([x, y]), p = A[A.length - 1][0];
+      c.fillStyle = W8((.02 + .2 * p).toFixed(3)); c.fillRect(i * cw + .5, j * cw + .5, cw - 1, cw - 1);
+      if (Math.abs(p - .5) < .07) { c.fillStyle = W8(.55); c.fillRect(i * cw + cw / 2 - 1, j * cw + cw / 2 - 1, 2, 2); }
+    }
+    for (const [x, y, t] of pts) {
+      const [px, py] = toPx(x, y); c.beginPath(); c.arc(px, py, 3.6, 0, 7);
+      if (t) { c.fillStyle = W8(.95); c.fill(); } else { c.fillStyle = "#0a0a0a"; c.fill(); c.strokeStyle = W8(.9); c.lineWidth = 1.3; c.stroke(); c.lineWidth = 1; }
+    }
+    info.textContent = pts.length ? `loss ${loss.toFixed(3)} · step ${step}` : "add some points";
   }
-  const go = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); };
-  addEventListener("pointermove", e => {
-    const r = cv.getBoundingClientRect(); if (!r.width) return;
-    const { tw, th, x0, y0 } = geo(), u = (e.clientX - r.left - x0) / (tw / 2), v = (e.clientY - r.top - y0 + th * 2) / (th / 2);
-    const i = (u + v) / 2, j = (v - u) / 2;
-    ptr = i > -4 && j > -4 && i < N + 4 && j < N + 4 ? { i, j } : null;
-    if (reduce) go();
+  function frame() { for (let k = 0; k < 4; k++) train(); render(); if (vis && !reduce) raf = requestAnimationFrame(frame); }
+  const go = () => { cancelAnimationFrame(raf); if (reduce) { for (let k = 0; k < 300; k++) train(); render(); } else raf = requestAnimationFrame(frame); };
+  cv.addEventListener("contextmenu", e => e.preventDefault());
+  cv.addEventListener("pointerdown", e => {
+    const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / W * 2 - 1, y = ((e.clientY - r.top) / H * 2 - 1) * (H / W);
+    pts.push([x, y, e.shiftKey || e.button === 2 ? 1 - cls : cls]); go();
   });
+  tog.addEventListener("click", () => { cls = 1 - cls; tog.textContent = cls ? "Placing ●" : "Placing ○"; });
+  document.getElementById("netreset").addEventListener("click", () => { seed(); init(); go(); });
+  document.getElementById("netclear").addEventListener("click", () => { pts.length = 0; init(); go(); });
+  seed(); init();
   new ResizeObserver(() => { size(); go(); }).observe(cv);
   new IntersectionObserver(([e]) => { vis = e.isIntersecting; if (vis) go(); }).observe(cv);
 })();
