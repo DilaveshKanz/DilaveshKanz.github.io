@@ -3,10 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dilavesh Kanz Nidooli · Forward Deployed AI Engineer, IIT Madras</title>
+<meta name="description" content="Dilavesh Kanz Nidooli builds AI and software that real people use. Data Science student at IIT Madras, Software Developer Intern at CODE, open to Forward Deployed Engineer internships.">
+<meta name="author" content="Dilavesh Kanz Nidooli">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://dilaveshkanz.github.io/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="profile">
+<meta property="og:site_name" content="Dilavesh Kanz Nidooli">
+<meta property="og:title" content="Dilavesh Kanz Nidooli · Forward Deployed AI Engineer, IIT Madras">
+<meta property="og:description" content="Dilavesh Kanz Nidooli builds AI and software that real people use. Data Science student at IIT Madras, Software Developer Intern at CODE, open to Forward Deployed Engineer internships.">
+<meta property="og:url" content="https://dilaveshkanz.github.io/">
+<meta property="og:image" content="https://dilaveshkanz.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Dilavesh Kanz Nidooli. Making AI happen. For real.">
+<meta property="profile:first_name" content="Dilavesh">
+<meta property="profile:last_name" content="Kanz Nidooli">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dilavesh Kanz Nidooli · Forward Deployed AI Engineer, IIT Madras">
+<meta name="twitter:description" content="Dilavesh Kanz Nidooli builds AI and software that real people use. Data Science student at IIT Madras, Software Developer Intern at CODE, open to Forward Deployed Engineer internships.">
+<meta name="twitter:image" content="https://dilaveshkanz.github.io/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Dilavesh Kanz Nidooli", "url": "https://dilaveshkanz.github.io/", "image": "https://dilaveshkanz.github.io/og.png", "jobTitle": "Software Developer Intern", "description": "Dilavesh Kanz Nidooli builds AI and software that real people use. Data Science student at IIT Madras, Software Developer Intern at CODE, open to Forward Deployed Engineer internships.", "email": "mailto:dilaveshkanz@gmail.com", "worksFor": {"@type": "Organization", "name": "Centre for Outreach and Digital Education (CODE), IIT Madras"}, "affiliation": {"@type": "CollegeOrUniversity", "name": "Indian Institute of Technology Madras"}, "knowsAbout": ["Artificial intelligence", "Machine learning", "Computer vision", "Forward deployed engineering", "Full-stack development", "Robotics", "AI agents"], "sameAs": ["https://github.com/DilaveshKanz", "https://www.linkedin.com/in/dilavesh-kanz-nidooli/"]}</script>
 <style>body{margin:0}[hidden]{display:none!important}</style>
-<title>Dilavesh Kanz Nidooli</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Dilavesh Kanz Nidooli builds AI and software and gets it working for the people who use it. Looking for a Forward Deployed Engineer internship.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Geist:wght@400;500&family=Geist+Mono:wght@400&display=swap">
@@ -23,8 +45,14 @@
   --mono: "Geist Mono", ui-monospace, Menlo, monospace;
   --fast: 160ms; --mid: 240ms; --slow: 480ms;
   --out: cubic-bezier(.2, .8, .2, 1);
+  --raise: #0d0d0d;
+  --glass: var(--glass);
+  --fill: rgba(255, 255, 255, .08);
+  --pulse: 255, 255, 255;
   color-scheme: dark;
 }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #fafaf9; --t1: rgba(10, 10, 10, .9); --t2: rgba(10, 10, 10, .62); --t3: rgba(10, 10, 10, .46); --hair: rgba(10, 10, 10, .1); --raise: #f2f2f1; --glass: rgba(250, 250, 249, .86); --fill: rgba(10, 10, 10, .06); --pulse: 10, 10, 10; color-scheme: light; } }
+:root[data-theme="light"] { --bg: #fafaf9; --t1: rgba(10, 10, 10, .9); --t2: rgba(10, 10, 10, .62); --t3: rgba(10, 10, 10, .46); --hair: rgba(10, 10, 10, .1); --raise: #f2f2f1; --glass: rgba(250, 250, 249, .86); --fill: rgba(10, 10, 10, .06); --pulse: 10, 10, 10; color-scheme: light; }
 * { box-sizing: border-box; }
 body { overflow-x: clip; background: var(--bg); color: var(--t2); font: 400 15px/1.7 var(--sans); -webkit-font-smoothing: antialiased; }
 ::selection { background: var(--t1); color: var(--bg); }
@@ -43,6 +71,7 @@ a { color: var(--t1); text-decoration: none; }
 .col { grid-column: 1; min-width: 0; }
 .stage { grid-column: 2; position: relative; }
 section + section { margin-top: 112px; }
+.sh h2 { margin: 0; }
 .sh { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
 
 /* Entry: each block sharpens into place, one after another */
@@ -51,29 +80,21 @@ section + section { margin-top: 112px; }
 
 /* Opening */
 #intro { position: relative; }
-.deploy { position: fixed; z-index: 30; right: max(20px, env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); display: inline-flex; align-items: center; gap: 10px; max-width: calc(100vw - 40px);
-  font: 400 11px/1 var(--mono); letter-spacing: .04em; color: var(--t1); background: rgba(12, 12, 12, .86); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  border: 1px solid var(--hair); border-radius: 999px; padding: 10px 14px; cursor: pointer; animation: chip .8s var(--out) 1s both; transition: border-color var(--fast); }
-.deploy:hover { border-color: var(--t3); }
-.deploy i { width: 6px; height: 6px; border-radius: 50%; background: var(--t1); flex: none; animation: ping 2.4s infinite; }
-.deploy.busy i { animation: spin .8s linear infinite; border-radius: 1px; }
-.deploy span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-@keyframes chip { from { opacity: 0; transform: translateY(16px); } }
-@keyframes spin { to { transform: rotate(360deg); } }
 h1 { font: 300 clamp(26px, calc((100vw - 44px) / 9), 64px)/1.02 var(--serif); color: var(--t1); margin: 0; letter-spacing: -.025em; cursor: default; white-space: nowrap; }
 h1 .ch { display: inline-block; transition: transform var(--mid) var(--out), color var(--mid); will-change: transform; }
 h1 .ch > i { display: inline-block; font-style: normal; animation: letter .9s var(--out) both; animation-delay: calc(var(--k) * 32ms + 120ms); }
 @keyframes letter { from { opacity: 0; filter: blur(8px); transform: translateY(.45em) rotate(4deg); } }
 .tagline { font: 300 clamp(20px, 3vw, 28px)/1.2 var(--serif); color: var(--t1); margin: 14px 0 0; letter-spacing: -.01em; }
 .tagline em { font-style: italic; color: var(--t2); }
-.swap { display: inline-block; white-space: nowrap; transition: width var(--slow) var(--out); vertical-align: bottom; overflow: visible; }
-.swap.dec { color: var(--t2); }
+.swap { display: inline-block; white-space: nowrap; transition: width var(--slow) var(--out), background-color var(--mid); vertical-align: baseline; overflow: visible; background: var(--t1); color: var(--bg); padding: 0 .2em .04em; border-radius: .14em; line-height: 1.1; text-align: center; }
+.swap.dec { background: var(--t2); }
 .real { position: relative; display: inline-block; }
 .real svg { position: absolute; left: -2%; bottom: -.18em; width: 104%; height: .42em; overflow: visible; }
 .real path { fill: none; stroke: var(--t2); stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 1.1s var(--out) 1.4s forwards; }
 .real.again path { animation: draw .9s var(--out) forwards; }
 @keyframes draw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
 .role { margin: 16px 0 40px; }
+@media (max-width: 560px) { .role { white-space: nowrap; font-size: clamp(8.5px, 2.55vw, 11px); letter-spacing: .05em; } }
 .bio { font: 400 21px/1.5 var(--serif); color: var(--t1); margin: 0; text-wrap: pretty; max-width: 30em; }
 .bio em { font-style: italic; color: var(--t2); }
 .city { position: absolute; top: -24px; left: calc(100% + 56px); width: 340px; margin: 0; }
@@ -95,7 +116,7 @@ h1 .ch > i { display: inline-block; font-style: normal; animation: letter .9s va
 .seg { display: inline-flex; padding: 2px; border: 1px solid var(--hair); border-radius: 999px; position: relative; }
 .seg button { position: relative; z-index: 1; font: 400 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--t3); background: none; border: 0; padding: 7px 12px; border-radius: 999px; cursor: pointer; transition: color var(--mid) var(--out); }
 .seg button[aria-pressed="true"] { color: var(--t1); }
-.seg i { position: absolute; z-index: 0; top: 2px; bottom: 2px; border-radius: 999px; background: rgba(255, 255, 255, .08); transition: left var(--mid) var(--out), width var(--mid) var(--out); }
+.seg i { position: absolute; z-index: 0; top: 2px; bottom: 2px; border-radius: 999px; background: var(--fill); transition: left var(--mid) var(--out), width var(--mid) var(--out); }
 .ctrl { display: flex; align-items: center; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
 
 .links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
@@ -126,7 +147,7 @@ button.lk { font: inherit; border: 0; cursor: pointer; }
 @media (max-width: 560px) { .row > button { grid-template-columns: 1fr; } .rt { grid-column: 1; grid-row: auto; text-align: left; margin-top: 4px; } }
 
 /* Hover sketch in the right margin */
-.peek { position: absolute; left: 0; top: 0; width: 300px; height: 200px; border: 1px solid var(--hair); border-radius: 12px; overflow: hidden; background: #0d0d0d;
+.peek { position: absolute; left: 0; top: 0; width: 300px; height: 200px; border: 1px solid var(--hair); border-radius: 12px; overflow: hidden; background: var(--raise);
   opacity: 0; transform: translateY(var(--y, 0)) scale(.97); filter: blur(4px);
   transition: opacity var(--mid) var(--out), filter var(--mid) var(--out), transform var(--slow) var(--out); pointer-events: none; }
 .peek.on { opacity: 1; filter: none; transform: translateY(var(--y, 0)) scale(1); }
@@ -149,8 +170,8 @@ button.lk { font: inherit; border: 0; cursor: pointer; }
 .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .list li { display: grid; grid-template-columns: 18px minmax(0, 1fr); }
 .list li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--t3); margin-top: 10px; }
-.list li.live::before { background: var(--t1); box-shadow: 0 0 0 0 rgba(255,255,255,.4); animation: ping 2.4s infinite; }
-@keyframes ping { 70% { box-shadow: 0 0 0 6px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
+.list li.live::before { background: var(--t1); box-shadow: 0 0 0 0 rgba(var(--pulse), .4); animation: ping 2.4s infinite; }
+@keyframes ping { 70% { box-shadow: 0 0 0 6px rgba(var(--pulse), 0); } 100% { box-shadow: 0 0 0 0 rgba(var(--pulse), 0); } }
 .list b { font-weight: 500; color: var(--t1); }
 
 footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
@@ -182,14 +203,15 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
     </section>
 
     <section id="work" class="in" style="--d:4">
-      <div class="sh"><span class="label">Work</span>
+      <div class="sh"><h2 class="label">Work</h2>
         <div class="seg" id="workSeg" role="group" aria-label="Show projects"><i></i><button type="button" aria-pressed="true" data-v="sel">Selected</button><button type="button" aria-pressed="false" data-v="all">All</button></div>
       </div>
       <ul class="rows" id="rows"></ul>
+      <noscript><ul><li><strong>Course Planner</strong>: Helps IIT Madras students plan their courses. Live in four degree programmes.</li><li><strong>Paradox Fest Platform</strong>: Runs events and sign-ups for the IIT Madras BS student fest.</li><li><strong>FieldPilot AI</strong>: A phone camera that watches a construction site and warns workers out loud.</li><li><strong>AltiMap</strong>: Works out how tall every building is from a single photo taken from above.</li><li><strong>Live Dress Try-On</strong>: A live mirror that shows you wearing a dress as you move.</li><li><strong>DealFlow360</strong>: Tracks a sale from the first quote to the final delivery.</li><li><strong>AssetFlow</strong>: Lets a team share equipment without two people booking it at once.</li><li><strong>Discourse Q&A</strong>: Answers student questions from the course forum, and shows where each answer came from.</li><li><strong>SurfaceGuard AI</strong>: Teaching a computer to spot scratches and defects on metal.</li><li><strong>Placement Portal</strong>: Connects students and companies for campus placements.</li><li><strong>TrailHead</strong>: Book a trekking trip and get a reminder before you go.</li></ul></noscript>
     </section>
 
     <section id="experience" class="in" style="--d:5">
-      <div class="sh"><span class="label">Experience</span></div>
+      <div class="sh"><h2 class="label">Experience</h2></div>
       <div class="xp">
         <div class="org">
           <div class="on">CODE, IIT Madras</div>
@@ -205,7 +227,7 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
     </section>
 
     <section id="now" class="in" style="--d:6">
-      <div class="sh"><span class="label">Now</span></div>
+      <div class="sh"><h2 class="label">Now</h2></div>
       <ul class="list">
         <li class="live"><span>Fine-tuning AltiMap for <b>Smart India Hackathon 2026</b></span></li>
         <li class="live"><span>Building fest modules on the <b>Paradox WebOps</b> core team</span></li>
@@ -220,8 +242,6 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
     </footer>
   </main>
 
-  <button class="deploy busy" id="deploy" type="button" title="Click to copy dilaveshkanz@gmail.com" aria-label="Ready for a Forward Deployed Engineer internship in 2026. Click to copy email."><i></i><span id="deploytxt">&nbsp;</span></button>
-
   <aside class="stage" aria-hidden="true">
     <div class="peek" id="peek"><canvas id="peekc"></canvas><span class="label" id="peekl"></span></div>
   </aside>
@@ -229,7 +249,15 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
 
 <script>
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const W8 = a => `rgba(255,255,255,${a})`;
+let INK = "255,255,255", LIGHT = false;
+const W8 = a => `rgba(${INK},${a})`;
+// Canvas colours follow the page theme: dark tones map to light paper tones
+const PAL = { "#0a0a0a": "#fafaf9", "#0c0c0c": "#f6f6f5", "#0d0d0d": "#f2f2f1", "#101010": "#eeeeed", "#141414": "#eaeae9", "#1b1b1b": "#e2e2e1" };
+const C = h => LIGHT ? PAL[h] : h, BGA = a => LIGHT ? `rgba(250,250,249,${a})` : `rgba(10,10,10,${a})`;
+const setTheme = () => { const th = document.documentElement.dataset.theme; LIGHT = th ? th === "light" : matchMedia("(prefers-color-scheme: light)").matches; INK = LIGHT ? "10,10,10" : "255,255,255"; };
+setTheme();
+matchMedia("(prefers-color-scheme: light)").addEventListener("change", setTheme);
+new MutationObserver(setTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
 const WORK = [
   { n: "Course Planner", c: "Helps IIT Madras students plan their courses. Live in four degree programmes.", t: "CODE · Live", sel: 1, v: "plan",
@@ -315,8 +343,8 @@ const SK = {
     B.forEach(([u0, v0, u1, v1, h]) => {
       const cu = (u0 + u1) / 2, cv = (v0 + v1) / 2, idx = (cv < 3 ? 0 : 4) + Math.min(3, Math.floor(cu / 2.5)), lit = idx < q;
       const a0 = P(u0, v0), b0 = P(u1, v0), c0 = P(u1, v1), d0 = P(u0, v1), a1 = P(u0, v0, h), b1 = P(u1, v0, h), c1 = P(u1, v1, h), d1 = P(u0, v1, h);
-      if (f > .02) { shape(c, [b0, c0, c1, b1], "#141414", W8(.22)); shape(c, [d0, c0, c1, d1], "#1b1b1b", W8(.22)); }
-      shape(c, [a1, b1, c1, d1], lit ? W8((.12 + .75 * h).toFixed(3)) : "#0d0d0d", W8(.5));
+      if (f > .02) { shape(c, [b0, c0, c1, b1], C("#141414"), W8(.22)); shape(c, [d0, c0, c1, d1], C("#1b1b1b"), W8(.22)); }
+      shape(c, [a1, b1, c1, d1], lit ? W8((.12 + .75 * h).toFixed(3)) : C("#0d0d0d"), W8(.5));
     });
     TR.forEach(([u, v]) => { const g = P(u, v), tp = P(u, v, .32); c.strokeStyle = W8(.4); c.beginPath(); c.moveTo(...g); c.lineTo(...tp); c.stroke(); c.fillStyle = W8(q > 7 || s > 2.2 ? .7 : .25); c.beginPath(); c.arc(tp[0], tp[1], 3.4, 0, 7); c.fill(); });
     if (win) { const k = Math.min(7, Math.floor(q)), [x, y] = P((k % 4) * 2.4 - .2, Math.floor(k / 4) * 3 - .2); c.strokeStyle = W8(.95); c.strokeRect(x, y, 3.3 * 24, 3.3 * 21); }
@@ -374,7 +402,7 @@ const SK = {
     const X = [16, 112, 208], cw = 76, ch = 32;
     ["draft", "core review", "live"].forEach((n, i) => { txt(c, n, X[i], 18, .5); box(c, X[i] - 2, 26, cw + 4, 150, W8(.07)); });
     const card = (x, y, reg, att, extra) => {
-      box(c, x, y, cw, ch, W8(.75), "#0d0d0d"); c.fillStyle = W8(.55); c.fillRect(x + 7, y + 8, 34, 2); c.fillStyle = W8(.25); c.fillRect(x + 7, y + 13, 22, 2);
+      box(c, x, y, cw, ch, W8(.75), C("#0d0d0d")); c.fillStyle = W8(.55); c.fillRect(x + 7, y + 8, 34, 2); c.fillStyle = W8(.25); c.fillRect(x + 7, y + 13, 22, 2);
       if (reg >= 0) { c.fillStyle = W8(.15); c.fillRect(x + 7, y + 22, cw - 14, 3); c.fillStyle = W8(.6); c.fillRect(x + 7, y + 22, (cw - 14) * reg, 3); if (att > 0) { c.fillStyle = W8(.95); c.fillRect(x + 7, y + 22, (cw - 14) * reg * att, 3); } }
       if (extra) extra(x, y);
     };
@@ -465,7 +493,7 @@ const SK = {
     const lk = [lh[0] - 2, gy - 30], la = [lh[0] - 4, gy], rk = [rh[0] + 2, gy - 30], ra = [rh[0] + 4, gy];
     const gen = ph(s, 1, 1.8), dress = [ls, rs, [rh[0] + 4, rh[1]], [rh[0] + 24, gy - 24], [lh[0] - 24, gy - 24], [lh[0] - 4, lh[1]]];
     if (s >= 1) { c.save(); c.beginPath(); c.rect(0, 0, W, gy - 116 + gen * 96); c.clip(); shape(c, dress, W8(.78), W8(.95));
-      c.strokeStyle = "rgba(10,10,10,.35)"; for (let k = 1; k < 4; k++) { c.beginPath(); c.moveTo(lh[0] - 4 - k * 2, lh[1] + 4); c.lineTo(lh[0] - 24 + k * 12, gy - 26); c.stroke(); } c.restore(); }
+      c.strokeStyle = BGA(.35); for (let k = 1; k < 4; k++) { c.beginPath(); c.moveTo(lh[0] - 4 - k * 2, lh[1] + 4); c.lineTo(lh[0] - 24 + k * 12, gy - 26); c.stroke(); } c.restore(); }
     const flash = ph(s, 4.2, 4.6); if (flash > 0 && flash < 1) shape(c, dress, W8((.6 * (1 - flash)).toFixed(3)));
     c.strokeStyle = W8(.65); c.beginPath(); [[nk, ls], [nk, rs], [ls, le], [le, lw], [rs, re], [re, rw], [nk, [hx, gy - 62]], [lh, rh], [lh, lk], [lk, la], [rh, rk], [rk, ra]].forEach(([a, b]) => { c.moveTo(...a); c.lineTo(...b); }); c.stroke();
     c.beginPath(); c.arc(hd[0], hd[1], 9, 0, 7); c.stroke();
@@ -589,7 +617,7 @@ const SK = {
     } },
     { n: "code", dur: 4600, slot: [262, 42, 72, 54], keep: 1, draw(c, p, t) {
       lab(c, "writing code");
-      box(c, 20, 32, 320, 212, W8(.2), "#0c0c0c");
+      box(c, 20, 32, 320, 212, W8(.2), C("#0c0c0c"));
       [32, 42, 52].forEach(x => { c.fillStyle = W8(.25); c.beginPath(); c.arc(x, 45, 2.5, 0, 7); c.fill(); });
       box(c, 261, 41, 74, 56, W8(.3)); c.font = MONO(8); c.fillStyle = W8(.4); c.fillText("QUOTE.TXT", 262, 108);
       const total = CODE.join("").length; let n = Math.floor(ph(p, .05, .82) * total), lx = 0, ly = 0;
@@ -608,7 +636,7 @@ const SK = {
         const v = CAT[y][x] * (1 - sig) + hash(x, y, step) * sig * .9;
         c.fillStyle = W8((.03 + v * .88).toFixed(3)); c.fillRect(x * 15 + .5, y * 15 + .5, 14, 14);
       }
-      c.fillStyle = "rgba(10,10,10,.75)"; c.fillRect(10, 10, 150, 18); lab(c, `denoising · step ${Math.round((1 - sig) * 50)}/50`);
+      c.fillStyle = BGA(.75); c.fillRect(10, 10, 150, 18); lab(c, `denoising · step ${Math.round((1 - sig) * 50)}/50`);
     } },
     { n: "robot", dur: 3800, slot: [144, 46, 72, 54], keep: 1, draw(c, p, t) {
       lab(c, "vision → action");
@@ -616,7 +644,7 @@ const SK = {
       c.strokeStyle = W8(.85); c.lineWidth = 1.5;
       c.beginPath(); c.moveTo(180, 40); c.lineTo(180, 28); c.stroke(); c.fillStyle = W8(t % 900 < 450 ? .95 : .3); c.beginPath(); c.arc(180, 25, 3, 0, 7); c.fill();
       c.strokeRect(138.5, 40.5, 84, 66); c.fillStyle = W8(.85); c.fillRect(172, 107, 16, 7);
-      c.fillStyle = "#101010"; c.fillRect(146, 114, 68, 62); c.strokeRect(146.5, 114.5, 68, 62);
+      c.fillStyle = C("#101010"); c.fillRect(146, 114, 68, 62); c.strokeRect(146.5, 114.5, 68, 62);
       [0, 1, 2].forEach(k => { c.fillStyle = W8(Math.floor(t / 300 + k) % 3 === 0 ? .9 : .25); c.fillRect(158 + k * 16, 128, 8, 5); });
       c.fillStyle = W8(.35); c.fillRect(158, 146, 44, 2); c.fillRect(158, 154, 30, 2);
       const w = 1.25 + Math.sin(t * .008) * .45, elx = 236, ely = 106, hx = elx + Math.cos(w) * 20, hy = ely - Math.sin(w) * 20;
@@ -644,7 +672,7 @@ const SK = {
         c.strokeStyle = W8(.09); c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
         if (p > .15) { const f = (t * .0007 + hash(l, a * 7 + b, 1)) % 1; c.fillStyle = W8((.7 * ph(p, .15, .3)).toFixed(3)); c.fillRect(x0 + (x1 - x0) * f - 1, y0 + (y1 - y0) * f - 1, 2, 2); }
       }
-      X.forEach((x, l) => { for (let j = 0; j < NN[l]; j++) { const y = Y(NN[l], j), mid = l === 2 && j === 2; c.beginPath(); c.arc(x, y, mid ? 11 : 6, 0, 7); c.fillStyle = "#0a0a0a"; c.fill(); c.strokeStyle = W8(mid ? .9 : .6); c.stroke(); } });
+      X.forEach((x, l) => { for (let j = 0; j < NN[l]; j++) { const y = Y(NN[l], j), mid = l === 2 && j === 2; c.beginPath(); c.arc(x, y, mid ? 11 : 6, 0, 7); c.fillStyle = C("#0a0a0a"); c.fill(); c.strokeStyle = W8(mid ? .9 : .6); c.stroke(); } });
       if (p > .55) { c.font = FS(16, true); c.fillStyle = W8((.9 * ph(p, .55, .7)).toFixed(3)); const s = "…and he would like to build the next one with you."; c.fillText(s, 180 - c.measureText(s).width / 2, 252); }
     } }
   ];
@@ -657,7 +685,7 @@ const SK = {
     S[k].draw(ctx, p, t);
     const s = S[k].slot; if (s && snap && slotAlpha > 0) { ctx.globalAlpha = slotAlpha; ctx.drawImage(snap, s[0], s[1], s[2], s[3]); ctx.globalAlpha = 1; }
   };
-  const base = ctx => { ctx.setTransform(sc, 0, 0, sc, 0, 0); ctx.globalAlpha = 1; ctx.fillStyle = "#0a0a0a"; ctx.fillRect(0, 0, 360, 270); };
+  const base = ctx => { ctx.setTransform(sc, 0, 0, sc, 0, 0); ctx.globalAlpha = 1; ctx.fillStyle = C("#0a0a0a"); ctx.fillRect(0, 0, 360, 270); };
   const snapshot = (k, t, from) => { const x = next.getContext("2d"); base(x); scene(x, k, 1, t, from, 1); [prev, next] = [next, prev]; };
   function frame(t) {
     const dt = Math.min(64, t - (last || t)); last = t; el += dt;
@@ -727,25 +755,9 @@ const SK = {
   if (reduce || !matchMedia("(hover: hover)").matches) return;
   h.addEventListener("pointermove", e => chs.forEach(s => {
     const r = s.getBoundingClientRect(), k = Math.exp(-((e.clientX - (r.left + r.width / 2)) ** 2) / 1800);
-    s.style.transform = `translateY(${(-k * 7).toFixed(2)}px)`; s.style.color = `rgba(255,255,255,${(.92 - k * .35).toFixed(3)})`;
+    s.style.transform = `translateY(${(-k * 7).toFixed(2)}px)`; s.style.color = `rgba(${INK},${(.92 - k * .35).toFixed(3)})`;
   }));
   h.addEventListener("pointerleave", () => chs.forEach(s => { s.style.transform = ""; s.style.color = ""; }));
-})();
-
-// Deploy-status chip: types a short "deploy log", then rests on availability. Click copies the email.
-(() => {
-  const b = document.getElementById("deploy"), s = document.getElementById("deploytxt"), FINAL = "ready for an FDE internship · 2026";
-  const steps = ["deploying dilavesh…", "running checks… passed ✓", FINAL];
-  const type = (txt, ms) => new Promise(r => { let i = 0; const k = setInterval(() => { s.textContent = txt.slice(0, ++i); if (i >= txt.length) { clearInterval(k); setTimeout(r, ms); } }, 28); });
-  (async () => {
-    if (reduce) { s.textContent = FINAL; b.classList.remove("busy"); return; }
-    await new Promise(r => setTimeout(r, 1300));
-    for (const [k, st] of steps.entries()) { if (k === steps.length - 1) b.classList.remove("busy"); await type(st, k < steps.length - 1 ? 700 : 0); }
-  })();
-  b.addEventListener("click", () => {
-    const back = () => setTimeout(() => { s.textContent = FINAL; }, 1600);
-    navigator.clipboard.writeText("dilaveshkanz@gmail.com").then(() => { s.textContent = "email copied ✓"; back(); }, () => { s.textContent = "dilaveshkanz@gmail.com"; back(); });
-  });
 })();
 
 // Email: copy on click, with the address in the tooltip as a fallback
