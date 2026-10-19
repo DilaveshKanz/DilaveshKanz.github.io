@@ -66,6 +66,13 @@ h1 .ch > i { display: inline-block; font-style: normal; animation: letter .9s va
 @keyframes letter { from { opacity: 0; filter: blur(8px); transform: translateY(.45em) rotate(4deg); } }
 .tagline { font: 300 clamp(20px, 3vw, 28px)/1.2 var(--serif); color: var(--t1); margin: 14px 0 0; letter-spacing: -.01em; }
 .tagline em { font-style: italic; color: var(--t2); }
+.swap { display: inline-block; white-space: nowrap; transition: width var(--slow) var(--out); vertical-align: bottom; overflow: visible; }
+.swap.dec { color: var(--t2); }
+.real { position: relative; display: inline-block; }
+.real svg { position: absolute; left: -2%; bottom: -.18em; width: 104%; height: .42em; overflow: visible; }
+.real path { fill: none; stroke: var(--t2); stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 1.1s var(--out) 1.4s forwards; }
+.real.again path { animation: draw .9s var(--out) forwards; }
+@keyframes draw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
 .role { margin: 16px 0 40px; }
 .bio { font: 400 21px/1.5 var(--serif); color: var(--t1); margin: 0; text-wrap: pretty; max-width: 30em; }
 .bio em { font-style: italic; color: var(--t2); }
@@ -161,7 +168,7 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
         <canvas id="story" title="Click to skip ahead"></canvas>
       </figure>
       <h1 id="name" aria-label="Dilavesh Kanz Nidooli">Dilavesh Kanz Nidooli</h1>
-      <p class="tagline in" style="--d:1">Making AI happen. <em>For real.</em></p>
+      <p class="tagline in" id="tag" style="--d:1" aria-label="Making AI happen. For real.">Making <span class="swap" id="swap" aria-hidden="true">AI</span> happen. <em class="real" aria-hidden="true">For real.<svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="100" d="M2 8 C 22 3, 48 11, 70 6 S 92 4, 98 6"/></svg></em></p>
       <p class="role label in" style="--d:1">Forward deployed engineering · AI · IIT Madras</p>
       <p class="bio in" style="--d:2">I build AI and software <em>and get it working for the people who use it.</em></p>
       <p class="open in" style="--d:3">I am looking for a <b>Forward Deployed Engineer internship</b>. I am also open to AI engineering, ML, software, intelligent systems, robotics, and autonomous-agent roles.</p>
@@ -683,6 +690,33 @@ const SK = {
   new ResizeObserver(() => { size(); go(); }).observe(cv);
   new IntersectionObserver(([en]) => { vis = en.isIntersecting; if (vis) go(); }).observe(cv);
   document.fonts?.ready.then(go);
+})();
+
+// Tagline: the word after "Making" decodes into the next one every few seconds (or on hover); "For real." draws its own underline
+(() => {
+  const tag = document.getElementById("tag"), sw = document.getElementById("swap"), real = tag.querySelector(".real");
+  const WORDS = ["AI", "agents", "robots", "models", "products"], GLYPHS = "abcdefghijklmnopqrstuvwxyz01<>/{}#%&*";
+  const probe = sw.cloneNode(); Object.assign(probe.style, { position: "absolute", visibility: "hidden", width: "auto", transition: "none" }); sw.parentNode.appendChild(probe);
+  const widthOf = s => { probe.textContent = s; return probe.getBoundingClientRect().width; };
+  let k = 0, busy = false, timer;
+  const fit = () => { sw.style.width = widthOf(sw.textContent) + "px"; };
+  document.fonts?.ready.then(fit); fit();
+  function decode(to) {
+    busy = true; sw.classList.add("dec"); sw.style.width = widthOf(to) + "px";
+    const from = sw.textContent, frames = 16 + to.length * 2; let f = 0;
+    const tick = setInterval(() => {
+      f++; const n = Math.round(from.length + (to.length - from.length) * Math.min(1, f / 8));
+      sw.textContent = [...Array(n)].map((_, i) => f > 6 + i * 2.2 && i < to.length ? to[i] : GLYPHS[Math.random() * GLYPHS.length | 0]).join("");
+      if (f >= frames) { clearInterval(tick); sw.textContent = to; sw.classList.remove("dec"); busy = false; }
+    }, 38);
+  }
+  const step = () => { if (busy || document.hidden) return; k = (k + 1) % WORDS.length; decode(WORDS[k]); };
+  if (!reduce) {
+    const loop = () => { clearInterval(timer); timer = setInterval(step, k === 0 ? 3600 : 2400); };
+    setTimeout(() => { step(); loop(); }, 3200);
+    tag.addEventListener("pointerenter", () => { step(); loop(); });
+  }
+  real.addEventListener("pointerenter", () => { real.classList.remove("again"); void real.offsetWidth; real.classList.add("again"); });
 })();
 
 // Name: letters lift gently under the cursor
