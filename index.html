@@ -55,6 +55,8 @@ section + section { margin-top: 112px; }
 .status i { width: 6px; height: 6px; border-radius: 50%; background: var(--t1); animation: ping 2.4s infinite; }
 h1 { font: 300 clamp(40px, 6.2vw, 64px)/1.02 var(--serif); color: var(--t1); margin: 0; letter-spacing: -.025em; cursor: default; }
 h1 .ch { display: inline-block; transition: transform var(--mid) var(--out), color var(--mid); will-change: transform; }
+h1 .ch > i { display: inline-block; font-style: normal; animation: letter .9s var(--out) both; animation-delay: calc(var(--k) * 32ms + 120ms); }
+@keyframes letter { from { opacity: 0; filter: blur(8px); transform: translateY(.45em) rotate(4deg); } }
 .role { margin: 18px 0 40px; }
 .bio { font: 400 21px/1.5 var(--serif); color: var(--t1); margin: 0; text-wrap: pretty; max-width: 30em; }
 .bio em { font-style: italic; color: var(--t2); }
@@ -67,6 +69,25 @@ h1 .ch { display: inline-block; transition: transform var(--mid) var(--out), col
 .nb { font: 400 11px/1 var(--mono); letter-spacing: .04em; color: var(--t2); background: none; border: 1px solid var(--hair); border-radius: 999px; padding: 6px 10px; cursor: pointer; transition: color var(--fast), border-color var(--fast); }
 .nb:hover { color: var(--t1); border-color: var(--t3); }
 @media (max-width: 1180px) { .city { position: static; width: 100%; max-width: 420px; margin: 0 0 32px; } .city canvas { aspect-ratio: 16 / 9; } }
+.gen { border: 1px solid var(--hair); border-radius: 14px; padding: 14px; display: grid; gap: 12px; background: #0c0c0c; top: -40px; width: 360px; }
+.gen-head { display: flex; justify-content: space-between; align-items: center; }
+.gen canvas.face { width: 40px; height: 20px; display: block; aspect-ratio: auto; border: 0; border-radius: 0; cursor: default; }
+.gen .seg { justify-self: start; }
+.gen-out { height: 200px; border: 1px solid var(--hair); border-radius: 10px; overflow: hidden; }
+.gen-out pre { margin: 0; padding: 12px 14px; height: 100%; overflow: auto; font: 400 12px/1.6 var(--mono); color: var(--t1); white-space: pre-wrap; }
+.gen-out canvas { display: block; width: 100%; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; cursor: default; }
+.gen-in { display: flex; gap: 6px; }
+.gen-in input { flex: 1; min-width: 0; background: none; border: 1px solid var(--hair); border-radius: 999px; padding: 8px 12px; color: var(--t1); font: 400 12px var(--mono); outline: none; transition: border-color var(--fast); }
+.gen-in input:focus { border-color: var(--t3); }
+.nb.solid { background: var(--t1); color: var(--bg); border-color: var(--t1); }
+.nb.solid:hover { background: transparent; color: var(--t1); }
+.gen-meta { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: end; min-height: 44px; }
+.gen-meta pre { margin: 0; white-space: pre; font-size: 10px; line-height: 1.5; text-transform: none; overflow: hidden; }
+.gen-meta > div { display: grid; gap: 6px; justify-items: end; }
+.temp { display: flex; align-items: center; gap: 6px; }
+.temp input { width: 80px; accent-color: #ededeb; }
+.gen .note { margin: 0; text-transform: none; letter-spacing: .02em; line-height: 1.5; }
+@media (max-width: 1180px) { .gen { width: 100%; max-width: 460px; } }
 .open { margin: 24px 0 0; color: var(--t2); max-width: 36em; }
 .open b { font-weight: 500; color: var(--t1); }
 
@@ -131,15 +152,16 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
 <div class="page">
   <main class="col">
     <section id="intro">
-      <figure class="city in" style="--d:2">
-        <canvas id="arm" aria-label="A robot arm that follows the cursor using inverse kinematics. Click near a block to grab it, click again to drop it."></canvas>
-        <figcaption>
-          <span class="label">Inverse kinematics, live. Move to steer. Click a block to grab it, click again to drop.</span>
-          <span class="netbar"><span class="label tnum" id="arminfo"></span><span class="netbtns"><button class="nb" id="armreset" type="button">Reset</button></span></span>
-        </figcaption>
+      <figure class="city gen in" style="--d:2" aria-label="dkn-1, a tiny toy model you can prompt">
+        <div class="gen-head"><span class="label">dkn-1 · a very small model</span><canvas id="genface" class="face" aria-hidden="true"></canvas></div>
+        <div class="seg" id="genmode" role="group" aria-label="Output mode"><i></i><button type="button" aria-pressed="true" data-v="text">Text</button><button type="button" aria-pressed="false" data-v="pixels">Pixels</button><button type="button" aria-pressed="false" data-v="code">Code</button><button type="button" aria-pressed="false" data-v="robot">Robot</button></div>
+        <div class="gen-out"><pre id="genpre"></pre><canvas id="gencv" hidden></canvas></div>
+        <div class="gen-in"><input id="genin" type="text" aria-label="Prompt" spellcheck="false"><button class="nb" id="gennext" type="button" title="Next prompt">↻</button><button class="nb solid" id="gengo" type="button">Generate</button></div>
+        <div class="gen-meta"><pre id="genprobs" class="label"></pre><div><span class="label tnum" id="genstat"></span><label class="label temp" id="gentemprow">temp <input id="gentemp" type="range" min="0.2" max="2.5" step="0.1" value="0.4"> <span id="gentempv">0.4</span></label></div></div>
+        <p class="label note">Text is a real character 4-gram trained in your browser. Pixels, code and robot are scripted for fun.</p>
       </figure>
       <p class="status label in" style="--d:0"><i></i>Open to internships · 2026</p>
-      <h1 id="name" class="in" style="--d:0" aria-label="Dilavesh Kanz Nidooli">Dilavesh Kanz Nidooli</h1>
+      <h1 id="name" aria-label="Dilavesh Kanz Nidooli">Dilavesh Kanz Nidooli</h1>
       <p class="role label in" style="--d:1">AI engineering · Computer vision · IIT Madras</p>
       <p class="bio in" style="--d:2">I train computer-vision models <em>and build the web apps that use them.</em> I study Data Science and Applications at IIT Madras and work as a Software Developer Intern at CODE.</p>
       <p class="open in" style="--d:3">I am open to <b>AI engineering, ML, software, intelligent systems, robotics, and autonomous-agent</b> opportunities.</p>
@@ -510,95 +532,176 @@ const SK = {
   });
 })();
 
-// Hero: a 3-joint arm that solves inverse kinematics (FABRIK) toward the cursor; grab blocks and stack them
+// Hero: dkn-1, a very small "multimodal model". Text mode is a real character 4-gram trained in the browser; the other modes are scripted.
 (() => {
-  const cv = document.getElementById("arm"), c = cv.getContext("2d"), info = document.getElementById("arminfo");
-  const L = [0, 0, 0], S = 22;
-  let W = 0, H = 0, gy = 0, base = [0, 0], J = [], tgt = null, aim = null, held = null, grip = 0, best = 1, vis = true, raf, inside = false;
-  let blocks = [];
-  const reset = () => {
-    const r = cv.getBoundingClientRect(); W = r.width; H = r.height; gy = H - 22; base = [W * .5, gy];
-    L[0] = H * .36; L[1] = H * .3; L[2] = H * .17;
-    J = [[base[0], gy], [base[0] - L[0] * .5, gy - L[0] * .85], [base[0] + L[1] * .2, gy - L[0] * .85 - L[1] * .9], [base[0] + L[1] * .2 + L[2], gy - L[0] * .85 - L[1] * .9]];
-    blocks = [[W * .16, 0], [W * .28, 0], [W * .82, 0]].map(([x]) => ({ x, y: gy - S / 2, vy: 0 }));
-    held = null; aim = null; best = 1;
+  const $ = id => document.getElementById(id);
+  const pre = $("genpre"), cv = $("gencv"), c = cv.getContext("2d"), inp = $("genin"), stat = $("genstat"), probs = $("genprobs"), temp = $("gentemp"), tempv = $("gentempv"), tempRow = $("gentemprow");
+  const PROMPTS = {
+    text: ["why hire dilavesh?", "what does he build?", "what is he into?"],
+    pixels: ["a robot that wants an internship", "a cat doing gradient descent", "a city from one aerial image"],
+    code: ["def should_hire()", "a training loop at 3am"],
+    robot: ["deliver the CV to the recruiter"]
   };
-  const size = () => { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); cv.width = r.width * d; cv.height = r.height * d; c.setTransform(d, 0, 0, d, 0, 0); reset(); };
-  const nrm = (a, b) => { const dx = a[0] - b[0], dy = a[1] - b[1], l = Math.hypot(dx, dy) || 1; return [dx / l, dy / l]; };
-  function solve(t) {
-    const reach = L[0] + L[1] + L[2];
-    if (Math.hypot(t[0] - base[0], t[1] - base[1]) >= reach) {
-      for (let i = 0; i < 3; i++) { const n = nrm(t, J[i]); J[i + 1] = [J[i][0] + n[0] * L[i], J[i][1] + n[1] * L[i]]; }
-      return;
+  let mode = "text", job = 0;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const show = w => { pre.hidden = w !== "pre"; cv.hidden = w !== "cv"; if (w === "cv") fit(); };
+  const fit = () => { const r = cv.getBoundingClientRect(), dp = Math.min(devicePixelRatio || 1, 2); cv.width = r.width * dp; cv.height = r.height * dp; c.setTransform(dp, 0, 0, dp, 0, 0); return r; };
+  const bar = p => "█".repeat(Math.round(p * 10)).padEnd(10, "·");
+
+  // ---------- text: character 4-gram with backoff, sampled with temperature
+  const CORPUS = (". dilavesh trains computer vision models and builds the web apps that use them. he fine-tunes height models for altimap, an isro problem. " +
+    "he trained the safety gear detector for fieldpilot ai. he took over a half built course planner and shipped it to four degree programmes. " +
+    "he builds the fest platform for paradox. he studies data science and applications at iit madras. he likes models that see the world. " +
+    "he wants to work on embodied ai and robots. he is open to ai engineering, ml, software, robotics and agent roles. " +
+    "hire him before the loss goes to zero. he builds things that ship. he reads loss curves for fun. ").repeat(2);
+  const N = 4, T = new Map();
+  for (let n = 1; n <= N; n++) for (let i = n; i < CORPUS.length; i++) {
+    const k = n + CORPUS.slice(i - n, i); let m = T.get(k); if (!m) T.set(k, m = new Map()); m.set(CORPUS[i], (m.get(CORPUS[i]) || 0) + 1);
+  }
+  const next = (ctx, t) => {
+    let m; for (let n = N; n >= 1 && !m; n--) m = T.get(n + ctx.slice(-n)); if (!m) m = T.get("2. ");
+    const e = [...m].map(([ch, k]) => [ch, Math.pow(k, 1 / t)]), z = e.reduce((a, [, w]) => a + w, 0);
+    let r = Math.random() * z, pick = e[0][0]; for (const [ch, w] of e) { if ((r -= w) <= 0) { pick = ch; break; } }
+    return { pick, top: e.sort((a, b) => b[1] - a[1]).slice(0, 3).map(([ch, w]) => [ch, w / z]) };
+  };
+  async function genText(id, prompt) {
+    show("pre");
+    const seed = /build|make|ship/i.test(prompt) ? "he builds " : /into|like|want/i.test(prompt) ? "he likes " : /hire|why/i.test(prompt) ? "hire him " : "dilavesh ";
+    let out = seed;
+    for (let i = 0; i < 190; i++) {
+      if (id !== job) return;
+      const { pick, top } = next(". " + out, +temp.value);
+      out += pick;
+      pre.textContent = "> " + prompt + "\n\n" + out + "▌";
+      probs.textContent = top.map(([ch, p]) => `'${ch === " " ? "␣" : ch}' ${p.toFixed(2)} ${bar(p)}`).join("\n");
+      stat.textContent = `char ${i + 1} · 4-gram · temp ${(+temp.value).toFixed(1)}`;
+      if (pick === "." && out.length > 80) break;
+      await sleep(26);
     }
-    for (let it = 0; it < 12; it++) {
-      J[3] = [t[0], t[1]];
-      for (let i = 2; i >= 0; i--) { const n = nrm(J[i], J[i + 1]); J[i] = [J[i + 1][0] + n[0] * L[i], J[i + 1][1] + n[1] * L[i]]; }
-      J[0] = [base[0], base[1]];
-      for (let i = 0; i < 3; i++) { const n = nrm(J[i + 1], J[i]); J[i + 1] = [J[i][0] + n[0] * L[i], Math.min(gy - 4, J[i][1] + n[1] * L[i])]; }
-      if (Math.hypot(J[3][0] - t[0], J[3][1] - t[1]) < .5) break;
+    pre.textContent = "> " + prompt + "\n\n" + out;
+  }
+
+  // ---------- pixels: a toy denoiser that walks from noise to a 20x20 sprite
+  const sprite = name => {
+    const g = [...Array(20)].map(() => Array(20).fill(0)), R = (x0, y0, x1, y1, v) => { for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) if (g[y] && x >= 0 && x < 20) g[y][x] = v; };
+    const O = (x0, y0, x1, y1, v) => { R(x0, y0, x1, y0, v); R(x0, y1, x1, y1, v); R(x0, y0, x0, y1, v); R(x1, y0, x1, y1, v); };
+    if (name === "robot") {
+      R(9, 0, 10, 1, .5); O(5, 2, 13, 8, 1); R(7, 4, 8, 5, 1); R(11, 4, 12, 5, 1); R(8, 7, 11, 7, .5); R(8, 9, 10, 9, .5);
+      R(5, 10, 13, 15, .45); O(5, 10, 13, 15, 1); R(3, 11, 4, 14, .8); R(14, 9, 15, 10, .8); R(16, 3, 16, 9, .8);
+      O(15, 1, 19, 6, 1); R(16, 4, 16, 4, 1); R(17, 5, 17, 5, 1); R(18, 3, 18, 3, 1); R(7, 16, 8, 19, .8); R(10, 16, 11, 19, .8);
+    } else if (name === "cat") {
+      for (let x = 0; x < 20; x++) { const y = Math.round(16 - (x - 10) ** 2 * .11); R(x, y, x, y, .55); }
+      [[2, 9], [4, 12], [6, 14]].forEach(([x, y]) => R(x, y, x, y, 1));
+      R(8, 12, 12, 16, .9); R(8, 10, 8, 11, .9); R(12, 10, 12, 11, .9); R(9, 13, 9, 13, 0); R(11, 13, 11, 13, 0); R(10, 15, 10, 15, .3); R(13, 15, 15, 15, .7); R(15, 13, 15, 14, .7);
+    } else {
+      const hs = [5, 9, 7, 13, 6, 10, 15, 8, 11, 6]; hs.forEach((h, i) => { const x0 = i * 2; R(x0, 19 - h, x0 + 1, 19, .85); for (let y = 21 - h; y < 19; y += 2) R(x0 + (y % 4 ? 0 : 1), y, x0 + (y % 4 ? 0 : 1), y, .25); });
+      R(16, 2, 17, 2, 1); R(17, 1, 17, 3, 1); R(14, 1, 15, 1, .5); R(18, 3, 19, 3, .5);
+    }
+    return g;
+  };
+  async function genPixels(id, prompt) {
+    show("cv"); const r = fit(), name = /robot|intern/i.test(prompt) ? "robot" : /cat|gradient|descent/i.test(prompt) ? "cat" : /city|aerial|height|map/i.test(prompt) ? "city" : ["robot", "cat", "city"][prompt.length % 3];
+    const g = sprite(name), steps = 48, cs = Math.floor(Math.min(r.width - 24, r.height - 24) / 20), ox = (r.width - cs * 20) / 2, oy = (r.height - cs * 20) / 2;
+    probs.textContent = `sampler   toy denoiser\nsprite    20 × 20\nadherence high (he wrote the prompts)`;
+    for (let s = 0; s <= steps; s++) {
+      if (id !== job) return;
+      const sig = Math.cos(s / steps * Math.PI / 2);
+      c.clearRect(0, 0, r.width, r.height);
+      for (let y = 0; y < 20; y++) for (let x = 0; x < 20; x++) {
+        const v = Math.min(1, Math.max(0, g[y][x] * (1 - sig) + Math.random() * sig));
+        c.fillStyle = W8((.03 + v * .9).toFixed(3)); c.fillRect(ox + x * cs, oy + y * cs, cs - 1, cs - 1);
+      }
+      stat.textContent = `denoising step ${s}/${steps} · σ ${sig.toFixed(2)}`;
+      await sleep(s < steps ? 55 : 0);
     }
   }
-  const tip = () => { const n = nrm(J[3], J[2]); return [J[3][0] + n[0] * 10, J[3][1] + n[1] * 10]; };
-  const deg = a => Math.round(a * 180 / Math.PI);
-  function step(t) {
-    const goal = tgt || [base[0] + Math.cos(t * .0006) * W * .28, gy - H * .45 + Math.sin(t * .0011) * H * .12];
-    aim = aim ? [aim[0] + (goal[0] - aim[0]) * .22, aim[1] + (goal[1] - aim[1]) * .22] : goal;
-    solve(aim);
-    grip += ((held ? 1 : 0) - grip) * .25;
-    const tp = tip();
-    if (held) { const n = nrm(J[3], J[2]); held.x = tp[0] + n[0] * (S / 2 - 3); held.y = tp[1] + n[1] * (S / 2 - 3); held.vy = 0; }
-    for (const b of blocks) {
-      if (b === held) continue;
-      b.vy += .55; b.y += b.vy;
-      let floor = gy - S / 2;
-      for (const o of blocks) if (o !== b && o !== held && Math.abs(o.x - b.x) < S * .9 && o.y > b.y - 1) floor = Math.min(floor, o.y - S);
-      if (b.y >= floor) { b.y = floor; b.vy = 0; }
+
+  // ---------- code: types a snippet token by token
+  const CODE = {
+    hire: 'def should_hire(candidate):\n    skills = {"pytorch", "fine-tuning", "full-stack"}\n    shipped = candidate.live_projects  # course planner: live\n    return skills <= candidate.skills and shipped\n\n>>> should_hire(dilavesh)\nTrue',
+    loop: 'for epoch in range(10**9):\n    loss = model(data) + regret\n    loss.backward()        # it is fine\n    if loss.isnan():\n        coffee += 1        # try again\n        optimizer.zero_grad()\n\n# epoch 1: loss nan. coffee 1.'
+  };
+  async function genCode(id, prompt) {
+    show("pre"); const src = /loop|train|3am/i.test(prompt) ? CODE.loop : CODE.hire, toks = src.match(/\s+|\w+|[^\s\w]/g);
+    probs.textContent = "decoding  greedy\nmodel     knows python\nvibes     immaculate";
+    let out = "";
+    for (let i = 0; i < toks.length; i++) {
+      if (id !== job) return;
+      out += toks[i]; pre.textContent = out + "▌";
+      stat.textContent = `token ${i + 1}/${toks.length} · p ${(0.82 + Math.random() * .17).toFixed(2)}`;
+      await sleep(/\s/.test(toks[i]) ? 8 : 34);
     }
-    const rest = blocks.filter(b => b !== held && b.vy === 0).map(b => Math.round((gy - S / 2 - b.y) / S) + 1);
-    best = Math.max(1, ...rest);
+    pre.textContent = out;
   }
-  function draw() {
-    c.clearRect(0, 0, W, H);
-    c.fillStyle = W8(.05); for (let x = 9; x < W; x += 17) for (let y = 9; y < gy; y += 17) c.fillRect(x, y, 1, 1);
-    c.setLineDash([2, 4]); c.strokeStyle = W8(.08); c.beginPath(); c.arc(base[0], base[1], L[0] + L[1] + L[2], Math.PI, 0); c.stroke(); c.setLineDash([]);
-    c.strokeStyle = W8(.3); c.beginPath(); c.moveTo(0, gy + .5); c.lineTo(W, gy + .5); c.stroke();
-    c.strokeStyle = W8(.1); for (let x = 4; x < W; x += 8) { c.beginPath(); c.moveTo(x, gy + 2); c.lineTo(x - 5, gy + 8); c.stroke(); }
-    for (const b of blocks) { c.fillStyle = W8(b === held ? .32 : .12); c.fillRect(b.x - S / 2, b.y - S / 2, S, S); c.strokeStyle = W8(.85); c.strokeRect(b.x - S / 2 + .5, b.y - S / 2 + .5, S - 1, S - 1); }
-    c.fillStyle = "#0a0a0a"; c.strokeStyle = W8(.85); c.beginPath(); c.moveTo(base[0] - 16, gy); c.lineTo(base[0] - 9, gy - 10); c.lineTo(base[0] + 9, gy - 10); c.lineTo(base[0] + 16, gy); c.closePath(); c.fill(); c.stroke();
-    c.lineWidth = 2; c.strokeStyle = W8(.9); c.beginPath(); c.moveTo(...J[0]); for (let i = 1; i < 4; i++) c.lineTo(...J[i]); c.stroke(); c.lineWidth = 1;
-    const n = nrm(J[3], J[2]), a = Math.atan2(n[1], n[0]), open = .55 - grip * .4;
-    c.strokeStyle = W8(.9); c.lineWidth = 1.5; c.beginPath();
-    [-1, 1].forEach(sg => { c.moveTo(...J[3]); c.lineTo(J[3][0] + Math.cos(a + sg * open) * 11, J[3][1] + Math.sin(a + sg * open) * 11); }); c.stroke(); c.lineWidth = 1;
-    J.slice(0, 3).forEach(p => { c.beginPath(); c.arc(p[0], p[1], 4, 0, 7); c.fillStyle = "#0a0a0a"; c.fill(); c.strokeStyle = W8(.9); c.stroke(); });
-    if (tgt && inside) { c.strokeStyle = W8(.4); c.beginPath(); c.moveTo(tgt[0] - 5, tgt[1]); c.lineTo(tgt[0] + 5, tgt[1]); c.moveTo(tgt[0], tgt[1] - 5); c.lineTo(tgt[0], tgt[1] + 5); c.stroke(); }
-    const th = [Math.atan2(base[1] - J[1][1], J[1][0] - base[0])];
-    for (let i = 1; i < 3; i++) { const p = Math.atan2(J[i][1] - J[i + 1][1], J[i + 1][0] - J[i][0]), q = Math.atan2(J[i - 1][1] - J[i][1], J[i][0] - J[i - 1][0]); let r = p - q; r = Math.atan2(Math.sin(r), Math.cos(r)); th.push(r); }
-    const pad = v => (v >= 0 ? " " : "") + v;
-    info.textContent = `θ ${th.map(v => pad(deg(v)) + "°").join(" ")} · grip ${held ? "closed" : "open"} · stack ${best}${best >= 3 ? " ✓" : ""}`;
+
+  // ---------- robot: language -> action tokens -> a pixel robot carries the CV to "you"
+  async function genRobot(id, prompt) {
+    show("cv"); const r = fit(), W = r.width, H = r.height, gy = H - 30;
+    const plan = [["<look>", 500], ["<walk: cv>", 1300], ["<grip>", 400], ["<lift>", 450], ["<walk: you>", 1500], ["<place>", 450], ["<wave>", 1100]];
+    probs.textContent = "policy    vla-nano\nactions   7 tokens\nsuccess   cv delivered";
+    const cvx = W * .45, you = W - 34;
+    let rx = 30, carry = false, armUp = 0, wave = 0, placed = false, say = "";
+    const draw = (k, tk) => {
+      c.clearRect(0, 0, W, H);
+      c.font = "400 10px 'Geist Mono', monospace";
+      plan.forEach(([n], i) => { c.fillStyle = W8(i < k ? .45 : i === k ? .95 : .18); c.fillText(n, 10 + (i % 4) * 72, 18 + Math.floor(i / 4) * 14); });
+      c.strokeStyle = W8(.3); c.beginPath(); c.moveTo(0, gy + .5); c.lineTo(W, gy + .5); c.stroke();
+      const bx = carry ? rx + 14 : placed ? you - 24 : cvx, by = carry ? gy - 40 - armUp * 8 : gy - 12;
+      c.fillStyle = W8(.85); c.fillRect(bx - 7, by, 14, 12); c.fillStyle = "#0c0c0c"; c.fillRect(bx - 4, by + 3, 8, 1.5); c.fillRect(bx - 4, by + 7, 6, 1.5);
+      c.strokeStyle = W8(.8); c.beginPath(); c.arc(you, gy - 34, 5, 0, 7); c.moveTo(you, gy - 29); c.lineTo(you, gy - 12); c.moveTo(you, gy - 12); c.lineTo(you - 5, gy); c.moveTo(you, gy - 12); c.lineTo(you + 5, gy); c.moveTo(you - 7, gy - 24); c.lineTo(you + 7, gy - 24); c.stroke();
+      c.fillStyle = W8(.45); c.fillText("you", you - 9, gy + 14);
+      const p = 4, X = rx - 12, Y = gy - 40, px = (x, y, w, h, a) => { c.fillStyle = W8(a); c.fillRect(X + x * p, Y + y * p, w * p, h * p); };
+      px(1, 0, 4, 3, .9); px(2, 1, 1, 1, 0); px(4, 1, 1, 1, 0); c.fillStyle = "#0c0c0c"; c.fillRect(X + 2 * p, Y + p, p, p); c.fillRect(X + 3.6 * p, Y + p, p, p);
+      px(0, 4, 6, 4, .6); const step = Math.floor(tk / 120) % 2; px(1, 8, 1, 2 - step, .8); px(4, 8, 1, 1 + step, .8);
+      c.strokeStyle = W8(.9); c.lineWidth = 2; c.beginPath(); c.moveTo(X + 6 * p, Y + 5 * p); c.lineTo(X + 6 * p + 8, Y + 5 * p - armUp * 10 + Math.sin(wave) * 4 - (carry ? 4 : 0)); c.stroke(); c.lineWidth = 1;
+      if (say) { c.fillStyle = W8(.85); c.fillText(say, you - 120, gy - 50); }
+    };
+    for (let k = 0; k < plan.length; k++) {
+      const [n, ms] = plan[k], t0 = performance.now(), x0 = rx;
+      while (performance.now() - t0 < ms) {
+        if (id !== job) return;
+        const e = (performance.now() - t0) / ms;
+        if (n === "<walk: cv>") rx = x0 + (cvx - 22 - x0) * e;
+        if (n === "<grip>") armUp = e * .3;
+        if (n === "<lift>") { carry = true; armUp = .3 + e * .7; }
+        if (n === "<walk: you>") rx = x0 + (you - 44 - x0) * e;
+        if (n === "<place>") { armUp = 1 - e; if (e > .6) { carry = false; placed = true; } }
+        if (n === "<wave>") { wave = e * 14; armUp = .8; say = "recruiter: when can you start?"; }
+        stat.textContent = `action ${k + 1}/${plan.length} · ${n}`;
+        draw(k, performance.now()); await sleep(16);
+      }
+    }
+    draw(plan.length, 0);
   }
-  function frame(t) { step(t); draw(); if (vis) raf = requestAnimationFrame(frame); }
-  const local = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-  addEventListener("pointermove", e => { if (e.pointerType === "mouse" || inside) tgt = local(e); });
-  cv.addEventListener("pointerenter", () => { inside = true; });
-  cv.addEventListener("pointerleave", () => { inside = false; });
-  cv.addEventListener("pointerdown", e => {
-    inside = true; tgt = local(e);
-    if (held) { held = null; return; }
-    const tp = tip(); let pick = null, bd = 26;
-    for (const b of blocks) { const d = Math.hypot(b.x - tp[0], b.y - tp[1]); if (d < bd) { bd = d; pick = b; } }
-    if (!pick) for (const b of blocks) { const d = Math.hypot(b.x - tgt[0], b.y - tgt[1]); if (d < 22) { pick = b; } }
-    held = pick;
-  });
-  document.getElementById("armreset").addEventListener("click", reset);
-  new ResizeObserver(size).observe(cv);
-  new IntersectionObserver(([e]) => { vis = e.isIntersecting; cancelAnimationFrame(raf); if (vis) raf = requestAnimationFrame(frame); }).observe(cv);
+
+  const RUN = { text: genText, pixels: genPixels, code: genCode, robot: genRobot };
+  const run = () => { const id = ++job; RUN[mode](id, inp.value.trim() || PROMPTS[mode][0]); };
+  seg($("genmode"), v => { mode = v; inp.value = PROMPTS[v][0]; tempRow.hidden = v !== "text"; probs.textContent = ""; run(); });
+  $("gengo").addEventListener("click", run);
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") run(); });
+  $("gennext").addEventListener("click", () => { const L = PROMPTS[mode]; inp.value = L[(L.indexOf(inp.value) + 1) % L.length]; run(); });
+  temp.addEventListener("input", () => { tempv.textContent = (+temp.value).toFixed(1); });
+  inp.value = PROMPTS.text[0];
+  setTimeout(run, 700);
+
+  // Mascot: a pixel face whose eyes follow the cursor and look up while it "thinks"
+  const m = $("genface"), mc = m.getContext("2d"), dp = Math.min(devicePixelRatio || 1, 2);
+  m.width = 40 * dp; m.height = 20 * dp; mc.setTransform(dp, 0, 0, dp, 0, 0);
+  let ex = 0, ey = 0, tx = 0, ty = 0, blink = 0;
+  addEventListener("pointermove", e => { const r = m.getBoundingClientRect(), dx = e.clientX - (r.left + 20), dy = e.clientY - (r.top + 10), d = Math.hypot(dx, dy) || 1; tx = dx / d * Math.min(1, d / 200) * 3; ty = dy / d * Math.min(1, d / 200) * 2.5; });
+  (function face(t) {
+    ex += (tx - ex) * .2; ey += (ty - ey) * .2;
+    blink = (t % 4200) < 120 ? 1 : 0;
+    mc.clearRect(0, 0, 40, 20); mc.strokeStyle = W8(.6); mc.strokeRect(.5, .5, 39, 19);
+    [12, 28].forEach(x => { if (blink) { mc.fillStyle = W8(.9); mc.fillRect(x - 4, 10, 8, 1.5); } else { mc.fillStyle = W8(.9); mc.fillRect(x - 4 + ex, 6 + ey, 8, 8); mc.fillStyle = "#0c0c0c"; mc.fillRect(x - 1 + ex * 1.4, 9 + ey * 1.4, 3, 3); } });
+    requestAnimationFrame(face);
+  })(0);
 })();
 
 // Name: letters lift gently under the cursor
 (() => {
   const h = document.getElementById("name");
-  h.innerHTML = [...h.textContent].map(ch => ch === " " ? " " : `<span class="ch" aria-hidden="true">${ch}</span>`).join("");
+  h.innerHTML = [...h.textContent].map((ch, k) => ch === " " ? " " : `<span class="ch" aria-hidden="true"><i style="--k:${k}">${ch}</i></span>`).join("");
   const chs = [...h.querySelectorAll(".ch")];
   if (reduce || !matchMedia("(hover: hover)").matches) return;
   h.addEventListener("pointermove", e => chs.forEach(s => {
