@@ -59,7 +59,7 @@ h1 .ch { display: inline-block; transition: transform var(--mid) var(--out), col
 .bio { font: 400 21px/1.5 var(--serif); color: var(--t1); margin: 0; text-wrap: pretty; max-width: 30em; }
 .bio em { font-style: italic; color: var(--t2); }
 .city { position: absolute; top: -24px; left: calc(100% + 56px); width: 340px; margin: 0; }
-.city canvas { display: block; width: 100%; aspect-ratio: 4 / 3; cursor: crosshair; }
+.city canvas { display: block; width: 100%; aspect-ratio: 4 / 3; cursor: crosshair; touch-action: none; }
 .city canvas { border: 1px solid var(--hair); border-radius: 12px; }
 .city figcaption { margin-top: 10px; display: grid; gap: 8px; }
 .netbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -132,10 +132,10 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
   <main class="col">
     <section id="intro">
       <figure class="city in" style="--d:2">
-        <canvas id="net" aria-label="A small neural network learning to separate two classes of points. Click to add points."></canvas>
+        <canvas id="arm" aria-label="A robot arm that follows the cursor using inverse kinematics. Click near a block to grab it, click again to drop it."></canvas>
         <figcaption>
-          <span class="label">A tiny neural network, training live. Click to add points.</span>
-          <span class="netbar"><span class="label tnum" id="netinfo"></span><span class="netbtns"><button class="nb" id="netcls" type="button">Placing ●</button><button class="nb" id="netclear" type="button">Clear</button><button class="nb" id="netreset" type="button">Reset</button></span></span>
+          <span class="label">Inverse kinematics, live. Move to steer. Click a block to grab it, click again to drop.</span>
+          <span class="netbar"><span class="label tnum" id="arminfo"></span><span class="netbtns"><button class="nb" id="armreset" type="button">Reset</button></span></span>
         </figcaption>
       </figure>
       <p class="status label in" style="--d:0"><i></i>Open to internships · 2026</p>
@@ -510,82 +510,89 @@ const SK = {
   });
 })();
 
-// Hero: a tiny neural network (2-10-10-1, tanh) that trains live on points you place
+// Hero: a 3-joint arm that solves inverse kinematics (FABRIK) toward the cursor; grab blocks and stack them
 (() => {
-  const cv = document.getElementById("net"), c = cv.getContext("2d"), info = document.getElementById("netinfo"), tog = document.getElementById("netcls");
-  const L = [2, 10, 10, 1], pts = [];
-  let Wt, Bs, VW, VB, step = 0, loss = 0, cls = 1, W = 0, H = 0, vis = true, raf;
-  const seed = () => {
-    pts.length = 0;
-    for (let i = 0; i < 14; i++) { const a = Math.random() * 6.283, r = Math.random() * .26; pts.push([Math.cos(a) * r, Math.sin(a) * r * .8, 1]); }
-    for (let i = 0; i < 24; i++) { const a = Math.random() * 6.283, r = .52 + Math.random() * .18; pts.push([Math.cos(a) * r, Math.sin(a) * r * .8, 0]); }
+  const cv = document.getElementById("arm"), c = cv.getContext("2d"), info = document.getElementById("arminfo");
+  const L = [0, 0, 0], S = 22;
+  let W = 0, H = 0, gy = 0, base = [0, 0], J = [], tgt = null, aim = null, held = null, grip = 0, best = 1, vis = true, raf, inside = false;
+  let blocks = [];
+  const reset = () => {
+    const r = cv.getBoundingClientRect(); W = r.width; H = r.height; gy = H - 22; base = [W * .5, gy];
+    L[0] = H * .36; L[1] = H * .3; L[2] = H * .17;
+    J = [[base[0], gy], [base[0] - L[0] * .5, gy - L[0] * .85], [base[0] + L[1] * .2, gy - L[0] * .85 - L[1] * .9], [base[0] + L[1] * .2 + L[2], gy - L[0] * .85 - L[1] * .9]];
+    blocks = [[W * .16, 0], [W * .28, 0], [W * .82, 0]].map(([x]) => ({ x, y: gy - S / 2, vy: 0 }));
+    held = null; aim = null; best = 1;
   };
-  const init = () => {
-    Wt = []; Bs = []; VW = []; VB = []; step = 0;
-    for (let l = 1; l < L.length; l++) {
-      const n = L[l], m = L[l - 1], sc = 1.6 / Math.sqrt(m);
-      Wt.push([...Array(n)].map(() => [...Array(m)].map(() => (Math.random() * 2 - 1) * sc))); Bs.push(Array(n).fill(0));
-      VW.push([...Array(n)].map(() => Array(m).fill(0))); VB.push(Array(n).fill(0));
+  const size = () => { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); cv.width = r.width * d; cv.height = r.height * d; c.setTransform(d, 0, 0, d, 0, 0); reset(); };
+  const nrm = (a, b) => { const dx = a[0] - b[0], dy = a[1] - b[1], l = Math.hypot(dx, dy) || 1; return [dx / l, dy / l]; };
+  function solve(t) {
+    const reach = L[0] + L[1] + L[2];
+    if (Math.hypot(t[0] - base[0], t[1] - base[1]) >= reach) {
+      for (let i = 0; i < 3; i++) { const n = nrm(t, J[i]); J[i + 1] = [J[i][0] + n[0] * L[i], J[i][1] + n[1] * L[i]]; }
+      return;
     }
-  };
-  const fwd = x => {
-    const A = [x];
-    for (let l = 0; l < Wt.length; l++) {
-      const prev = A[l], last = l === Wt.length - 1;
-      A.push(Wt[l].map((w, i) => { let z = Bs[l][i]; for (let j = 0; j < w.length; j++) z += w[j] * prev[j]; return last ? 1 / (1 + Math.exp(-z)) : Math.tanh(z); }));
+    for (let it = 0; it < 12; it++) {
+      J[3] = [t[0], t[1]];
+      for (let i = 2; i >= 0; i--) { const n = nrm(J[i], J[i + 1]); J[i] = [J[i + 1][0] + n[0] * L[i], J[i + 1][1] + n[1] * L[i]]; }
+      J[0] = [base[0], base[1]];
+      for (let i = 0; i < 3; i++) { const n = nrm(J[i + 1], J[i]); J[i + 1] = [J[i][0] + n[0] * L[i], Math.min(gy - 4, J[i][1] + n[1] * L[i])]; }
+      if (Math.hypot(J[3][0] - t[0], J[3][1] - t[1]) < .5) break;
     }
-    return A;
-  };
-  const train = () => {
-    if (!pts.length) return;
-    const gW = Wt.map(w => w.map(r => r.map(() => 0))), gB = Bs.map(b => b.map(() => 0));
-    let ls = 0;
-    for (const [x, y, t] of pts) {
-      const A = fwd([x, y]), p = A[A.length - 1][0];
-      ls -= t * Math.log(p + 1e-7) + (1 - t) * Math.log(1 - p + 1e-7);
-      let dz = [p - t];
-      for (let l = Wt.length - 1; l >= 0; l--) {
-        const prev = A[l], nd = Array(prev.length).fill(0);
-        for (let i = 0; i < dz.length; i++) { gB[l][i] += dz[i]; for (let j = 0; j < prev.length; j++) { gW[l][i][j] += dz[i] * prev[j]; nd[j] += dz[i] * Wt[l][i][j]; } }
-        if (l > 0) dz = nd.map((v, j) => v * (1 - prev[j] * prev[j]));
-      }
-    }
-    const n = pts.length, lr = .2, mo = .9;
-    for (let l = 0; l < Wt.length; l++) for (let i = 0; i < Wt[l].length; i++) {
-      VB[l][i] = mo * VB[l][i] - lr * gB[l][i] / n; Bs[l][i] += VB[l][i];
-      for (let j = 0; j < Wt[l][i].length; j++) { VW[l][i][j] = mo * VW[l][i][j] - lr * gW[l][i][j] / n; Wt[l][i][j] += VW[l][i][j]; }
-    }
-    loss = ls / n; step++;
-  };
-  const size = () => { const r = cv.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0); };
-  const toPx = (x, y) => [(x + 1) / 2 * W, (y / (H / W) + 1) / 2 * H];
-  function render() {
-    c.clearRect(0, 0, W, H);
-    const cols = 40, cw = W / cols, rows = Math.round(H / cw);
-    for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
-      const x = ((i + .5) / cols) * 2 - 1, y = (((j + .5) / rows) * 2 - 1) * (H / W), A = fwd([x, y]), p = A[A.length - 1][0];
-      c.fillStyle = W8((.02 + .2 * p).toFixed(3)); c.fillRect(i * cw + .5, j * cw + .5, cw - 1, cw - 1);
-      if (Math.abs(p - .5) < .07) { c.fillStyle = W8(.55); c.fillRect(i * cw + cw / 2 - 1, j * cw + cw / 2 - 1, 2, 2); }
-    }
-    for (const [x, y, t] of pts) {
-      const [px, py] = toPx(x, y); c.beginPath(); c.arc(px, py, 3.6, 0, 7);
-      if (t) { c.fillStyle = W8(.95); c.fill(); } else { c.fillStyle = "#0a0a0a"; c.fill(); c.strokeStyle = W8(.9); c.lineWidth = 1.3; c.stroke(); c.lineWidth = 1; }
-    }
-    info.textContent = pts.length ? `loss ${loss.toFixed(3)} · step ${step}` : "add some points";
   }
-  function frame() { for (let k = 0; k < 4; k++) train(); render(); if (vis && !reduce) raf = requestAnimationFrame(frame); }
-  const go = () => { cancelAnimationFrame(raf); if (reduce) { for (let k = 0; k < 300; k++) train(); render(); } else raf = requestAnimationFrame(frame); };
-  cv.addEventListener("contextmenu", e => e.preventDefault());
+  const tip = () => { const n = nrm(J[3], J[2]); return [J[3][0] + n[0] * 10, J[3][1] + n[1] * 10]; };
+  const deg = a => Math.round(a * 180 / Math.PI);
+  function step(t) {
+    const goal = tgt || [base[0] + Math.cos(t * .0006) * W * .28, gy - H * .45 + Math.sin(t * .0011) * H * .12];
+    aim = aim ? [aim[0] + (goal[0] - aim[0]) * .22, aim[1] + (goal[1] - aim[1]) * .22] : goal;
+    solve(aim);
+    grip += ((held ? 1 : 0) - grip) * .25;
+    const tp = tip();
+    if (held) { const n = nrm(J[3], J[2]); held.x = tp[0] + n[0] * (S / 2 - 3); held.y = tp[1] + n[1] * (S / 2 - 3); held.vy = 0; }
+    for (const b of blocks) {
+      if (b === held) continue;
+      b.vy += .55; b.y += b.vy;
+      let floor = gy - S / 2;
+      for (const o of blocks) if (o !== b && o !== held && Math.abs(o.x - b.x) < S * .9 && o.y > b.y - 1) floor = Math.min(floor, o.y - S);
+      if (b.y >= floor) { b.y = floor; b.vy = 0; }
+    }
+    const rest = blocks.filter(b => b !== held && b.vy === 0).map(b => Math.round((gy - S / 2 - b.y) / S) + 1);
+    best = Math.max(1, ...rest);
+  }
+  function draw() {
+    c.clearRect(0, 0, W, H);
+    c.fillStyle = W8(.05); for (let x = 9; x < W; x += 17) for (let y = 9; y < gy; y += 17) c.fillRect(x, y, 1, 1);
+    c.setLineDash([2, 4]); c.strokeStyle = W8(.08); c.beginPath(); c.arc(base[0], base[1], L[0] + L[1] + L[2], Math.PI, 0); c.stroke(); c.setLineDash([]);
+    c.strokeStyle = W8(.3); c.beginPath(); c.moveTo(0, gy + .5); c.lineTo(W, gy + .5); c.stroke();
+    c.strokeStyle = W8(.1); for (let x = 4; x < W; x += 8) { c.beginPath(); c.moveTo(x, gy + 2); c.lineTo(x - 5, gy + 8); c.stroke(); }
+    for (const b of blocks) { c.fillStyle = W8(b === held ? .32 : .12); c.fillRect(b.x - S / 2, b.y - S / 2, S, S); c.strokeStyle = W8(.85); c.strokeRect(b.x - S / 2 + .5, b.y - S / 2 + .5, S - 1, S - 1); }
+    c.fillStyle = "#0a0a0a"; c.strokeStyle = W8(.85); c.beginPath(); c.moveTo(base[0] - 16, gy); c.lineTo(base[0] - 9, gy - 10); c.lineTo(base[0] + 9, gy - 10); c.lineTo(base[0] + 16, gy); c.closePath(); c.fill(); c.stroke();
+    c.lineWidth = 2; c.strokeStyle = W8(.9); c.beginPath(); c.moveTo(...J[0]); for (let i = 1; i < 4; i++) c.lineTo(...J[i]); c.stroke(); c.lineWidth = 1;
+    const n = nrm(J[3], J[2]), a = Math.atan2(n[1], n[0]), open = .55 - grip * .4;
+    c.strokeStyle = W8(.9); c.lineWidth = 1.5; c.beginPath();
+    [-1, 1].forEach(sg => { c.moveTo(...J[3]); c.lineTo(J[3][0] + Math.cos(a + sg * open) * 11, J[3][1] + Math.sin(a + sg * open) * 11); }); c.stroke(); c.lineWidth = 1;
+    J.slice(0, 3).forEach(p => { c.beginPath(); c.arc(p[0], p[1], 4, 0, 7); c.fillStyle = "#0a0a0a"; c.fill(); c.strokeStyle = W8(.9); c.stroke(); });
+    if (tgt && inside) { c.strokeStyle = W8(.4); c.beginPath(); c.moveTo(tgt[0] - 5, tgt[1]); c.lineTo(tgt[0] + 5, tgt[1]); c.moveTo(tgt[0], tgt[1] - 5); c.lineTo(tgt[0], tgt[1] + 5); c.stroke(); }
+    const th = [Math.atan2(base[1] - J[1][1], J[1][0] - base[0])];
+    for (let i = 1; i < 3; i++) { const p = Math.atan2(J[i][1] - J[i + 1][1], J[i + 1][0] - J[i][0]), q = Math.atan2(J[i - 1][1] - J[i][1], J[i][0] - J[i - 1][0]); let r = p - q; r = Math.atan2(Math.sin(r), Math.cos(r)); th.push(r); }
+    const pad = v => (v >= 0 ? " " : "") + v;
+    info.textContent = `θ ${th.map(v => pad(deg(v)) + "°").join(" ")} · grip ${held ? "closed" : "open"} · stack ${best}${best >= 3 ? " ✓" : ""}`;
+  }
+  function frame(t) { step(t); draw(); if (vis) raf = requestAnimationFrame(frame); }
+  const local = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  addEventListener("pointermove", e => { if (e.pointerType === "mouse" || inside) tgt = local(e); });
+  cv.addEventListener("pointerenter", () => { inside = true; });
+  cv.addEventListener("pointerleave", () => { inside = false; });
   cv.addEventListener("pointerdown", e => {
-    const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / W * 2 - 1, y = ((e.clientY - r.top) / H * 2 - 1) * (H / W);
-    pts.push([x, y, e.shiftKey || e.button === 2 ? 1 - cls : cls]); go();
+    inside = true; tgt = local(e);
+    if (held) { held = null; return; }
+    const tp = tip(); let pick = null, bd = 26;
+    for (const b of blocks) { const d = Math.hypot(b.x - tp[0], b.y - tp[1]); if (d < bd) { bd = d; pick = b; } }
+    if (!pick) for (const b of blocks) { const d = Math.hypot(b.x - tgt[0], b.y - tgt[1]); if (d < 22) { pick = b; } }
+    held = pick;
   });
-  tog.addEventListener("click", () => { cls = 1 - cls; tog.textContent = cls ? "Placing ●" : "Placing ○"; });
-  document.getElementById("netreset").addEventListener("click", () => { seed(); init(); go(); });
-  document.getElementById("netclear").addEventListener("click", () => { pts.length = 0; init(); go(); });
-  seed(); init();
-  new ResizeObserver(() => { size(); go(); }).observe(cv);
-  new IntersectionObserver(([e]) => { vis = e.isIntersecting; if (vis) go(); }).observe(cv);
+  document.getElementById("armreset").addEventListener("click", reset);
+  new ResizeObserver(size).observe(cv);
+  new IntersectionObserver(([e]) => { vis = e.isIntersecting; cancelAnimationFrame(raf); if (vis) raf = requestAnimationFrame(frame); }).observe(cv);
 })();
 
 // Name: letters lift gently under the cursor
