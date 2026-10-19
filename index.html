@@ -29,6 +29,7 @@
 <meta name="twitter:image" content="https://dilaveshkanz.github.io/og.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Dilavesh Kanz Nidooli", "url": "https://dilaveshkanz.github.io/", "image": "https://dilaveshkanz.github.io/og.png", "jobTitle": "Software Developer Intern", "description": "Dilavesh Kanz Nidooli builds AI and software that real people use. Data Science student at IIT Madras, Software Developer Intern at CODE, open to Forward Deployed Engineer internships.", "email": "mailto:dilaveshkanz@gmail.com", "worksFor": {"@type": "Organization", "name": "Centre for Outreach and Digital Education (CODE), IIT Madras"}, "affiliation": {"@type": "CollegeOrUniversity", "name": "Indian Institute of Technology Madras"}, "knowsAbout": ["Artificial intelligence", "Machine learning", "Computer vision", "Forward deployed engineering", "Full-stack development", "Robotics", "AI agents"], "sameAs": ["https://github.com/DilaveshKanz", "https://www.linkedin.com/in/dilavesh-kanz-nidooli/"]}</script>
 <style>body{margin:0}[hidden]{display:none!important}</style>
+<script>try { const th = localStorage.getItem("theme"); if (th === "light" || th === "dark") document.documentElement.dataset.theme = th; } catch (e) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&family=Geist:wght@400;500&family=Geist+Mono:wght@400&display=swap">
@@ -166,6 +167,17 @@ button.lk { font: inherit; border: 0; cursor: pointer; }
 .job p { grid-column: 1 / -1; margin: 0; max-width: 36em; }
 @media (max-width: 560px) { .job { grid-template-columns: 1fr; } .jd { grid-row: 2; margin-bottom: 4px; } }
 
+/* Theme toggle: fixed top-right, icon swaps with a small spin; the page change is a circular reveal */
+.tt { position: fixed; z-index: 40; top: calc(18px + env(safe-area-inset-top, 0px)); right: max(18px, env(safe-area-inset-right, 0px)); width: 36px; height: 36px; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid var(--hair); background: var(--glass); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: var(--t1); cursor: pointer;
+  transition: border-color var(--fast), transform var(--mid) var(--out); animation: sharpen var(--slow) var(--out) .5s both; }
+.tt:hover { border-color: var(--t3); transform: scale(1.06); }
+.tt:active { transform: scale(.94); }
+.tt svg { grid-area: 1 / 1; width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: opacity var(--mid) var(--out), transform var(--slow) var(--out); }
+.tt .moon { fill: currentColor; stroke: none; }
+.tt[data-mode="dark"] .moon, .tt[data-mode="light"] .sun { opacity: 0; transform: rotate(-90deg) scale(.5); }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+
 /* Now */
 .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .list li { display: grid; grid-template-columns: 18px minmax(0, 1fr); }
@@ -181,6 +193,11 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 </style>
+
+<button class="tt" id="themeBtn" type="button" aria-label="Switch theme">
+  <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+  <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6z"/></svg>
+</button>
 
 <div class="page">
   <main class="col">
@@ -680,6 +697,7 @@ const SK = {
   const ZOOM = 1300, FADE = 900;
   let sc = 1, i = 0, phase = "play", el = 0, last = 0, mx = 0, my = 0, px = 0, py = 0, vis = true, raf;
   let prev = document.createElement("canvas"), next = document.createElement("canvas");
+  new MutationObserver(() => { prev.getContext("2d").clearRect(0, 0, prev.width, prev.height); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   const size = () => { const r = cv.getBoundingClientRect(), dp = Math.min(devicePixelRatio || 1, 2); [cv, prev, next].forEach(k => { k.width = r.width * dp; k.height = r.height * dp; }); sc = r.width * dp / 360; };
   const scene = (ctx, k, p, t, snap, slotAlpha) => {
     S[k].draw(ctx, p, t);
@@ -758,6 +776,21 @@ const SK = {
     s.style.transform = `translateY(${(-k * 7).toFixed(2)}px)`; s.style.color = `rgba(${INK},${(.92 - k * .35).toFixed(3)})`;
   }));
   h.addEventListener("pointerleave", () => chs.forEach(s => { s.style.transform = ""; s.style.color = ""; }));
+})();
+
+// Theme toggle: starts from the system setting, remembers the visitor's choice
+(() => {
+  const btn = document.getElementById("themeBtn"), root = document.documentElement, mq = matchMedia("(prefers-color-scheme: light)");
+  const current = () => root.dataset.theme || (mq.matches ? "light" : "dark");
+  const sync = () => { const m = current(); btn.dataset.mode = m; btn.setAttribute("aria-label", m === "dark" ? "Switch to light theme" : "Switch to dark theme"); };
+  sync(); mq.addEventListener("change", sync);
+  btn.addEventListener("click", () => {
+    const next = current() === "dark" ? "light" : "dark";
+    const flip = () => { root.dataset.theme = next; try { localStorage.setItem("theme", next); } catch (e) {} sync(); };
+    if (!document.startViewTransition || reduce) return flip();
+    const r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    document.startViewTransition(flip).ready.then(() => root.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] }, { duration: 560, easing: "cubic-bezier(.2,.8,.2,1)", pseudoElement: "::view-transition-new(root)" })).catch(() => {});
+  });
 })();
 
 // Email: copy on click, with the address in the tooltip as a fallback
