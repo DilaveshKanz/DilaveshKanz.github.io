@@ -57,7 +57,9 @@ h1 { font: 300 clamp(26px, calc((100vw - 44px) / 9), 64px)/1.02 var(--serif); co
 h1 .ch { display: inline-block; transition: transform var(--mid) var(--out), color var(--mid); will-change: transform; }
 h1 .ch > i { display: inline-block; font-style: normal; animation: letter .9s var(--out) both; animation-delay: calc(var(--k) * 32ms + 120ms); }
 @keyframes letter { from { opacity: 0; filter: blur(8px); transform: translateY(.45em) rotate(4deg); } }
-.role { margin: 18px 0 40px; }
+.tagline { font: 300 clamp(20px, 3vw, 28px)/1.2 var(--serif); color: var(--t1); margin: 14px 0 0; letter-spacing: -.01em; }
+.tagline em { font-style: italic; color: var(--t2); }
+.role { margin: 16px 0 40px; }
 .bio { font: 400 21px/1.5 var(--serif); color: var(--t1); margin: 0; text-wrap: pretty; max-width: 30em; }
 .bio em { font-style: italic; color: var(--t2); }
 .city { position: absolute; top: -24px; left: calc(100% + 56px); width: 340px; margin: 0; }
@@ -142,6 +144,7 @@ footer { margin-top: 112px; padding-top: 20px; border-top: 1px solid var(--hair)
       </figure>
       <p class="status label in" style="--d:0"><i></i>Open to FDE internships · 2026</p>
       <h1 id="name" aria-label="Dilavesh Kanz Nidooli">Dilavesh Kanz Nidooli</h1>
+      <p class="tagline in" style="--d:1">Making AI happen. <em>For real.</em></p>
       <p class="role label in" style="--d:1">Forward deployed engineering · AI · IIT Madras</p>
       <p class="bio in" style="--d:2">I build AI and software <em>and get it working for the people who use it.</em> At CODE, IIT Madras, I started out coordinating 60+ workshops with professors, then finished and launched a course planner now live in four degree programmes.</p>
       <p class="open in" style="--d:3">I am looking for a <b>Forward Deployed Engineer internship</b>. I am also open to AI engineering, ML, software, intelligent systems, robotics, and autonomous-agent roles.</p>
